@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Кнопка с изменением</title>
+<style>
+  body {
+    background-color: white;
+    color: white;
+  }
+  .btn {
+    display: inline-block;
+    width: 150px;
+    height: 40px;
+    
+    background-color: lightgreen;
+    border: 0.3px solid black;
+    border-radius: 20px;
+    position: relative;
+    color: white;
+    -webkit-text-stroke: 0.5px black;
+    font-weight: 900;
+    font-size: 1.1em;
+  }
+  .btn span {
+    position: relative;
+    z-index: 1;
+  }
+  .btn.clicked {
+    background-color: pink;
+  }
+  .btn.clicked .circle {
+    right: -70px;
+  }
+  .btn.clicked span {
+    color: white;
+    -webkit-text-stroke: 0.5px black;
+    font-size: 1.1em;
+  }
+  .circle {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 10px;
+    transition: right 0.3s;
+    border: 0.3px solid black;
+  }
+</style>
+</head>
+<body>
+
+<button class="btn" onclick="handleButtonClick(this)">
+  <span>Фильм</span>
+  <div class="circle"></div>
+</button>
+
+<script>
+function handleButtonClick(btn) {
+  btn.classList.toggle('clicked');
+  const title = btn.querySelector('span');
+  const circle = btn.querySelector('.circle');
+  
+  if (title.innerText === 'Фильм') {
+    title.innerText = 'Книга';
+    circle.style.right = '115px';
+  } else {
+    title.innerText = 'Фильм';
+    circle.style.right = '10px';
+  }
+}
+</script>
+
+</body>
+</html>
