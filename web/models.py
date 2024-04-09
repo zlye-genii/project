@@ -5,6 +5,8 @@ from django.contrib.contenttypes.models import ContentType
 # Create your models here.
 
 class Genre(models.Model):
+    def __str__(self):
+        return self.name
     name = models.CharField(max_length=100)
 
 class StarRating(models.IntegerChoices):
@@ -26,6 +28,8 @@ class Rating(models.Model):
 # pull all this stuff from imdb scraper (not paying for an api key >_<)
 # https://discord.com/channels/465439647334400001/1150680390902743060/1220148782000246944
 class Movie(models.Model):
+    def __str__(self):
+        return self.title
     id = models.CharField(max_length=25, primary_key=True)
     title = models.CharField(max_length=200)
     release_date = models.DateField()
@@ -43,6 +47,8 @@ class Movie(models.Model):
         super().delete(*args, **kwargs)
 
 class Book(models.Model):
+    def __str__(self):
+        return self.title
     id = models.IntegerField(primary_key=True)
     title = models.CharField()
     description = models.CharField()
