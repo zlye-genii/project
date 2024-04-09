@@ -59,8 +59,9 @@ def get_popular_movies(request):
     res['result_count'] = len(res['results'])
     return Response(res)
 
+# this is mainly for speed reasons because scraper is sloooooooow
 @api_view(["POST"])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def create_movie(request):
     # Extract movie id from the request
     movie_id = request.data.get("id")

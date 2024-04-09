@@ -39,7 +39,7 @@ class Movie(models.Model):
     imdb_rating = models.FloatField()
     user_ratings = models.ManyToManyField(Rating)
     description = models.TextField()
-    poster_url = models.URLField(default='/assets/404.png')
+    poster_url = models.URLField(default='/static/banner404.png')
     content_rating = models.IntegerField()
     # hack because no cascade delete on genericforeignkeys
     def delete(self, *args,**kwargs):
