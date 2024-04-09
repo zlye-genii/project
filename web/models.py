@@ -1,15 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import User
-from django.db import models
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
 # Create your models here.
-
-# addon for djangos user
-# includes a list of Ratings stuff and user data
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
 class Genre(models.Model):
     name = models.CharField(max_length=100)
@@ -42,7 +35,8 @@ class Movie(models.Model):
     imdb_rating = models.FloatField()
     user_ratings = models.ManyToManyField(Rating)
     description = models.TextField()
-    short_description = models.TextField() # generate this once with ai and save it (yay, money saved!)
+    poster_url = models.URLField(default='/assets/404.png')
+    content_rating = models.IntegerField()
     # hack because no cascade delete on genericforeignkeys
     def delete(self, *args,**kwargs):
         Rating.objects.filter(content_type=ContentType.objects.get_for_model(self.__class__), object_id=self.id).delete()

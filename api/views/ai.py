@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from web.models import Profile
+from user.models import Profile
 import requests
 import json
 load_dotenv('../..')
@@ -50,7 +50,7 @@ def get_user_recommendations(request):
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3' # me when cloudflare moment
         },
         json={
-            'model': 'gpt-4-1106-preview', # TODO: change to gigachat later
+            'model': 'gpt-4', # TODO: change to gigachat later
             'messages': messages,
             "temperature": 0.5,
             "top_p": 0.5

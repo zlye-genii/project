@@ -12,5 +12,7 @@ urlpatterns = [
     path('movies/details', movies.get_movie_details),
     path('movies/search', movies.search_movies),
     path('movies/upcoming', movies.get_upcoming_movies),
-    path('movies/popular', movies.get_popular_movies)
+    path('movies/popular', movies.get_popular_movies),
+
+    path('movies/create', movies.create_movie) # add movie to database
 ]
