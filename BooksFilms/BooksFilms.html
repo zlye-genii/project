@@ -79,6 +79,7 @@
         .underline {
             width: 100%;
             border-bottom: 3px solid black;
+            margin: 0px;
         }
         
 
@@ -91,6 +92,46 @@
 	    flex: 1;
 	    padding: 20px;
 	}
+	
+	.film-block {
+	    display: flex;
+	}
+	
+	.film {
+	    display: inline-block;
+            width: 185px;
+            margin: 20px;
+            text-align: left;
+	}
+	
+	.film img {
+            width: 185px;
+    	    height: 300px;
+  	}
+
+	.film h3 {
+ 	    margin: 2px 0;
+            color: #333;
+	}
+	
+	.film p {
+            color: #666;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+        
+        .rating {
+	    position: relative;
+            top: -348px;
+            left: 5px;
+            width: 25px;
+            background-color: green;
+            text-align: center;
+            color: white;
+            padding: 3px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
 
 
     </style>
@@ -115,10 +156,62 @@
     </nav>
 
     <div class="content">
+        
         <div class="title-main">
             <img src="золотая коллекция.png" alt="Иконка Золотой Коллекции" style="max-width: 65px; height: 65px;"> Золотая коллекция
             <div class="underline"></div>
         </div>
+        <div class="film-block">
+            <div class="film">
+		<img src="img/1.jpg" alt="Название фильма 1">
+    		<h3>Название фильма 1</h3>
+    		<p>2022, мистика</p>
+    		<div class="rating">8.5</div>
+	    </div>
+	    <div class="film">
+	        <img src="img/2.jpg" alt="Название фильма 2">
+	        <h3>Название фильма 2</h3>
+	        <p>2022, мюзикл</p>
+	        <div class="rating">9.5</div>
+	    </div>
+	    <div class="film">
+	        <img src="img/3.jpg" alt="Название фильма 3">
+	        <h3>Название 3</h3>
+	        <p>2035, мультфильм</p>
+	        <div class="rating">8.5</div>
+	    </div>
+	    <div class="film">
+	        <img src="img/4.jpg" alt="Название фильма 4">
+	        <h3>Название 4</h3>
+	        <p>2019, криминал</p>
+	        <div class="rating">0.0</div>
+	    </div>
+	    <div class="film">
+	        <img src="img/5.jpg" alt="Название фильма 5">
+	        <h3>Название 5</h3>
+	        <p>2013, аниме</p>
+	        <div class="rating">4.3</div>
+	    </div>
+	    <div class="film">
+	        <img src="img/6.jpg" alt="Название фильма 6">
+	        <h3>Котик!</h3>
+	        <p>2022, детектив</p>
+	        <div class="rating">8.1</div>
+	    </div>
+	    <div class="film">
+	        <img src="img/7.jpg" alt="Название фильма 7">
+	        <h3>абарара</h3>
+	        <p>2022, комедия</p>
+	        <div class="rating">1.0</div>
+	    </div>
+	    <div class="film">
+	        <img src="img/8.png" alt="Название фильма 8">
+	        <h3>f</h3>
+	        <p>f</p>
+	        <div class="rating">10</div>
+	    </div>
+        </div>
+        ЛДОРПА
     </div>
 </main>
 
