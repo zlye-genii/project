@@ -57,7 +57,7 @@ def get_user_recommendations(request):
         }
     )
 
-    if response.status_code == 200:
+    if response.ok:
         recommendations = response.json()['choices'][0]['message']['content'].split(',')
         return Response({"recommendations": recommendations}, status=status.HTTP_200_OK)
     else:

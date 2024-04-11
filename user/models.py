@@ -9,6 +9,8 @@ from allauth.account.signals import user_signed_up
 # addon for djangos user
 # includes a list of Ratings stuff and user data
 class Profile(models.Model):
+    def __str__(self):
+        return self.user
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
 @receiver(user_signed_up)

@@ -105,7 +105,7 @@ LOGIN_URL = '/user/login'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "movies_app",
+        "NAME": os.getenv("POSTGRES_DB"),
         "USER": os.getenv("POSTGRESQL_USER"),
         "PASSWORD": os.getenv("POSTGRESQL_PASS"),
         "HOST": os.getenv("POSTGRESQL_IP"),

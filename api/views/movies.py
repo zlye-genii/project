@@ -6,7 +6,7 @@ from web.models import Movie
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from web.models import Movie, Genre
+from web.models import Movie, Genre, Director
 from PyMovieDb import IMDB
 import json
 import datetime
@@ -32,10 +32,16 @@ def _create_movie(movie_id):
     movie_details = _get_movie_details(id=movie_id)
     if not movie_details:
         return {"error": "Failed to retrieve movie details"}, status.HTTP_500_INTERNAL_SERVER_ERROR
+    if movie_details['status'] == 404:
+        # how? ¯\_(ツ)_/¯
+        return {"error": "Movie not found"}, status.HTTP_404_NOT_FOUND
 
     genres = movie_details.get("genre", [])
     # duration has a weird format (e.g. PT1H55M) :p
-    time_obj = datetime.datetime.strptime(movie_details.get("duration").replace("PT", ''), "%HH%MM")
+    duration = movie_details.get("duration")
+    if 'M' not in duration:
+        duration += '0M'
+    time_obj = datetime.datetime.strptime(duration.replace("PT", ''), "%HH%MM")
     runtime = time_obj.hour * 60 + time_obj.minute
     short_description = movie_details.get("short_description")
 
@@ -55,6 +61,10 @@ def _create_movie(movie_id):
     for genre_name in genres:
         genre, created = Genre.objects.get_or_create(name=genre_name)
         movie.genres.add(genre)
+
+    for director in movie_details.get("director"):
+        director_obj, created = Director.objects.get_or_create(name=director['name'], url=director['url'])
+        movie.directors.add(director_obj)
     
     return {"message": "Movie created successfully", "movie_id": movie.id}, status.HTTP_201_CREATED
 
@@ -65,7 +75,7 @@ def get_movie_details(request):
     id = request.query_params.get('id')
     if name or id:
         movie_info = _get_movie_details(name=name, id=id)
-        return Response(json.loads(movie_info))
+        return Response(movie_info)
     else:
         return Response({'error': 'Bad Request: Please provide either a name or an id'}, status=status.HTTP_400_BAD_REQUEST)
 

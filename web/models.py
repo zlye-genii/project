@@ -7,7 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 class Genre(models.Model):
     def __str__(self):
         return self.name
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
 
 class StarRating(models.IntegerChoices):
     ONE = 1, 'Terrible'
@@ -24,6 +24,10 @@ class Rating(models.Model):
     # genericforeignkey(content type, foreign key (unique movie/book object id))
     content_object = GenericForeignKey('content_type', 'object_id') # set/get media object here (movie, book)
 
+class Director(models.Model):
+    name = models.CharField(max_length=100)
+    url = models.URLField()
+
 # movie datal
 # pull all this stuff from imdb scraper (not paying for an api key >_<)
 # https://discord.com/channels/465439647334400001/1150680390902743060/1220148782000246944
@@ -32,15 +36,15 @@ class Movie(models.Model):
         return self.title
     id = models.CharField(max_length=25, primary_key=True)
     title = models.CharField(max_length=200)
-    release_date = models.DateField()
-    genres = models.ManyToManyField(Genre)
-    director = models.CharField(max_length=100)
-    runtime = models.IntegerField() # mins
-    imdb_rating = models.FloatField()
+    release_date = models.DateField(null=True)
+    genres = models.ManyToManyField(Genre, blank=True)
+    directors = models.ManyToManyField(Director, blank=True)
+    runtime = models.IntegerField(null=True) # mins
+    imdb_rating = models.FloatField(null=True)
     user_ratings = models.ManyToManyField(Rating)
-    description = models.TextField()
-    poster_url = models.URLField(default='/static/banner404.png')
-    content_rating = models.IntegerField()
+    description = models.TextField(null=True)
+    poster_url = models.URLField(default='/static/banner404.png', null=True)
+    content_rating = models.CharField(max_length=20, null=True)
     # hack because no cascade delete on genericforeignkeys
     def delete(self, *args,**kwargs):
         Rating.objects.filter(content_type=ContentType.objects.get_for_model(self.__class__), object_id=self.id).delete()
