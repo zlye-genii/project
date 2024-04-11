@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Favorites</title>
+</head>
+<body>
+    <h1>Add a Movie to Favorites</h1>
+    <form id="add-favorite-form">
+        <label for="movie_id">Movie ID:</label><br>
+        <input type="text" id="movie_id" name="movie_id"><br>
+        <input type="submit" value="Add to Favorites">
+    </form>
+    <h1>Remove a Movie from Favorites</h1>
+    <form id="remove-favorite-form">
+        <label for="remove_movie_id">Movie ID:</label><br>
+        <input type="text" id="remove_movie_id" name="remove_movie_id"><br>
+        <input type="submit" value="Remove from Favorites">
+    </form>
+    <div id="message"></div>
+    <script>
+        function getCookie(name) {
+            const value = '; ' + document.cookie;
+            const parts = value.split('; ' + name + '=');
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
+        document.getElementById('add-favorite-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            fetch('/api/user/favorites/add/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    movie_id: document.getElementById('movie_id').value
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('message').innerText = data.message || data.error;
+            });
+        });
+
+        document.getElementById('remove-favorite-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            fetch('/api/user/favorites/remove/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    movie_id: document.getElementById('remove_movie_id').value
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('message').innerText = data.message || data.error;
+            });
+        });
+    </script>
+</body>
+</html>

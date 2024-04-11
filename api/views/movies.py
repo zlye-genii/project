@@ -20,6 +20,44 @@ def _get_movie_details(name=None, id=None):
         results = imdb.get_by_id(id)
     return json.loads(results)
 
+def _create_movie(movie_id):
+    # Check if movie already exists to avoid duplicates
+    if Movie.objects.filter(id=movie_id).exists():
+        return {"error": "Movie with this ID already exists"}, status.HTTP_400_BAD_REQUEST
+    
+    # Create a new Movie instance with the provided ID
+    movie = Movie(id=movie_id)
+
+    # Extract additional movie details from the get_movie_details API
+    movie_details = _get_movie_details(id=movie_id)
+    if not movie_details:
+        return {"error": "Failed to retrieve movie details"}, status.HTTP_500_INTERNAL_SERVER_ERROR
+
+    genres = movie_details.get("genre", [])
+    # duration has a weird format (e.g. PT1H55M) :p
+    time_obj = datetime.datetime.strptime(movie_details.get("duration").replace("PT", ''), "%HH%MM")
+    runtime = time_obj.hour * 60 + time_obj.minute
+    short_description = movie_details.get("short_description")
+
+    # Set the movie details
+    movie.title = movie_details.get("name")
+    movie.release_date = movie_details.get("datePublished")
+    movie.director = movie_details.get("director")
+    movie.runtime = runtime
+    movie.imdb_rating = movie_details.get("rating").get("ratingValue")
+    movie.description = movie_details.get("description")
+    movie.content_rating = movie_details.get("contentRating")
+    movie.poster_url = movie_details.get("poster") # amazon link
+    
+    movie.save()
+
+    # Link the genres to the movie
+    for genre_name in genres:
+        genre, created = Genre.objects.get_or_create(name=genre_name)
+        movie.genres.add(genre)
+    
+    return {"message": "Movie created successfully", "movie_id": movie.id}, status.HTTP_201_CREATED
+
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_movie_details(request):
@@ -48,7 +86,7 @@ def get_upcoming_movies(request):
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
-def get_popular_movies(request):
+def get_popular_movies(request): # TODO fix: returns movie results in spanish (????????)
     genre = request.query_params.get('genre')
     page = request.query_params.get('page', 0)
     start_id = int(page) * 50 + 1
@@ -63,44 +101,9 @@ def get_popular_movies(request):
 @api_view(["POST"])
 @permission_classes([AllowAny])
 def create_movie(request):
-    # Extract movie id from the request
     movie_id = request.data.get("id")
     if not movie_id:
         return Response({"error": "Movie ID is required"}, status=status.HTTP_400_BAD_REQUEST)
     
-    # Check if movie already exists to avoid duplicates
-    if Movie.objects.filter(id=movie_id).exists():
-        return Response({"error": "Movie with this ID already exists"}, status=status.HTTP_400_BAD_REQUEST)
-    
-    # Create a new Movie instance with the provided ID
-    movie = Movie(id=movie_id)
-
-    # Extract additional movie details from the get_movie_details API
-    movie_details = _get_movie_details(id=movie_id)
-    if not movie_details:
-        return Response({"error": "Failed to retrieve movie details"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    genres = movie_details.get("genre", [])
-    # duration has a weird format (e.g. PT1H55M) :p
-    time_obj = datetime.datetime.strptime(movie_details.get("duration").replace("PT", ''), "%HH%MM")
-    runtime = time_obj.hour * 60 + time_obj.minute
-    short_description = movie_details.get("short_description")
-
-    # Set the movie details
-    movie.title = movie_details.get("name")
-    movie.release_date = movie_details.get("datePublished")
-    movie.director = movie_details.get("director")
-    movie.runtime = runtime
-    movie.imdb_rating = movie_details.get("rating").get("ratingValue")
-    movie.description = movie_details.get("description")
-    movie.content_rating = movie_details.get("contentRating")
-    movie.poster_url = movie_details.get("poster") # amazon link
-    
-    movie.save()
-
-    # Link the genres to the movie
-    for genre_name in genres:
-        genre, created = Genre.objects.get_or_create(name=genre_name)
-        movie.genres.add(genre)
-    
-    return Response({"message": "Movie created successfully", "movie_id": movie.id}, status=status.HTTP_201_CREATED)
+    result, status_code = _create_movie(movie_id)
+    return Response(result, status=status_code)

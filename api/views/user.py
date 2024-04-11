@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from ..serializers import ProfileSerializer
 from web.models import Movie, Genre
-from .movies import get_movie_details
+from .movies import _create_movie
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
@@ -23,7 +23,11 @@ def add_movie_to_favorites(request):
     try:
         movie = Movie.objects.get(id=movie_id)
     except Movie.DoesNotExist:
-        return Response({"error": "Movie not found"}, status=status.HTTP_404_NOT_FOUND)
+        try:
+            _create_movie(movie_id)
+            movie = Movie.objects.get(id=movie_id)
+        except Movie.DoesNotExist:
+            return Response({"error": "Movie not found"}, status=status.HTTP_404_NOT_FOUND)
 
     profile = request.user.profile
     if movie not in profile.favorite_movies.all():
@@ -43,7 +47,11 @@ def remove_movie_from_favorites(request):
     try:
         movie = Movie.objects.get(id=movie_id)
     except Movie.DoesNotExist:
-        return Response({"error": "Movie not found"}, status=status.HTTP_404_NOT_FOUND)
+        try:
+            _create_movie(movie_id)
+            movie = Movie.objects.get(id=movie_id)
+        except Movie.DoesNotExist:
+            return Response({"error": "Movie not found"}, status=status.HTTP_404_NOT_FOUND)
 
     profile = request.user.profile
     if movie in profile.favorite_movies.all():
