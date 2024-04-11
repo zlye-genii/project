@@ -25,6 +25,8 @@ class Rating(models.Model):
     content_object = GenericForeignKey('content_type', 'object_id') # set/get media object here (movie, book)
 
 class Director(models.Model):
+    def __str__(self):
+        return self.name
     name = models.CharField(max_length=100)
     url = models.URLField()
 

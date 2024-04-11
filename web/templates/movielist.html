@@ -26,10 +26,10 @@
         {% for movie in movies %}
             <li>
                 Title: {{ movie.title }},
-                {% for director in movie.director %}
-                    {{ director.name }}
-                    {% if not loop.last %}, {% endif %}
-                {% endfor %},
+                Directors:
+                {% for director in movie.directors.all %}
+                    {{ director.name }}{% if not loop.last %}, {% endif %}
+                {% endfor %}
                 Release Date: {{ movie.release_date }},
                 IMDB Rating: {{ movie.imdb_rating }}
             </li>
