@@ -6,17 +6,28 @@
 <body>
     <h1>Add a Movie to Favorites</h1>
     <form id="add-favorite-form">
-        <label for="movie_id">Movie ID:</label><br>
-        <input type="text" id="movie_id" name="movie_id"><br>
+        <label for="movie_id">Movie:</label><br>
+        <select id="movie_id" name="movie_id">
+            {% for movie in movies %}
+                <option value="{{ movie.id }}">{{ movie.title }}</option>
+            {% endfor %}
+        </select><br>
         <input type="submit" value="Add to Favorites">
     </form>
     <h1>Remove a Movie from Favorites</h1>
     <form id="remove-favorite-form">
-        <label for="remove_movie_id">Movie ID:</label><br>
-        <input type="text" id="remove_movie_id" name="remove_movie_id"><br>
+        <label for="remove_movie_id">Movie:</label><br>
+        <select id="remove_movie_id" name="remove_movie_id">
+            {% for favorite in favorites %}
+                <option value="{{ favorite.content_object.title }}">{{ favorite.content_object.title }}</option>
+            {% endfor %}
+        </select><br>
         <input type="submit" value="Remove from Favorites">
     </form>
-    <div id="message"></div>
+    <h1>Your Favorites</h1>
+    {% for favorite in favorites %}
+        <div>{{ favorite.media.title }}</div>
+    {% endfor %}
     <script>
         function getCookie(name) {
             const value = '; ' + document.cookie;

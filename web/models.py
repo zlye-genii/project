@@ -1,6 +1,7 @@
 from django.db import models
-from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
+from user.models import Profile
 
 # Create your models here.
 
@@ -10,19 +11,12 @@ class Genre(models.Model):
     name = models.CharField(max_length=100, unique=True)
 
 class StarRating(models.IntegerChoices):
+    ZERO = 0, 'None' # kind of a hack to allow favorited without a rating :p
     ONE = 1, 'Terrible'
     TWO = 2, 'Poor'
     THREE = 3, 'Average'
     FOUR = 4, 'Good'
     FIVE = 5, 'Excellent'
-
-class Rating(models.Model):
-    stars = models.IntegerField(choices=StarRating.choices)
-    review = models.CharField()
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE) 
-    object_id = models.PositiveIntegerField()
-    # genericforeignkey(content type, foreign key (unique movie/book object id))
-    content_object = GenericForeignKey('content_type', 'object_id') # set/get media object here (movie, book)
 
 class Director(models.Model):
     def __str__(self):
@@ -30,9 +24,7 @@ class Director(models.Model):
     name = models.CharField(max_length=100)
     url = models.URLField()
 
-# movie datal
-# pull all this stuff from imdb scraper (not paying for an api key >_<)
-# https://discord.com/channels/465439647334400001/1150680390902743060/1220148782000246944
+# TODO: merge these two into one Media object with foreignkey contenttype
 class Movie(models.Model):
     def __str__(self):
         return self.title
@@ -43,14 +35,21 @@ class Movie(models.Model):
     directors = models.ManyToManyField(Director, blank=True)
     runtime = models.IntegerField(null=True) # mins
     imdb_rating = models.FloatField(null=True)
-    user_ratings = models.ManyToManyField(Rating)
     description = models.TextField(null=True)
     poster_url = models.URLField(default='/static/banner404.png', null=True)
     content_rating = models.CharField(max_length=20, null=True)
-    # hack because no cascade delete on genericforeignkeys
     def delete(self, *args,**kwargs):
-        Rating.objects.filter(content_type=ContentType.objects.get_for_model(self.__class__), object_id=self.id).delete()
+        self.ratings.all().delete()
         super().delete(*args, **kwargs)
+
+class Rating(models.Model):
+    def __str__(self):
+        return f"{self.media.title}: {self.stars}{', ★' if self.favorited else ''}" # star is NOT rating amount!!!! it is if favorited yes/no
+    stars = models.IntegerField(choices=StarRating.choices, default=StarRating.ZERO)
+    review = models.TextField(null=True, blank=True)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, default=None)
+    media = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='ratings', default=None) # why do you want a default, none of you should be null anyway??
+    favorited = models.BooleanField(default=False)
 
 class Book(models.Model):
     def __str__(self):
@@ -61,5 +60,5 @@ class Book(models.Model):
     short_description = models.CharField()
     genre = models.CharField()
     def delete(self, *args,**kwargs):
-        Rating.objects.filter(content_type=ContentType.objects.get_for_model(self.__class__), object_id=self.id).delete()
+        self.ratings.all().delete()
         super().delete(*args, **kwargs)

@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from web.models import Movie
 
 # Create your views here.
 
@@ -14,4 +15,6 @@ def account(request):
 
 @login_required
 def favorites(request):
-    return render(request, 'favorites.html')
+    movies = Movie.objects.all().prefetch_related('genres', 'directors') # temp for testing
+    favorites = request.user.profile.ratings.filter(favorited=True)
+    return render(request, 'favorites.html', {'movies': movies, 'favorites': favorites})

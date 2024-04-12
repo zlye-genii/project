@@ -1,7 +1,7 @@
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from web.models import Movie
 
 from rest_framework.decorators import api_view, permission_classes
@@ -32,12 +32,14 @@ def _create_movie(movie_id):
     movie_details = _get_movie_details(id=movie_id)
     if not movie_details:
         return {"error": "Failed to retrieve movie details"}, status.HTTP_500_INTERNAL_SERVER_ERROR
-    if movie_details['status'] == 404:
-        # how? ¯\_(ツ)_/¯
-        return {"error": "Movie not found"}, status.HTTP_404_NOT_FOUND
+    if 'status' in movie_details:
+        if movie_details['status'] == 404:
+            # how? ¯\_(ツ)_/¯
+            return {"error": "Movie not found"}, status.HTTP_404_NOT_FOUND
 
     genres = movie_details.get("genre", [])
     # duration has a weird format (e.g. PT1H55M) :p
+    # TODO: some movies have no duration, what to do with those?
     duration = movie_details.get("duration")
     if 'M' not in duration:
         duration += '0M'
@@ -53,7 +55,7 @@ def _create_movie(movie_id):
     movie.imdb_rating = movie_details.get("rating").get("ratingValue")
     movie.description = movie_details.get("description")
     movie.content_rating = movie_details.get("contentRating")
-    movie.poster_url = movie_details.get("poster") # amazon link
+    movie.poster_url = movie_details.get("poster") # amazon link, they be chonky (3000x5000) = LAG, TODO: downscale and store in /static/movieposters
     
     movie.save()
 
@@ -70,6 +72,7 @@ def _create_movie(movie_id):
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
+@authentication_classes([])
 def get_movie_details(request):
     name = request.query_params.get('name')
     id = request.query_params.get('id')
@@ -81,6 +84,7 @@ def get_movie_details(request):
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
+@authentication_classes([])
 def search_movies(request):
     query = request.query_params.get('query')
     year = request.query_params.get('year')  # recommended
@@ -89,6 +93,7 @@ def search_movies(request):
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
+@authentication_classes([])
 def get_upcoming_movies(request):
     region = request.query_params.get('region')
     res = imdb.upcoming(region=region)
@@ -96,6 +101,7 @@ def get_upcoming_movies(request):
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
+@authentication_classes([])
 def get_popular_movies(request): # TODO fix: returns movie results in spanish (????????)
     genre = request.query_params.get('genre')
     page = request.query_params.get('page', 0)
@@ -110,6 +116,7 @@ def get_popular_movies(request): # TODO fix: returns movie results in spanish (?
 # this is mainly for speed reasons because scraper is sloooooooow
 @api_view(["POST"])
 @permission_classes([AllowAny])
+@authentication_classes([])
 def create_movie(request):
     movie_id = request.data.get("id")
     if not movie_id:
