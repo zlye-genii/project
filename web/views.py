@@ -11,5 +11,4 @@ def index(request):
 
 def movielist(request):
     movies = Movie.objects.all().prefetch_related('genres', 'directors')
-    # print(movies[0].directors.all())
     return render(request, 'movielist.html', {'movies': movies})

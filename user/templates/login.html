@@ -45,7 +45,7 @@
           })
           .then(response => response.json())
           .then(data => {
-              if (data.success) {
+              if (!data.error) {
                   window.location.href = '/user/account';
               } else {
                   // handle error
@@ -68,7 +68,7 @@
           })
           .then(response => response.json())
           .then(data => {
-              if (data.success) {
+              if (!data.error) {
                   window.location.href = '/user/account';
               } else {
                   // handle error
