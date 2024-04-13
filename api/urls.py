@@ -13,10 +13,9 @@ urlpatterns = [
     path('movies/upcoming', movies.get_upcoming_movies),
     path('movies/popular', movies.get_popular_movies),
     path('movies/create', movies.create_movie) 
-    path('books/details', book.get_book_details),
-    path('books/search', book.search_books),
-    path('books/upcoming', book.get_upcoming_books),
-    path('books/popular', book.get_popular_books),
-    path('books/create', book.create_book),
-]
+    path('book/details', book.get_book_details),
+    path('book/search', book.search_books),
+    path('book/upcoming', book.get_upcoming_books),
+    path('book/popular', book.get_popular_books),
+    path('book/create', book.create_book),
 ]
