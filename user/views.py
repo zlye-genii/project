@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from web.models import Movie
+from api.views.ai import get_user_recommendations
 
 # Create your views here.
 
@@ -18,3 +19,8 @@ def favorites(request):
     movies = Movie.objects.all().prefetch_related('genres', 'directors') # temp for testing
     favorites = request.user.profile.ratings.filter(favorited=True)
     return render(request, 'favorites.html', {'movies': movies, 'favorites': favorites})
+
+@login_required
+def recom(request):
+    recommendations = get_user_recommendations(request)
+    return render(request, 'recom.html', {'recommendations': recommendations})

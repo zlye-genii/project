@@ -62,3 +62,27 @@ def get_user_recommendations(request):
         return Response({"recommendations": recommendations}, status=status.HTTP_200_OK)
     else:
         return Response({"error": "AI service unavailable"}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+
+
+def get_book_by_id(book_id):
+    GOOGLE_BOOKS_API_URL = f"https://www.googleapis.com/books/v1/volumes/{book_id}"
+    response = requests.get(GOOGLE_BOOKS_API_URL)
+
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return None
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_book(request):
+    book_id = request.data.get('book_id')
+
+    if book_id:
+        book = get_book_by_id(book_id)
+        if book:
+            return Response({"book": book}, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "Book not found"}, status=status.HTTP_404_NOT_FOUND)
+    else:
+        return Response({"error": "No book_id provided"}, status=status.HTTP_400_BAD_REQUEST)
