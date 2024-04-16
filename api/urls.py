@@ -1,6 +1,6 @@
 from django.urls import path, include
 
-from .views import user, movies, book
+from .views import user, movies, book, ai
 
 urlpatterns = [
     path('user/', include('dj_rest_auth.urls')),
@@ -10,6 +10,8 @@ urlpatterns = [
     path('user/favorites/remove/', user.remove_media_from_favorites),
     path('user/ratings/', user.get_ratings_by_media_type),
     path('user/ratings/set/', user.set_media_rating),
+
+    path('user/recommendations', ai.get_user_recommendations),
     
     path('movies/details/', movies.get_movie_details),
     path('movies/search/', movies.search_movies),

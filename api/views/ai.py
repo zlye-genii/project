@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from user.models import Profile
+from .user import _get_user_favorites
 import requests
 import json
 load_dotenv('../..')
@@ -17,7 +17,6 @@ PROMPT = '''You are a {{CONTENT_TYPE}} expert and your task is to recommend {{CO
 You will be given the User's preferences in the <UserPreferences> tag. You must provide a list of FIVE {{CONTENT_TYPE_PLURAL}}, outputting ONLY COMMA-SEPERATED NAMES, after the "Recommendations" line.
 <UserPreferences>
 {{FAVORITES}}
-{{LASTWATCHED}}
 </UserPreferences>
 '''
 FAVORITES_BASE = "User has added the following {{CONTENT_TYPE_PLURAL}} to their favorites:"
@@ -37,20 +36,20 @@ content_type_plural_action = {
 @permission_classes([IsAuthenticated])
 def get_user_recommendations(request):
     profile = request.user.profile
-    media_type = request.data.get('media_type')
+    media_type = request.query_params.get('media_type')
     if media_type == 'movie':
-        favorites = profile.favorite_movies.all().order_by('-id')[:5]
-        favorites_list = [movie.title for movie in favorites]
-        last_watched = profile.last_watched_movies.all().order_by('-watch_date')[:5]
-        last_watched_list = [movie.title for movie in last_watched]
+        favorites_list = _get_user_favorites(profile, media_type)
+        # TODO: implement last watched lol
+        # last_watched = profile.last_watched_movies.all().order_by('-watch_date')[:5]
+        # last_watched_list = [movie.title for movie in last_watched]
     elif media_type == 'book':
         # e
         pass
     else:
         return Response({"error": "Invalid media type"}, status=status.HTTP_400_BAD_REQUEST)
 
-    prompt_filled = PROMPT.replace("{{FAVORITES}}", FAVORITES_BASE + " " + ", ".join(favorites_list))
-    prompt_filled = prompt_filled.replace("{{LASTWATCHED}}", LASTWATCHED_BASE + " " + ", ".join(last_watched_list))
+    prompt_filled = PROMPT.replace("{{FAVORITES}}", FAVORITES_BASE + " " + ", ".join(x['title'] for x in favorites_list))
+    # prompt_filled = prompt_filled.replace("{{LASTWATCHED}}", LASTWATCHED_BASE + " " + ", ".join(last_watched_list))
     prompt_filled = prompt_filled.replace("{{CONTENT_TYPE}}", media_type) \
         .replace("{{CONTENT_TYPE_PLURAL}}", content_type_plural[media_type]) \
         .replace("{{CONTENT_TYPE_PLURAL_ACTION}}", content_type_plural_action[media_type])
@@ -62,6 +61,8 @@ def get_user_recommendations(request):
         {"role": "user", "content": "Recommendations:"}
     ]
 
+    print(messages)
+
     response = requests.post(
         AI_BASE_URL + '/v1/chat/completions',
         headers={
@@ -72,12 +73,13 @@ def get_user_recommendations(request):
             'model': 'gpt-4', # TODO: change to gigachat later
             'messages': messages,
             "temperature": 0.5,
-            "top_p": 0.5
+            "top_p": 0.5,
+            "max_tokens": 256
         }
     )
 
     if response.ok:
-        recommendations = response.json()['choices'][0]['message']['content'].split(',')
+        recommendations = response.json()['choices'][0]['message']['content'].split(', ')
         return Response({"recommendations": recommendations}, status=status.HTTP_200_OK)
     else:
         return Response({"error": "AI service unavailable"}, status=status.HTTP_503_SERVICE_UNAVAILABLE)

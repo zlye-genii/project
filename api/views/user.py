@@ -47,6 +47,11 @@ def remove_media_from_favorites(request):
     else:
         return Response({"error": "Media not in favorites"}, status=status.HTTP_400_BAD_REQUEST)
 
+def _get_user_favorites(profile, media_type):
+    favorites = [rating for rating in profile.ratings.all() if isinstance(rating.media, (Movie if media_type == 'movie' else Book)) and rating.favorited]
+    favorites_list = [{"id": rating.media.id, "title": rating.media.title, "stars": rating.stars, "favorited": rating.favorited} for rating in favorites]
+    return favorites_list
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def get_ratings_by_media_type(request):
