@@ -16,9 +16,7 @@ def account(request):
 
 @login_required
 def favorites(request):
-    movies = Movie.objects.all().prefetch_related('genres', 'directors') # temp for testing
-    favorites = request.user.profile.ratings.filter(favorited=True)
-    return render(request, 'favorites.html', {'movies': movies, 'favorites': favorites})
+    return render(request, 'favorites.html')
 
 @login_required
 def recommendations(request):

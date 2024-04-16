@@ -11,6 +11,9 @@
         {% csrf_token %}
         <input type="submit" value="Logout">
     </form>
+    <button href="/movies">Go to /movies</button>
+    <h1>Authorized routes</h1>
+    <button href="/user/movie/favorites">Test favorites</button>
     <script>
     document.getElementById('logoutForm').addEventListener('submit', function(event) {
         event.preventDefault();

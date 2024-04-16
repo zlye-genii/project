@@ -3,6 +3,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 import requests
+from web.models import Book, Person, Genre
 
 GOOGLE_BOOKS_API_URL = "https://www.googleapis.com/books/v1/volumes"
 
@@ -12,6 +13,15 @@ def _get_book_details(id=None):
         if response.status_code == 200:
             return response.json()
     return None
+
+def get_book_by_id(book_id):
+    GOOGLE_BOOKS_API_URL = f"https://www.googleapis.com/books/v1/volumes/{book_id}"
+    response = requests.get(GOOGLE_BOOKS_API_URL)
+
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return None
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
@@ -62,6 +72,7 @@ def get_popular_books(request):
     else:
         return Response({'error': 'Failed to retrieve popular books'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+# https://developers.google.com/books/docs/v1/using?hl=ru#RetrievingVolume
 @api_view(["POST"])
 @permission_classes([AllowAny])
 def create_book(request):
@@ -84,12 +95,18 @@ def create_book(request):
 
     # Set the book details
     book.title = book_details.get("volumeInfo").get("title")
-    book.authors = book_details.get("volumeInfo").get("authors")
-    book.published_date = book_details.get("volumeInfo").get("publishedDate")
+    for author in book_details.get("volumeInfo").get("authors"):
+        author_obj, created = Person.objects.get_or_create(name=author) # google does not provide a url
+        book.authors.add(author_obj)
+    book.release_date = book_details.get("volumeInfo").get("publishedDate")
     book.description = book_details.get("volumeInfo").get("description")
-    book.page_count = book_details.get("volumeInfo").get("pageCount")
-    book.thumbnail_url = book_details.get("volumeInfo").get("imageLinks").get("thumbnail")
+    book.pages = book_details.get("volumeInfo").get("pageCount")
+    book.thumbnail = book_details.get("volumeInfo").get("imageLinks").get("thumbnail")
     
     book.save()
+
+    # well books have category not genre but who cares
+    genre, created = Genre.objects.get_or_create(name=book_details.get("mainCategory"))
+    book.genres.add(genre)
     
     return Response({"message": "Book created successfully", "book_id": book.id}, status=status.HTTP_201_CREATED)

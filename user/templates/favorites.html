@@ -4,35 +4,87 @@
     <title>Favorites</title>
 </head>
 <body>
-    <h1>Add a Movie to Favorites</h1>
+    <h1>Add Media to Favorites</h1>
     <form id="add-favorite-form">
-        <label for="movie_id">Movie:</label><br>
-        <select id="movie_id" name="movie_id">
-            {% for movie in movies %}
-                <option value="{{ movie.id }}">{{ movie.title }}</option>
-            {% endfor %}
+        <label for="media_type">Media Type:</label><br>
+        <select id="media_type" name="media_type" onchange="fetchMedia()">
+            <option value="movie">Movie</option>
+            <option value="book">Book</option>
+        </select><br>
+        <label for="media_id">Media:</label><br>
+        <select id="media_id" name="media_id">
+            <!-- Media options will be populated here -->
         </select><br>
         <input type="submit" value="Add to Favorites">
     </form>
-    <h1>Remove a Movie from Favorites</h1>
+    <h1>Remove Media from Favorites</h1>
     <form id="remove-favorite-form">
-        <label for="remove_movie_id">Movie:</label><br>
-        <select id="remove_movie_id" name="remove_movie_id">
-            {% for favorite in favorites %}
-                <option value="{{ favorite.content_object.title }}">{{ favorite.content_object.title }}</option>
-            {% endfor %}
+        <label for="remove_media_type">Media Type:</label><br>
+        <select id="remove_media_type" name="remove_media_type" onchange="fetchFavorites()">
+            <option value="movie">Movie</option>
+            <option value="book">Book</option>
+        </select><br>
+        <label for="remove_media_id">Media:</label><br>
+        <select id="remove_media_id" name="remove_media_id">
+            <!-- Favorite media options will be populated here -->
         </select><br>
         <input type="submit" value="Remove from Favorites">
     </form>
-    <h1>Your Favorites</h1>
-    {% for favorite in favorites %}
-        <div>{{ favorite.media.title }}</div>
-    {% endfor %}
+    <h1>Your Favorites (by selected media type)</h1>
+    <div id="favs-block"></div>
     <script>
         function getCookie(name) {
             const value = '; ' + document.cookie;
             const parts = value.split('; ' + name + '=');
             if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
+        function fetchMedia() {
+            const mediaType = document.getElementById('media_type').value;
+            fetch(`/api/${mediaType}s/upcoming/`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const mediaSelect = document.getElementById('media_id');
+                mediaSelect.innerHTML = '';
+                data.results.forEach(media => {
+                    const option = document.createElement('option');
+                    option.value = media.id;
+                    option.text = media.name; // TODO: DO NOT USE UPCOMING, ITS SPANISH, I DONT KNOW WHY, JUST FEED DATA INTO /DETAILS FIRST THATS MORE RELIABLE, also media.title
+                    mediaSelect.add(option);
+                });
+            });
+        }
+
+        function fetchFavorites() {
+            const mediaType = document.getElementById('remove_media_type').value;
+            fetch(`/api/user/favorites/?media_type=${mediaType}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const mediaSelect = document.getElementById('remove_media_id');
+                const favsBlock = document.getElementById('favs-block')
+                mediaSelect.innerHTML = '';
+                data.favorites.forEach(media => {
+                    const option = document.createElement('option');
+                    option.value = media.id;
+                    option.text = media.title;
+                    mediaSelect.add(option);
+                    const p = document.createElement('p')
+                    p.innerText = media.title
+                    favsBlock.appendChild(p);
+                });
+            });
         }
 
         document.getElementById('add-favorite-form').addEventListener('submit', function(event) {
@@ -44,7 +96,8 @@
                     'X-CSRFToken': getCookie('csrftoken')
                 },
                 body: JSON.stringify({
-                    movie_id: document.getElementById('movie_id').value
+                    media_id: document.getElementById('media_id').value,
+                    media_type: document.getElementById('media_type').value
                 })
             })
             .then(response => response.json())
@@ -62,7 +115,8 @@
                     'X-CSRFToken': getCookie('csrftoken')
                 },
                 body: JSON.stringify({
-                    movie_id: document.getElementById('remove_movie_id').value
+                    media_id: document.getElementById('remove_media_id').value,
+                    media_type: document.getElementById('remove_media_type').value
                 })
             })
             .then(response => response.json())
@@ -70,6 +124,8 @@
                 document.getElementById('message').innerText = data.message || data.error;
             });
         });
+        fetchMedia()
+        fetchFavorites()
     </script>
 </body>
 </html>
