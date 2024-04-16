@@ -6,7 +6,7 @@ from web.models import Movie
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from web.models import Movie, Genre, Director
+from web.models import Movie, Genre, Director, StarRating, Rating
 from PyMovieDb import IMDB
 import json
 import datetime
@@ -124,3 +124,26 @@ def create_movie(request):
     
     result, status_code = _create_movie(movie_id)
     return Response(result, status=status_code)
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def set_movie_rating(request):
+    movie_id = request.data.get("movie_id")
+    star_rating = request.data.get("star_rating")
+    if not movie_id or star_rating is None:
+        return Response({"error": "Movie ID and Star Rating are required"}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        movie = Movie.objects.get(id=movie_id)
+    except Movie.DoesNotExist:
+        return Response({"error": "Movie not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    if not StarRating.ZERO <= star_rating <= StarRating.FIVE:
+        return Response({"error": "Invalid Star Rating"}, status=status.HTTP_400_BAD_REQUEST)
+
+    profile = request.user.profile
+    rating, created = Rating.objects.get_or_create(media=movie, profile=profile)
+    rating.stars = star_rating
+    rating.save()
+
+    return Response({"message": "Movie rating set successfully"}, status=status.HTTP_200_OK)
