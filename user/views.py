@@ -21,6 +21,6 @@ def favorites(request):
     return render(request, 'favorites.html', {'movies': movies, 'favorites': favorites})
 
 @login_required
-def recom(request):
+def recommendations(request):
     recommendations = get_user_recommendations(request)
     return render(request, 'recom.html', {'recommendations': recommendations})
