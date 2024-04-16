@@ -30,7 +30,22 @@
         </select><br>
         <input type="submit" value="Remove from Favorites">
     </form>
-    <h1>Your Favorites (by selected media type)</h1>
+    <h1>Rate Media</h1>
+    <form id="rate-media-form">
+        <label for="rate_media_type">Media Type:</label><br>
+        <select id="rate_media_type" name="rate_media_type" onchange="fetchFavorites()">
+            <option value="movie">Movie</option>
+            <option value="book">Book</option>
+        </select><br>
+        <label for="rate_media_id">Media:</label><br>
+        <select id="rate_media_id" name="rate_media_id">
+            <!-- Favorite media options will be populated here -->
+        </select><br>
+        <label for="rating">Rating:</label><br>
+        <input type="number" id="rating" name="rating" min="1" max="5"><br>
+        <input type="submit" value="Rate Media">
+    </form>
+    <h1>Your Ratings (by selected media type)</h1>
     <div id="favs-block"></div>
     <script>
         function getCookie(name) {
@@ -51,19 +66,26 @@
             .then(response => response.json())
             .then(data => {
                 const mediaSelect = document.getElementById('media_id');
+                const mediaRating = document.getElementById('rate_media_id');
                 mediaSelect.innerHTML = '';
+                mediaRating.innerHTML = '';
                 data.results.forEach(media => {
+                    // TODO: DO NOT USE UPCOMING, ITS SPANISH, I DONT KNOW WHY, JUST FEED DATA INTO /DETAILS FIRST THATS MORE RELIABLE, also media.title
                     const option = document.createElement('option');
                     option.value = media.id;
-                    option.text = media.name; // TODO: DO NOT USE UPCOMING, ITS SPANISH, I DONT KNOW WHY, JUST FEED DATA INTO /DETAILS FIRST THATS MORE RELIABLE, also media.title
+                    option.text = media.name;
+                    const option2 = document.createElement('option');
+                    option2.value = media.id;
+                    option2.text = media.name;
                     mediaSelect.add(option);
+                    mediaRating.add(option2);
                 });
             });
         }
 
         function fetchFavorites() {
             const mediaType = document.getElementById('remove_media_type').value;
-            fetch(`/api/user/favorites/?media_type=${mediaType}`, {
+            fetch(`/api/user/ratings/?media_type=${mediaType}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -75,17 +97,42 @@
                 const mediaSelect = document.getElementById('remove_media_id');
                 const favsBlock = document.getElementById('favs-block')
                 mediaSelect.innerHTML = '';
-                data.favorites.forEach(media => {
+                data.ratings.forEach(media => {
                     const option = document.createElement('option');
                     option.value = media.id;
                     option.text = media.title;
                     mediaSelect.add(option);
-                    const p = document.createElement('p')
-                    p.innerText = media.title
+                    const p = document.createElement('p');
+                    const star = media.favorited ? '⭐' : ''; // this one looks better in the actual html: ☆
+                    if (media.stars !== 0) {
+                        p.innerText = `${media.title} [${media.stars}] ${star}`;
+                    } else {
+                        p.innerText = `${media.title} ${star}`;
+                    }
                     favsBlock.appendChild(p);
                 });
             });
         }
+
+        document.getElementById('rate-media-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            fetch('/api/user/ratings/set/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    media_id: document.getElementById('rate_media_id').value,
+                    media_type: document.getElementById('rate_media_type').value,
+                    rating: document.getElementById('rating').value
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('message').innerText = data.message || data.error;
+            });
+        });
 
         document.getElementById('add-favorite-form').addEventListener('submit', function(event) {
             event.preventDefault();

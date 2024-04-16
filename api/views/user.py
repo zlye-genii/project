@@ -46,10 +46,10 @@ def remove_media_from_favorites(request):
         return Response({"message": "Media removed from favorites"}, status=status.HTTP_200_OK)
     else:
         return Response({"error": "Media not in favorites"}, status=status.HTTP_400_BAD_REQUEST)
-    
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def get_favorites_by_media_type(request):
+def get_ratings_by_media_type(request):
     media_type = request.query_params.get("media_type")  # 'movie' or 'book'
 
     if not media_type:
@@ -59,18 +59,18 @@ def get_favorites_by_media_type(request):
         model = ContentType.objects.get(model=media_type).model_class()
     except model.DoesNotExist:
         return Response({"error": "Invalid media type"}, status=status.HTTP_400_BAD_REQUEST)
+    
     profile = request.user.profile
-    favorites = [rating for rating in profile.ratings.filter(favorited=True) if isinstance(rating.media, (Movie if media_type == 'movie' else Book))]
+    ratings = [rating for rating in profile.ratings.all() if isinstance(rating.media, (Movie if media_type == 'movie' else Book))]
 
-    favorites_list = [{"id": fav.media.id, "title": fav.media.title} for fav in favorites]
+    ratings_list = [{"id": rating.media.id, "title": rating.media.title, "stars": rating.stars, "favorited": rating.favorited} for rating in ratings]
 
-    return Response({"favorites": favorites_list}, status=status.HTTP_200_OK)
-
+    return Response({"ratings": ratings_list}, status=status.HTTP_200_OK)
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def set_media_rating(request):
-    star_rating = request.data.get('rating') # 1 - 5
+    star_rating = int(request.data.get('rating')) # 1 - 5
 
     media = get_media(request)
     if isinstance(media, Response):

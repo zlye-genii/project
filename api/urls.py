@@ -8,7 +8,8 @@ urlpatterns = [
     path('user/data/', user.get_user_data),
     path('user/favorites/add/', user.add_media_to_favorites),
     path('user/favorites/remove/', user.remove_media_from_favorites),
-    path('user/favorites/', user.get_favorites_by_media_type),
+    path('user/ratings/', user.get_ratings_by_media_type),
+    path('user/ratings/set/', user.set_media_rating),
     
     path('movies/details/', movies.get_movie_details),
     path('movies/search/', movies.search_movies),
