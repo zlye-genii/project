@@ -4,7 +4,6 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from utils.movie import _create_movie, _get_movie_details
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.response import Response
 from web.models import Movie, Genre, Person
 from api.serializers import MovieSerializer
 from PyMovieDb import IMDB
@@ -17,13 +16,17 @@ imdb = IMDB()
 @permission_classes([AllowAny])
 @authentication_classes([])
 def get_movie_details(request):
-    name = request.query_params.get('name')
     id = request.query_params.get('id')
-    if name or id:
-        movie_info = _get_movie_details(name=name, id=id)
-        return Response(movie_info)
+    if id:
+        movie_info = _get_movie_details(id=id)
+        # le jank
+        # first time accessing a new movie takes forever because it gets saved to the faster db
+        if not isinstance(movie_info, Response):
+            return Response(movie_info, status=status.HTTP_200_OK)
+        else:
+            return movie_info
     else:
-        return Response({'error': 'Bad Request: Please provide either a name or an id'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': 'Bad Request: Please provide an id'}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 @permission_classes([AllowAny])

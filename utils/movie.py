@@ -1,5 +1,6 @@
 from rest_framework import status
 from web.models import Movie, Genre, Person
+from rest_framework.response import Response
 from api.serializers import MovieSerializer
 from PIL import Image
 import os
@@ -13,26 +14,30 @@ imdb = IMDB()
     
 # compress poster urls received from amazon because my chrome is crying loading 50 of these
 # books are fine (common google W)
-def compress_movie_media(movie_id, poster_url):
+def compress_movie_media(movie_id, poster_url, regen=False):
+    img_path = os.path.join('static', 'movieposters', os.path.basename(movie_id) + '.png')
+    if not regen and img_path:
+        return img_path
     response = requests.get(poster_url)
     img = Image.open(BytesIO(response.content))
     img = img.resize((100, 250), Image.ANTIALIAS) # adjust this
 
-    img_path = os.path.join('static', 'movieposters', os.path.basename(movie_id) + '.png')
     img.save(img_path)
 
     return img_path.replace('\\', '/') # windows <3
 
-def _get_movie_details(name=None, id=None):
-    if name:
-        movie = Movie.objects.filter(name=name).first()
-        if not movie:
-            results = imdb.get_by_name(name)
-    elif id:
-        movie = Movie.objects.filter(id=id).first()
-        if not movie:
-            results = imdb.get_by_id(id)
-    return json.loads(results) if not movie else MovieSerializer(movie).data
+def _get_movie_details(id, db_only=True):
+    movie = Movie.objects.filter(id=id).first()
+    if not movie:
+        if db_only:
+            results, stat = _create_movie(id)
+            if stat != status.HTTP_201_CREATED: # uh well um oops good luck
+                return Response(results, status=stat)
+            movie = Movie.objects.filter(id=id).first()
+        else:
+            results = json.loads(imdb.get_by_id(id))
+        
+    return results if not movie else MovieSerializer(movie).data
 
 def _create_movie(movie_id):
     # Check if movie already exists to avoid duplicates
@@ -43,7 +48,7 @@ def _create_movie(movie_id):
     movie = Movie(id=movie_id)
 
     # Extract additional movie details from the get_movie_details API
-    movie_details = _get_movie_details(id=movie_id)
+    movie_details = _get_movie_details(id=movie_id, db_only=False)
     if not movie_details:
         return {"error": "Failed to retrieve movie details"}, status.HTTP_500_INTERNAL_SERVER_ERROR
     if 'status' in movie_details:
@@ -52,6 +57,7 @@ def _create_movie(movie_id):
             return {"error": "Movie not found"}, status.HTTP_404_NOT_FOUND
 
     genres = movie_details.get("genre", [])
+    directors = movie_details.get("director")
     # duration has a weird format (e.g. PT1H55M) :p
     duration = movie_details.get("duration")
     if not duration:
@@ -68,17 +74,19 @@ def _create_movie(movie_id):
     movie.imdb_rating = movie_details.get("rating").get("ratingValue")
     movie.description = movie_details.get("description")
     movie.content_rating = movie_details.get("contentRating")
-    movie.thumbnail = compress_movie_media(movie_id, movie_details.get("poster"))
+    if movie_details.get("poster"):
+        movie.thumbnail = compress_movie_media(movie_id, movie_details.get("poster"))
     
     movie.save()
 
     # Link the genres to the movie
-    for genre_name in genres:
-        genre, created = Genre.objects.get_or_create(name=genre_name)
-        movie.genres.add(genre)
-
-    for director in movie_details.get("director"):
-        director_obj, created = Person.objects.get_or_create(name=director['name'], url=director['url'])
-        movie.directors.add(director_obj)
+    if genres:
+        for genre_name in genres:
+            genre, created = Genre.objects.get_or_create(name=genre_name)
+            movie.genres.add(genre)
+    if directors:
+        for director in directors:
+            director_obj, created = Person.objects.get_or_create(name=director['name'], url=director['url'])
+            movie.directors.add(director_obj)
     
     return {"message": "Movie created successfully", "movie_id": movie.id}, status.HTTP_201_CREATED

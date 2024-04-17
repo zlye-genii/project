@@ -53,7 +53,7 @@ class Book(Media):
 class Rating(models.Model):
     stars = models.IntegerField(choices=StarRating.choices, default=StarRating.ZERO)
     review = models.TextField(null=True, blank=True)
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='ratings')
     media = models.ForeignKey(Media, on_delete=models.CASCADE, related_name='ratings')
     favorited = models.BooleanField(default=False)
 

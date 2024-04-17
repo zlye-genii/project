@@ -69,16 +69,26 @@
                 const mediaRating = document.getElementById('rate_media_id');
                 mediaSelect.innerHTML = '';
                 mediaRating.innerHTML = '';
+                // oomf
                 data.results.forEach(media => {
-                    // TODO: DO NOT USE UPCOMING, ITS SPANISH, I DONT KNOW WHY, JUST FEED DATA INTO /DETAILS FIRST THATS MORE RELIABLE, also media.title
-                    const option = document.createElement('option');
-                    option.value = media.id;
-                    option.text = media.name;
-                    const option2 = document.createElement('option');
-                    option2.value = media.id;
-                    option2.text = media.name;
-                    mediaSelect.add(option);
-                    mediaRating.add(option2);
+                    fetch(`/api/movies/details?id=${media.id}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCookie('csrftoken')
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(details => {
+                        const option = document.createElement('option');
+                        option.value = media.id;
+                        option.text = details.title;
+                        const option2 = document.createElement('option');
+                        option2.value = media.id;
+                        option2.text = details.title;
+                        mediaSelect.add(option);
+                        mediaRating.add(option2);
+                    });
                 });
             });
         }

@@ -13,7 +13,6 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    ratings = models.ManyToManyField('web.rating', related_name='ratings')
 
 @receiver(user_signed_up)
 def create_profile(sender, **kwargs):
