@@ -43,10 +43,18 @@
                   password2: document.getElementById('password2').value
               })
           })
-          .then(response => response.json())
+          .then(response => {
+                if (response.status === 204) { // whyyyyy does registration return 204!??!
+                    var nextUrl = new URLSearchParams(window.location.search).get('next');
+                    window.location.href = nextUrl ? nextUrl : '/user/account';
+                } else {
+                    return response.json();
+                }
+            })
           .then(data => {
-              if (data.success) {
-                  window.location.href = '/user/account';
+              if (!data.error) {
+                var nextUrl = new URLSearchParams(window.location.search).get('next');
+                window.location.href = nextUrl ? nextUrl : '/user/account';
               } else {
                   // handle error
               }
@@ -68,8 +76,9 @@
           })
           .then(response => response.json())
           .then(data => {
-              if (data.success) {
-                  window.location.href = '/user/account';
+              if (!data.error) {
+                  var nextUrl = new URLSearchParams(window.location.search).get('next');
+                  window.location.href = nextUrl ? nextUrl : '/user/account';
               } else {
                   // handle error
               }

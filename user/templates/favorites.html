@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Favorites</title>
+</head>
+<body>
+    <h1>Add Media to Favorites</h1>
+    <form id="add-favorite-form">
+        <label for="media_type">Media Type:</label><br>
+        <select id="media_type" name="media_type" onchange="fetchMedia()">
+            <option value="movie">Movie</option>
+            <option value="book">Book</option>
+        </select><br>
+        <label for="media_id">Media:</label><br>
+        <select id="media_id" name="media_id">
+            <!-- Media options will be populated here -->
+        </select><br>
+        <input type="submit" value="Add to Favorites">
+    </form>
+    <h1>Remove Media from Favorites</h1>
+    <form id="remove-favorite-form">
+        <label for="remove_media_type">Media Type:</label><br>
+        <select id="remove_media_type" name="remove_media_type" onchange="fetchFavorites()">
+            <option value="movie">Movie</option>
+            <option value="book">Book</option>
+        </select><br>
+        <label for="remove_media_id">Media:</label><br>
+        <select id="remove_media_id" name="remove_media_id">
+            <!-- Favorite media options will be populated here -->
+        </select><br>
+        <input type="submit" value="Remove from Favorites">
+    </form>
+    <h1>Rate Media</h1>
+    <form id="rate-media-form">
+        <label for="rate_media_type">Media Type:</label><br>
+        <select id="rate_media_type" name="rate_media_type" onchange="fetchFavorites()">
+            <option value="movie">Movie</option>
+            <option value="book">Book</option>
+        </select><br>
+        <label for="rate_media_id">Media:</label><br>
+        <select id="rate_media_id" name="rate_media_id">
+            <!-- Favorite media options will be populated here -->
+        </select><br>
+        <label for="rating">Rating:</label><br>
+        <input type="number" id="rating" name="rating" min="1" max="5"><br>
+        <input type="submit" value="Rate Media">
+    </form>
+    <h1>Your Ratings (by selected media type)</h1>
+    <div id="favs-block"></div>
+    <script>
+        function getCookie(name) {
+            const value = '; ' + document.cookie;
+            const parts = value.split('; ' + name + '=');
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
+        function fetchMedia() {
+            const mediaType = document.getElementById('media_type').value;
+            fetch(`/api/${mediaType}s/upcoming/`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const mediaSelect = document.getElementById('media_id');
+                const mediaRating = document.getElementById('rate_media_id');
+                mediaSelect.innerHTML = '';
+                mediaRating.innerHTML = '';
+                // oomf
+                data.results.forEach(media => {
+                    fetch(`/api/movies/details?id=${media.id}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCookie('csrftoken')
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(details => {
+                        const option = document.createElement('option');
+                        option.value = media.id;
+                        option.text = details.title;
+                        const option2 = document.createElement('option');
+                        option2.value = media.id;
+                        option2.text = details.title;
+                        mediaSelect.add(option);
+                        mediaRating.add(option2);
+                    });
+                });
+            });
+        }
+
+        function fetchFavorites() {
+            const mediaType = document.getElementById('remove_media_type').value;
+            fetch(`/api/user/ratings/?media_type=${mediaType}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const mediaSelect = document.getElementById('remove_media_id');
+                const favsBlock = document.getElementById('favs-block')
+                mediaSelect.innerHTML = '';
+                data.ratings.forEach(media => {
+                    const option = document.createElement('option');
+                    option.value = media.id;
+                    option.text = media.title;
+                    mediaSelect.add(option);
+                    const p = document.createElement('p');
+                    const star = media.favorited ? '⭐' : ''; // this one looks better in the actual html: ☆
+                    if (media.stars !== 0) {
+                        p.innerText = `${media.title} [${media.stars}] ${star}`;
+                    } else {
+                        p.innerText = `${media.title} ${star}`;
+                    }
+                    favsBlock.appendChild(p);
+                });
+            });
+        }
+
+        document.getElementById('rate-media-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            fetch('/api/user/ratings/set/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    media_id: document.getElementById('rate_media_id').value,
+                    media_type: document.getElementById('rate_media_type').value,
+                    rating: document.getElementById('rating').value
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('message').innerText = data.message || data.error;
+            });
+        });
+
+        document.getElementById('add-favorite-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            fetch('/api/user/ratings/set/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    media_id: document.getElementById('media_id').value,
+                    media_type: document.getElementById('media_type').value,
+                    favorited: true
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('message').innerText = data.message || data.error;
+            });
+        });
+
+        document.getElementById('remove-favorite-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            fetch('/api/user/ratings/set/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    media_id: document.getElementById('remove_media_id').value,
+                    media_type: document.getElementById('remove_media_type').value,
+                    favorited: false
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('message').innerText = data.message || data.error;
+            });
+        });
+        fetchMedia()
+        fetchFavorites()
+    </script>
+</body>
+</html>

@@ -16,7 +16,7 @@
         }
 
         function displayAccessToken() {
-            const accessToken = getCookie('access_token');
+            const accessToken = getCookie('sessionid');
             if (accessToken) {
                 document.getElementById('access-token').innerText = 'Access Token: ' + accessToken;
             } else {

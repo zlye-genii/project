@@ -1,59 +1,62 @@
 from django.db import models
-from django.contrib.contenttypes.fields import GenericForeignKey
-from django.contrib.contenttypes.models import ContentType
+from user.models import Profile
+from polymorphic.models import PolymorphicModel
 
 # Create your models here.
 
 class Genre(models.Model):
     def __str__(self):
         return self.name
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
 
 class StarRating(models.IntegerChoices):
+    ZERO = 0, 'None' # kind of a hack to allow favorited without a rating :p
     ONE = 1, 'Terrible'
     TWO = 2, 'Poor'
     THREE = 3, 'Average'
     FOUR = 4, 'Good'
     FIVE = 5, 'Excellent'
 
-class Rating(models.Model):
-    stars = models.IntegerField(choices=StarRating.choices)
-    review = models.CharField()
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE) 
-    object_id = models.PositiveIntegerField()
-    # genericforeignkey(content type, foreign key (unique movie/book object id))
-    content_object = GenericForeignKey('content_type', 'object_id') # set/get media object here (movie, book)
-
-# movie datal
-# pull all this stuff from imdb scraper (not paying for an api key >_<)
-# https://discord.com/channels/465439647334400001/1150680390902743060/1220148782000246944
-class Movie(models.Model):
+class Person(models.Model):
     def __str__(self):
-        return self.title
+        return self.name
+    name = models.CharField(max_length=100)
+    url = models.URLField(null=True)
+
+# are you here because of a "non nullable field" error?
+# step 1: delete database
+# step 2: delete all migration folders, keep __init__.py
+# step 3: run dmigrate
+# step 4: yippee!
+
+class Media(PolymorphicModel):
     id = models.CharField(max_length=25, primary_key=True)
     title = models.CharField(max_length=200)
-    release_date = models.DateField()
-    genres = models.ManyToManyField(Genre)
-    director = models.CharField(max_length=100)
-    runtime = models.IntegerField() # mins
-    imdb_rating = models.FloatField()
-    user_ratings = models.ManyToManyField(Rating)
-    description = models.TextField()
-    poster_url = models.URLField(default='/static/banner404.png')
-    content_rating = models.IntegerField()
-    # hack because no cascade delete on genericforeignkeys
-    def delete(self, *args,**kwargs):
-        Rating.objects.filter(content_type=ContentType.objects.get_for_model(self.__class__), object_id=self.id).delete()
-        super().delete(*args, **kwargs)
+    description = models.TextField(null=True)
+    release_date = models.DateField(null=True)
+    genres = models.ManyToManyField(Genre, blank=True)
+    thumbnail = models.URLField(default='/static/banner404.png', null=True)
 
-class Book(models.Model):
     def __str__(self):
         return self.title
-    id = models.IntegerField(primary_key=True)
-    title = models.CharField()
-    description = models.CharField()
-    short_description = models.CharField()
-    genre = models.CharField()
-    def delete(self, *args,**kwargs):
-        Rating.objects.filter(content_type=ContentType.objects.get_for_model(self.__class__), object_id=self.id).delete()
-        super().delete(*args, **kwargs)
+
+class Movie(Media):
+    directors = models.ManyToManyField(Person, blank=True)
+    runtime = models.IntegerField(null=True) # mins
+    imdb_rating = models.FloatField(null=True)
+    content_rating = models.CharField(max_length=20, null=True)
+
+class Book(Media):
+    authors = models.ManyToManyField(Person, blank=True)
+    pages = models.IntegerField()
+
+class Rating(models.Model):
+    stars = models.IntegerField(choices=StarRating.choices, default=StarRating.ZERO)
+    review = models.TextField(null=True, blank=True)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='ratings')
+    media = models.ForeignKey(Media, on_delete=models.CASCADE, related_name='ratings')
+    favorited = models.BooleanField(default=False)
+    completed = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.media.title}: {self.stars}{', ★' if self.favorited else ''}{', ✔' if self.completed else ''}" # star is NOT rating amount!!!! it is if favorited yes/no
