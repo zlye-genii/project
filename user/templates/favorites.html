@@ -146,7 +146,7 @@
 
         document.getElementById('add-favorite-form').addEventListener('submit', function(event) {
             event.preventDefault();
-            fetch('/api/user/favorites/add/', {
+            fetch('/api/user/ratings/set/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -154,7 +154,8 @@
                 },
                 body: JSON.stringify({
                     media_id: document.getElementById('media_id').value,
-                    media_type: document.getElementById('media_type').value
+                    media_type: document.getElementById('media_type').value,
+                    favorited: true
                 })
             })
             .then(response => response.json())
@@ -165,7 +166,7 @@
 
         document.getElementById('remove-favorite-form').addEventListener('submit', function(event) {
             event.preventDefault();
-            fetch('/api/user/favorites/remove/', {
+            fetch('/api/user/ratings/set/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -173,7 +174,8 @@
                 },
                 body: JSON.stringify({
                     media_id: document.getElementById('remove_media_id').value,
-                    media_type: document.getElementById('remove_media_type').value
+                    media_type: document.getElementById('remove_media_type').value,
+                    favorited: false
                 })
             })
             .then(response => response.json())

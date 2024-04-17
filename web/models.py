@@ -56,6 +56,7 @@ class Rating(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='ratings')
     media = models.ForeignKey(Media, on_delete=models.CASCADE, related_name='ratings')
     favorited = models.BooleanField(default=False)
+    completed = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.media.title}: {self.stars}{', ★' if self.favorited else ''}" # star is NOT rating amount!!!! it is if favorited yes/no
+        return f"{self.media.title}: {self.stars}{', ★' if self.favorited else ''}{', ✔' if self.completed else ''}" # star is NOT rating amount!!!! it is if favorited yes/no
