@@ -35,3 +35,5 @@ target/
 # Operating Systems
 .DS_Store
 Thumbs.db
+
+static/movieposters/

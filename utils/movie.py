@@ -16,12 +16,12 @@ imdb = IMDB()
 def compress_movie_media(movie_id, poster_url):
     response = requests.get(poster_url)
     img = Image.open(BytesIO(response.content))
-    img = img.resize((100, 250), Image.ANTIALIAS)
+    img = img.resize((100, 250), Image.ANTIALIAS) # adjust this
 
-    img_path = os.path.join('static', 'movieposters', os.path.basename(movie_id))
+    img_path = os.path.join('static', 'movieposters', os.path.basename(movie_id) + '.png')
     img.save(img_path)
 
-    return img_path
+    return img_path.replace('\\', '/') # windows <3
 
 def _get_movie_details(name=None, id=None):
     if name:
