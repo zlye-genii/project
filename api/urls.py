@@ -12,6 +12,7 @@ urlpatterns = [
     path('user/recommendations', ai.get_user_recommendations),
     
     path('movies/details/', movies.get_movie_details),
+    path('movies/details/bulk/', movies.get_movie_details_bulk),
     path('movies/search/', movies.search_movies),
     path('movies/upcoming/', movies.get_upcoming_movies),
     path('movies/popular/', movies.get_popular_movies),

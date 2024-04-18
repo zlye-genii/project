@@ -28,6 +28,23 @@ def get_movie_details(request):
     else:
         return Response({'error': 'Bad Request: Please provide an id'}, status=status.HTTP_400_BAD_REQUEST)
 
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+@authentication_classes([])
+def get_movie_details_bulk(request):
+    ids = request.query_params.get('ids')
+    if ids:
+        ids = ids.split(',')  # assuming ids are comma-separated
+        movie_infos = []
+        for id in ids:
+            movie_info = _get_movie_details(id=id)
+            if not isinstance(movie_info, Response):
+                movie_infos.append(movie_info)
+        return Response(movie_infos, status=status.HTTP_200_OK)
+    else:
+        return Response({'error': 'Bad Request: Please provide ids'}, status=status.HTTP_400_BAD_REQUEST)
+
 @api_view(['GET'])
 @permission_classes([AllowAny])
 @authentication_classes([])

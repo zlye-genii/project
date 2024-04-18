@@ -92,6 +92,12 @@ REST_FRAMEWORK = {
     ],
 }
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}
+
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 7  # week
 
 WSGI_APPLICATION = "movies.wsgi.application"
