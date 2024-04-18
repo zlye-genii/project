@@ -7,6 +7,7 @@ import os
 import requests
 from io import BytesIO
 from PyMovieDb import IMDB
+from django.core.cache import cache
 import json
 import datetime
 
@@ -27,15 +28,19 @@ def compress_movie_media(movie_id, poster_url, regen=False):
     return img_path.replace('\\', '/') # windows <3
 
 def _get_movie_details(id, db_only=True):
-    movie = Movie.objects.filter(id=id).first()
+    movie = cache.get(f'movie_{id}')
     if not movie:
-        if db_only:
-            results, stat = _create_movie(id)
-            if stat != status.HTTP_201_CREATED: # uh well um oops good luck
-                return Response(results, status=stat)
-            movie = Movie.objects.filter(id=id).first()
-        else:
-            results = json.loads(imdb.get_by_id(id))
+        movie = Movie.objects.filter(id=id).first()
+        if not movie:
+            if db_only:
+                results, stat = _create_movie(id)
+                if stat != status.HTTP_201_CREATED: # uh well um oops good luck
+                    return Response(results, status=stat)
+                movie = Movie.objects.filter(id=id).first()
+            else:
+                results = json.loads(imdb.get_by_id(id))
+        if movie:
+            cache.set(f'movie_{id}', movie) # cache
         
     return results if not movie else MovieSerializer(movie).data
 
