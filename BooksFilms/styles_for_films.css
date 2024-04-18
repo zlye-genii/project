@@ -116,6 +116,25 @@ nav img {
     overflow-x: hidden;
 }
 
+.title-main {
+    color: black;
+    text-align: center;
+    margin-top: 25px;
+    margin-bottom: 5px;
+}
+
+.title-main h1 {
+    font-size: 300%;
+    margin: 0;
+    padding: 10px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.title-main img {
+     vertical-align: middle;
+}
+
 .underline {
     width: 100%;
     border-bottom: 3px solid black;
@@ -151,7 +170,7 @@ nav img {
         
 .rating {
      position: relative;
-     top: -348px;
+     top: 30px;
      left: 5px;
      width: 25px;
      background-color: green;
