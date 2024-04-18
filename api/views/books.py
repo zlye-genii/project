@@ -53,16 +53,7 @@ def search_books(request):
         return Response(books)
     else:
         return Response({'error': 'Bad Request: Please provide a query'}, status=status.HTTP_400_BAD_REQUEST)
-    
 
-@api_view(['GET'])
-@permission_classes([AllowAny])
-def get_new_books(request):
-    response = requests.get(GOOGLE_BOOKS_API_URL, params={"orderBy": "newest"})
-    if response.status_code == 200:
-        return Response(response.json().get('items', []))
-    else:
-        return Response({'error': 'Failed to retrieve new books'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['GET'])
 @permission_classes([AllowAny])

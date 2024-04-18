@@ -19,7 +19,7 @@ urlpatterns = [
 
     path('books/details/', books.get_book_details),
     path('books/search/', books.search_books),
-    path('books/upcoming/', books.get_new_books),
+    path('books/upcoming/', books.get_popular_books),
     path('books/popular/', books.get_popular_books),
     path('books/create/', books.create_book)
 ]
