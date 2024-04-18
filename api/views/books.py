@@ -140,7 +140,8 @@ def create_book(request):
         book.authors.add(author_obj)
         
     # well books have category not genre but who cares
-    genre, created = Genre.objects.get_or_create(name=book_details.get("mainCategory"))
-    book.genres.add(genre)
+    if book_details.get("mainCategory"):
+        genre, created = Genre.objects.get_or_create(name=book_details.get("mainCategory"))
+        book.genres.add(genre)
     
     return Response({"message": "Book created successfully", "book_id": book.id}, status=status.HTTP_201_CREATED)

@@ -22,17 +22,20 @@
         });
     </script>
     <h1>Popular Books</h1>
-    <ul id="book-list">
+    <div id="book-list">
         {% for book in books %}
-            <li>
-                Title: {{ book.title }},
-                Authors:
-                {% for author in book.authors.all %}
-                    {{ author.name }}{% if not loop.last %}, {% endif %}
-                {% endfor %}
-                Published Date: {{ book.published_date }},
-                // Добавьте здесь другую информацию о книге
-            </li>
+            <div class="book-card">
+                <img src="{{ book.thumbnail }}" alt="{{ book.title }} thumbnail" class="book-thumbnail">
+                <h2 class="book-title">{{ book.title }}</h2>
+                <h3 class="book-authors">
+                    {% for author in book.authors.all %}
+                        {{ author.name }}{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </h3>
+                <p class="book-published-date">Published Date: {{ book.published_date }}</p>
+                <p class="book-description">{{ book.description|safe }}</p>
+                <p class="book-pages">Pages: {{ book.pages }}</p>
+            </div>
         {% endfor %}
-    </ul>
+    </div>
 </body>
