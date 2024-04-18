@@ -31,7 +31,7 @@ class Person(models.Model):
 
 class Media(PolymorphicModel):
     id = models.CharField(max_length=25, primary_key=True)
-    title = models.CharField(max_length=200)
+    title = models.TextField(null=True)
     description = models.TextField(null=True)
     release_date = models.DateField(null=True)
     genres = models.ManyToManyField(Genre, blank=True)

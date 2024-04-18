@@ -105,7 +105,7 @@ LOGIN_URL = '/user/login'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("POSTGRES_DB"),
+        "NAME": os.getenv("POSTGRESQL_DB"),
         "USER": os.getenv("POSTGRESQL_USER"),
         "PASSWORD": os.getenv("POSTGRESQL_PASS"),
         "HOST": os.getenv("POSTGRESQL_IP"),

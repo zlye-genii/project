@@ -1,6 +1,6 @@
 from django.urls import path, include
 
-from .views import user, movies, book, ai
+from .views import user, movies, books, ai
 
 urlpatterns = [
     path('user/', include('dj_rest_auth.urls')),
@@ -17,9 +17,9 @@ urlpatterns = [
     path('movies/popular/', movies.get_popular_movies),
     path('movies/create/', movies.create_movie),
 
-    path('books/details', book.get_book_details),
-    path('books/search', book.search_books),
-    path('books/upcoming', book.get_new_books),
-    path('books/popular', book.get_popular_books),
-    path('books/create', book.create_book)
+    path('books/details', books.get_book_details),
+    path('books/search', books.search_books),
+    path('books/upcoming', books.get_new_books),
+    path('books/popular', books.get_popular_books),
+    path('books/create', books.create_book)
 ]
