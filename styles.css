@@ -34,7 +34,7 @@ header .logo {
     padding-left: 250px;
 }
 
-header .logo img{
+header .logo img {
     width: 50px;
     height: 50px;
     display: flex;
@@ -53,7 +53,7 @@ main {
     display: grid;
     grid-template-columns: 250px auto;
     width: 100vw;
-    
+
 }
 
 /* start left menu */
@@ -68,7 +68,8 @@ nav {
     position: fixed;
     top: 70px;
     left: 0;
-    max-width: 250px; /*same as in main grid column one*/
+    max-width: 250px;
+    /*same as in main grid column one*/
     height: 100vh;
 }
 
@@ -80,7 +81,8 @@ nav ul {
 nav .footer {
     position: fixed;
     bottom: 0vh;
-    padding-left: 20px; /*same as nav ul*/
+    padding-left: 20px;
+    /*same as nav ul*/
 }
 
 nav ul li {
@@ -96,8 +98,8 @@ nav ul li a {
 nav a {
     display: grid;
     grid-template-columns: 50px auto;
-   gap: 20px;
-   align-items: center;
+    gap: 20px;
+    align-items: center;
 }
 
 nav img {
@@ -116,7 +118,7 @@ nav img {
     overflow-x: hidden;
 }
 
-.top {    
+.top {
     border-bottom: 2px solid black;
     display: flex;
     align-items: center;
@@ -140,7 +142,7 @@ nav img {
     overflow-x: auto;
 }
 
-.scroll-container{
+.scroll-container {
     display: flex;
     gap: 10px;
 }
@@ -167,47 +169,65 @@ nav img {
     width: 150px;
 }
 
-.calendar-list ul{
+.calendar-list ul {
     list-style-type: none;
     display: grid;
-    grid-template-columns: 450px 450px;
+    grid-template-columns: repeat(2, 50%);
     gap: 20px;
     padding: 0px;
 }
 
-.calendar-list ul li{
+.calendar-item {
     border-bottom: 2px solid gray;
     display: grid;
-    grid-template-columns: 20px 50px 200px 100px 50px;
+    grid-template-columns: 10% 150px 30% 10% 10%;
+    align-items: center;
 }
 
-.calendar-list ul li span {
+.calendar-item span {
     color: gray;
 }
 
-.calendar-list ul li:nth-child(9) {
+.calendar-item:nth-child(9) {
     border-bottom: none;
 }
 
-.calendar-list ul li:last-child{
+.calendar-item:last-child {
     border-bottom: none;
 }
 
-.calendar-list ul li h4 {
+.calendar-item-title {
     text-align: center;
 }
 
-.calendar-list ul li p {
+.calendar-item p {
     text-align: center;
 }
 
-.calendar-list ul li button {
-    border: 2px solid;
-    width: 70px;
-    height: 70px;
-}
-
-.calendar-list img {
-    width: 100%;
+.calendar-item-img {
+    width: inherit;
     height: auto;
 }
+
+
+.calendar-item-img img {
+    width: 150px;
+    height: 200px;
+}
+
+.like {
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+}
+.like:hover {
+    cursor: pointer;
+}
+
+.like:hover path{
+    cursor: pointer;
+    fill: red;
+}
+
