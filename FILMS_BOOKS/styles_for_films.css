@@ -1,0 +1,182 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Arial", sans-serif;
+    overflow-x: hidden;
+}
+
+a {
+    text-decoration: none;
+}
+
+header {
+    background-color: black;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    width: 100vw;
+    padding: 10px 0px;
+}
+
+header h1 {
+    margin: 0;
+}
+
+header .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-left: 250px;
+}
+
+header .logo img{
+    width: 50px;
+    height: 50px;
+    display: flex;
+}
+
+.user-icon {
+    width: 50px;
+    padding-right: 20px;
+}
+
+.user-icon img {
+    width: 100%;
+}
+
+main {
+    display: grid;
+    grid-template-columns: 250px auto;
+    width: 100vw;
+    
+}
+
+/* start left menu */
+.left-menu {
+    position: relative;
+    background-color: red;
+}
+
+nav {
+    background-color: lightgrey;
+    border-right: 2px solid black;
+    position: fixed;
+    top: 70px;
+    left: 0;
+    max-width: 250px; /*same as in main grid column one*/
+    height: 100vh;
+}
+
+nav ul {
+    list-style: none;
+    padding: 20px;
+}
+
+nav .footer {
+    position: fixed;
+    bottom: 0vh;
+    padding-left: 20px; /*same as nav ul*/
+}
+
+nav ul li {
+    margin: 10px 0;
+}
+
+nav ul li a {
+    color: black;
+    font-size: large;
+    font-weight: bold;
+}
+
+nav a {
+    display: grid;
+    grid-template-columns: 50px auto;
+   gap: 20px;
+   align-items: center;
+}
+
+nav img {
+    width: 100%;
+}
+
+.footer {
+    text-align: center;
+    font-size: 0.8em;
+}
+
+/* end left menu */
+
+.content {
+    margin: 70px 30px 30px 30px;
+    overflow-x: hidden;
+}
+
+.title-main {
+    color: black;
+    text-align: center;
+    margin-top: 25px;
+    margin-bottom: 5px;
+}
+
+.title-main h1 {
+    font-size: 300%;
+    margin: 0;
+    padding: 10px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.title-main img {
+     vertical-align: middle;
+}
+
+.underline {
+    width: 100%;
+    border-bottom: 3px solid black;
+    margin: 0px;
+}
+	
+.film-block {
+    display: flex;
+}
+	
+.film {
+    display: inline-block;
+    width: 185px;
+    margin: 20px;
+    text-align: left;
+}
+	
+.film img {
+    width: 185px;
+    height: 300px;
+}
+
+.film h3 {
+    margin: 2px 0;
+    color: #333;
+}
+	
+.film p {
+     color: #666;
+     font-size: 14px;
+     margin: 5px 0;
+}
+        
+.rating {
+     position: relative;
+     top: 30px;
+     left: 5px;
+     width: 25px;
+     background-color: green;
+     text-align: center;
+     color: white;
+     padding: 3px;
+     border-radius: 3px;
+     font-weight: bold;
+}

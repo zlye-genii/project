@@ -49,6 +49,19 @@
     width: 150px;
 }
 
+.raiting {
+    position: relative;
+    top: 30px;
+    left: 5px;
+    width: 25px;
+    background-color: green;
+    text-align: center;
+    color: white;
+    padding: 3px;
+    border-radius: 3px;
+    font-weight: bold;
+}
+
 .calendar-list ul {
     list-style-type: none;
     display: grid;
