@@ -17,7 +17,33 @@
         </div>
 
         <div class="user-icon">
-            <img src="logo/лк.png" alt="Иконка пользователя">
+            <button class="lk">
+                <img src="logo/лк.png" alt="Иконка пользователя">
+                <div>
+                    <form action="">
+                        <textarea name="" id="" cols="10" rows="1"></textarea>
+                        <textarea name="" id="" cols="10" rows="1"></textarea>
+                        <textarea name="" id="" cols="10" rows="1"></textarea>
+                    </form>
+                </div>
+                <script>
+                    const
+                        btn = document.querySelector('#btn'),
+                        form = document.querySelector('form'),
+                        textarea = document.querySelectorAll('textarea')
+
+                    function clearFields() {
+                        for (let i = 0; i < textarea.length; i++) {
+                            textarea[i].value = '';
+                        }
+                    }
+
+                    btn.addEventListener('click', function() {
+                        submitFormToServer()
+                        clearFields()
+                    })
+                </script>
+            </button>
         </div>
     </header>
     <main>
