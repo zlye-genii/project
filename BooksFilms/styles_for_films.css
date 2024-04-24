@@ -34,7 +34,7 @@ header .logo {
     padding-left: 250px;
 }
 
-header .logo img{
+header .logo img {
     width: 50px;
     height: 50px;
     display: flex;
@@ -53,13 +53,12 @@ main {
     display: grid;
     grid-template-columns: 250px auto;
     width: 100vw;
-    
+
 }
 
 /* start left menu */
 .left-menu {
     position: relative;
-    background-color: red;
 }
 
 nav {
@@ -68,7 +67,8 @@ nav {
     position: fixed;
     top: 70px;
     left: 0;
-    max-width: 250px; /*same as in main grid column one*/
+    max-width: 250px;
+    /*same as in main grid column one*/
     height: 100vh;
 }
 
@@ -80,7 +80,8 @@ nav ul {
 nav .footer {
     position: fixed;
     bottom: 0vh;
-    padding-left: 20px; /*same as nav ul*/
+    padding-left: 20px;
+    /*same as nav ul*/
 }
 
 nav ul li {
@@ -96,8 +97,8 @@ nav ul li a {
 nav a {
     display: grid;
     grid-template-columns: 50px auto;
-   gap: 20px;
-   align-items: center;
+    gap: 20px;
+    align-items: center;
 }
 
 nav img {
@@ -144,12 +145,19 @@ nav img {
 .film-block {
     display: flex;
 }
+
+.scroll-container {
+    width: 100%;
+    overflow: auto;
+    overflow-x: auto;
+    gap: 10px;
+}
 	
 .film {
-    display: inline-block;
     width: 185px;
     margin: 20px;
     text-align: left;
+    overflow-x: auto;
 }
 	
 .film img {
@@ -179,4 +187,54 @@ nav img {
      padding: 3px;
      border-radius: 3px;
      font-weight: bold;
+}
+
+.calendar-list {
+    list-style-type: none;
+    display: grid;
+    grid-template-columns: repeat(3, 30%);
+    gap: 20px;
+    padding: 0px;
+}
+
+.calendar-item {
+    border-bottom: 2px solid gray;
+    display: grid;
+    grid-template-columns: 5% 5% 200px 10%;
+    align-items: center;
+    font-size: small;
+}
+
+.calendar-item ul {
+    list-style-type: none;
+}
+
+.calendar-item li {
+    justify-content: left;
+}
+
+.calendar-item span {
+    color: gray;
+}
+
+.calendar-item:last-child {
+    border-bottom: none;
+}
+
+.calendar-item-title {
+    text-align: left;
+}
+
+.calendar-item p {
+    text-align: left;
+}
+
+.calendar-item-img {
+    width: inherit;
+    height: auto;
+}
+
+.calendar-item-img img {
+    width: 50px;
+    height: 75px;
 }
