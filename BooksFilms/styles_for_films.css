@@ -166,15 +166,29 @@ nav img {
     height: 300px;
 }
 
-.film h3 {
+.film-text {
+    list-style-type: none;
+    display: grid;
+    grid-template-columns: 140px 40px;
+    gap: 0px;
+}
+
+.film-cell {
+    width: auto;
+    list-style-type: none;
+}
+
+.film-cell h3 {
     margin: 2px 0;
     color: #333;
+    text-align: left;
 }
 	
-.film p {
+.film-cell p {
      color: #666;
      font-size: 14px;
      margin: 5px 0;
+     text-align: left;
 }
         
 .rating {
@@ -188,6 +202,24 @@ nav img {
      padding: 3px;
      border-radius: 3px;
      font-weight: bold;
+}
+
+.elect {
+    width: 35px;
+    height: 35px;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+}
+
+.elect:hover {
+    cursor: pointer;
+}
+
+.elect:hover path{
+    cursor: pointer;
+    fill: red;
+    stroke: #960018;
 }
 
 /* end for films */
@@ -234,12 +266,13 @@ nav img {
 }
 
 .calendar-item-title {
-    text-align: left;
+    text-align: right;
 }
 
 .calendar-item p {
     text-align: right;
     vertical-align: top;
+    color: #CD5700
 }
 
 .calendar-item-img {
