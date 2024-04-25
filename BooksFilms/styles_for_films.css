@@ -141,13 +141,14 @@ nav img {
     border-bottom: 3px solid black;
     margin: 0px;
 }
-	
-.film-block {
-    display: flex;
+
+.block-films {
+    overflow-x: auto;
 }
 
 .scroll-container {
     width: 100%;
+    display: flex;
     overflow: auto;
     overflow-x: auto;
     gap: 10px;
@@ -157,7 +158,6 @@ nav img {
     width: 185px;
     margin: 20px;
     text-align: left;
-    overflow-x: auto;
 }
 	
 .film img {
