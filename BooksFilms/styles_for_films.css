@@ -111,6 +111,7 @@ nav img {
 }
 
 /* end left menu */
+/* for films */
 
 .content {
     margin: 70px 30px 30px 30px;
@@ -161,7 +162,7 @@ nav img {
 }
 	
 .film img {
-    width: 185px;
+    width: 180px;
     height: 300px;
 }
 
@@ -189,18 +190,29 @@ nav img {
      font-weight: bold;
 }
 
+/* end for films */
+/* промежуток между разделами */
+
+.interval {
+    height: 50px;
+}
+
+/* end промежуток между разделами */
+/* хиты продаж */
+
 .calendar-list {
     list-style-type: none;
     display: grid;
-    grid-template-columns: repeat(3, 30%);
+    grid-template-columns: repeat(3, minmax(350px, 1fr));
     gap: 20px;
-    padding: 0px;
+    padding: 3px;
+    overflow-x: auto;
 }
 
 .calendar-item {
-    border-bottom: 2px solid gray;
+    border-bottom: 2px solid #A0A0A0;
     display: grid;
-    grid-template-columns: 5% 5% 200px 10%;
+    grid-template-columns: 5% 5% 200px 20%;
     align-items: center;
     font-size: small;
 }
@@ -210,11 +222,11 @@ nav img {
 }
 
 .calendar-item li {
-    justify-content: left;
+    text-align: left;
 }
 
 .calendar-item span {
-    color: gray;
+    color: #666;
 }
 
 .calendar-item:last-child {
@@ -226,7 +238,8 @@ nav img {
 }
 
 .calendar-item p {
-    text-align: left;
+    text-align: right;
+    vertical-align: top;
 }
 
 .calendar-item-img {
@@ -237,4 +250,10 @@ nav img {
 .calendar-item-img img {
     width: 50px;
     height: 75px;
+}
+
+.scroll-container-sell {
+    display: grid;
+    white-space: nowrap;
+    gap: 10px;
 }
