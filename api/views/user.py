@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
-from ..serializers import ProfileSerializer
+from ..serializers import ProfileSerializer, RatingSerializer
 from django.contrib.contenttypes.models import ContentType
 from web.models import Rating, Movie, Book
 from utils.media import get_media
@@ -63,11 +63,16 @@ def change_media_rating(request):
         else:
             return Response({"error": "Media not marked as completed"}, status=status.HTTP_400_BAD_REQUEST)
         return Response({"message": "Media completed status changed"}, status=status.HTTP_200_OK)
-    
+
 def _get_user_favorites(profile, media_type):
     favorites = [rating for rating in profile.ratings.all() if isinstance(rating.media, (Movie if media_type == 'movie' else Book)) and rating.favorited]
-    favorites_list = [{"id": rating.media.id, "title": rating.media.title, "stars": rating.stars, "favorited": rating.favorited} for rating in favorites]
-    return favorites_list
+    serializer = RatingSerializer(favorites, many=True)
+    return serializer.data
+
+def _get_user_watched(profile, media_type):
+    watched = [rating for rating in profile.ratings.all() if isinstance(rating.media, (Movie if media_type == 'movie' else Book)) and rating.completed]
+    serializer = RatingSerializer(watched, many=True)
+    return serializer.data
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
