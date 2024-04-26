@@ -9,7 +9,7 @@ from api.views.user import _get_user_watched
 def login(request):
     if request.user.is_authenticated:
         return redirect('account')
-    return render(request, 'login.html')
+    return render(request, 'login2.html')
 
 @login_required
 def account(request):

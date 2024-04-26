@@ -1,0 +1,88 @@
+.login-container {
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: calc(100% - 20px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.login-button {
+    padding: 10px 20px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.logo {
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+}
+
+.login-button:hover {
+    background-color: #333;
+}
+
+.logo-and-title {
+    text-align: center;
+    margin-bottom: 20px; /*Adjust as needed*/
+}
+
+.logo-and-title {
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+}
+
+.logo-and-title h1 {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px;
+    color: red; /*If you want the text in red*/
+}
+
+.login-container {
+    /*Existing styles*/
+    position: relative;
+    padding-bottom: 40px; /*Make space for the registration prompt*/
+}
+
+.registration-prompt {
+    position: absolute;
+    bottom: 10px; /*Adjust as needed*/
+    width: calc(100% - 40px);
+    text-align: center;
+}
+
+.registration-prompt p {
+    margin: 0;
+}
+
+.registration-prompt a {
+    color: green; /*Style the link color as desired*/
+    font-weight: bold;
+}
