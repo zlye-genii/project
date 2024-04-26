@@ -1,0 +1,114 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+    <link rel="stylesheet" href="{% static 'css/prochit.css' %}">
+    <title>BookflixRecommender</title>
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <img src="{% static 'logo/logo.png' %}" alt="Лотип сайта">
+            <h1>BookflixRecommender</h1>
+        </div>
+
+        <div class="user-icon">
+            <button class="lk">
+                <img src="{% static 'logo/лк.png' %}" alt="Иконка пользователя">
+            </button>
+        </div>
+    </header>
+    <main>
+        <div class="left-menu">
+            <nav>
+                <ul>
+                    <li>
+                        <a href="#">
+                            <img src="{% static 'logo/новинки.png' %}" alt="Иконка Фильмы" />
+                            <span>Новинки</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% static 'FILMS_BOOKS/films.html' %}">
+                            <img src="{% static 'logo/фильмы.png' %}" alt="Иконка Фильмы" />
+                            <span>Фильмы</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% static 'FILMS_BOOKS/films.html' %}">
+                            <img src="{% static 'logo/книги.png' %}" alt="Иконка Книги" />
+                            <span>Книги</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% static 'PERSONAL_SEARCH/personalselection.html#' %}">
+                            <img src="{% static 'logo/подборка.png' %}" alt="Иконка Персональная подборка">
+                            <span>Персональная подборка</span>
+                        </a>
+                    </li>
+                </ul>
+                <div class="footer">
+                    <p>
+                        © 2024, Злые гении
+                    </p>
+                    <p>
+                        <a>Служба поддержки</a>
+                    </p>
+                </div>
+            </nav>
+        </div>
+        <div class="content">
+            <div class="top">
+                <h2>Прочитанное</h2>
+            </div>
+            <div class="calendar-list">
+                <ul>
+                    {% for movie in watched_movies %}
+                    <li class="calendar-item">
+                        <div class="calendar-item-img">
+                            <img src="/{{ movie.media.thumbnail }}">
+                        </div>
+                        <div class="mnogabukav">
+                            <ul>
+                                <li>
+                                    <h3>{{ movie.media.title }}</h3>
+                                </li>
+                                <li>
+                                    <h4>{{ movie.media.release_date }}</h4>
+                                </li>
+                                <li>
+                                    <p>
+                                    {{ movie.media.description }}
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="rate">
+                            <ul>
+                                <li>Ваша оценка</li>
+                                <li>{{ movie.stars }}</li>
+                            </ul>
+                        </div>    
+                        <div class="likee">
+                            <button>
+                                <img src="{% if movie.favorited %}{% static 'logo/избранное.png' %}{% else %}{% static 'logo/неизбранное.png' %}{% endif %}">
+                            </button>
+                        </div>
+                        <ul>
+                            <li><p>Ваш комментарий:</p></li>
+                            <li><textarea name="Here may be your add" cols="30" rows="5">{{ movie.review }}</textarea></li>
+                        </ul>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

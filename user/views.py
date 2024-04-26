@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from web.models import Movie
 from api.views.ai import get_user_recommendations
+from api.views.user import _get_user_watched
 
 # Create your views here.
 
@@ -20,5 +21,11 @@ def favorites(request):
 
 @login_required
 def recommendations(request):
-    recommendations = get_user_recommendations(request)
+    recommendations = get_user_recommendations(request) # convert this to internal call?
     return render(request, 'recom.html', {'recommendations': recommendations})
+
+@login_required
+def watched(request):
+    watched_movies = _get_user_watched(request.user.profile, 'movie')
+    print(watched_movies)
+    return render(request, 'prochit.html', {'watched_movies': watched_movies})

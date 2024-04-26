@@ -1,0 +1,107 @@
+.lk {
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+}
+
+.lk:hover {
+    cursor: pointer;
+}
+
+.top {
+    border-bottom: 2px solid black;
+    display: flex;
+    padding: 20px 0px 10px 0px;
+    width: 100vw;
+}
+
+.top h2 {
+    text-align: center;
+}
+
+
+.calendar-list {
+    list-style-type: none;
+    display: grid;
+    padding: 0px;
+}
+
+.calendar-item {
+    border-bottom: 2px solid gray;
+    display: grid;
+    grid-template-columns: 6% 40% 10% 10% auto;
+    align-items: center;
+}
+
+.calendar-item ul {
+    list-style-type: none;
+    padding-left: 0px;
+}
+
+.calendar-item ul li {
+    text-align: center;
+    justify-content: center;
+    margin-bottom: 2px solid gray;
+}
+
+.calendar-item-title {
+    text-align: center;
+}
+
+.calendar-item p {
+    text-align: center;
+}
+
+.calendar-item-img {
+    width: inherit;
+    height: auto;
+}
+
+.calendar-item-img img {
+    width: 50px;
+    height: 75px;
+}
+
+.mnogabukav li h3 {
+    text-align: left;
+    margin: 0px;
+}
+
+.mnogabukav li h4 {
+    text-align: left;
+    margin: 0px;
+}
+
+.mnogabukav li p {
+    text-align: left;
+    margin: 0px;
+}
+
+.mnogabukav li:first-child {
+    font-size: large;
+    font-weight: bold;
+    color: black;
+}
+
+.mnogabukav li:last-child {
+    font-size: small;
+    color: gray;
+}
+
+.rate ul li {
+    font-weight: bold;
+    font-size: large;
+    margin-bottom: 30px;
+}
+
+.likee {
+    display: flex;
+    justify-content: center;
+}
+
+.likee button img{
+    width: 35px;
+    height: 35px;
+}
