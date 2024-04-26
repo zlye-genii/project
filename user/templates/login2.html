@@ -20,7 +20,8 @@
         </div>
         <div class="login-container">
             <h2>Login</h2>
-            <form class="login-form" action="/login/" method="post">
+            <form class="login-form" id="loginForm" action="/api/user/login/" method="post">
+                {% csrf_token %}
                 <div class="form-group">
                     <label for="username">Username:</label>
                     <input type="text" id="username" name="username" required>
@@ -31,6 +32,7 @@
                 </div>
                 <div class="form-group">
                     <button type="submit" class="login-button">Login</button>
+                    <div class="error-message" id="error-message"></div>
                 </div>
             </form>
             <div class="registration-prompt">
@@ -38,4 +40,35 @@
             </div>
         </div>
     </div>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            fetch('/api/user/login/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: JSON.stringify({
+                    username: document.getElementById('username').value,
+                    password: document.getElementById('password').value
+                })
+            })
+            .then(response => {
+                return response.json().then(data => ({status: response.status, body: data}));
+            })
+            .then(({status, body: data}) => {
+                if (status >= 200 && status < 300) {
+                    var nextUrl = new URLSearchParams(window.location.search).get('next');
+                    window.location.href = nextUrl ? nextUrl : '/user/account';
+                } else {
+                    if (data.detail || data.non_field_errors) {
+                        document.getElementById('error-message').textContent = data.detail || data.non_field_errors;
+                    } else {
+                        document.getElementById('error-message').textContent = 'Invalid login or password.';
+                    }
+                }
+            });
+        });
+    </script>
 </body>
