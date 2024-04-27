@@ -9,6 +9,19 @@ a {
     text-decoration: none;
 }
 
+.lk {
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+}
+
+.lk:hover {
+    cursor: pointer;
+}
+
+
 header {
     background-color: black;
     color: white;

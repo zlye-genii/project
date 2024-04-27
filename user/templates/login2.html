@@ -6,69 +6,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/global.css' %}">
-    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}"> <!-- Assuming this CSS contains the desired styles -->
+
     <title>Login - BookflixRecommender</title>
 </head>
 
 <body>
-    <div class="content">
-        <div class="logo-and-title">
-            <div class="logo">
-                <img src="{% static 'logo/logo.png' %}" alt="Лотип сайта" style="max-width: 64px; max-height: 64px;">
-                <h1>BookflixRecommender</h1>
+    {% include 'templates/header.html' %}
+    <main>
+        {% include 'templates/sidebar.html' %}
+        <div class="content">
+            <div class="login-container"> <!-- This div should mirror the style of your other containers -->
+                <div class="top">
+                    <h2>Login</h2>
+                </div>
+                <div class="form-wrapper">
+                    <form class="login-form" id="loginForm" action="/api/user/login/" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="username">Username:</label>
+                            <input type="text" id="username" name="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <input type="password" id="password" name="password" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="buttons">
+                    <div class="registration-prompt">
+                        <p>Don't have an account?</p>
+                        <a href="/user/register/">Register</a>
+                    </div>
+                    <div class="form-group">
+                        <div class="button-wrapper"> <!-- New wrapper for the button -->
+                            <button type="submit" class="login-button">Login</button>
+                        </div>
+                        <div class="error-message" id="error-message"></div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="login-container">
-            <h2>Login</h2>
-            <form class="login-form" id="loginForm" action="/api/user/login/" method="post">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="login-button">Login</button>
-                    <div class="error-message" id="error-message"></div>
-                </div>
-            </form>
-            <div class="registration-prompt">
-                <p>Don't have an account? <a href="/user/register/">Register</a></p>
-            </div>
-        </div>
-    </div>
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            fetch('/api/user/login/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-                },
-                body: JSON.stringify({
-                    username: document.getElementById('username').value,
-                    password: document.getElementById('password').value
-                })
-            })
-            .then(response => {
-                return response.json().then(data => ({status: response.status, body: data}));
-            })
-            .then(({status, body: data}) => {
-                if (status >= 200 && status < 300) {
-                    var nextUrl = new URLSearchParams(window.location.search).get('next');
-                    window.location.href = nextUrl ? nextUrl : '/user/account';
-                } else {
-                    if (data.detail || data.non_field_errors) {
-                        document.getElementById('error-message').textContent = data.detail || data.non_field_errors;
-                    } else {
-                        document.getElementById('error-message').textContent = 'Invalid login or password.';
-                    }
-                }
-            });
-        });
-    </script>
+    </main>
+    <script src="{% static 'js/login.js' %}"></script> <!-- Moved JavaScript to an external file -->
 </body>
+
+</html>
