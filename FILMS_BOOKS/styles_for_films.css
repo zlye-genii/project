@@ -252,7 +252,7 @@ nav img {
 .calendar-item {
     border-bottom: 2px solid #A0A0A0;
     display: grid;
-    grid-template-columns: 5% 5% 200px 20%;
+    grid-template-columns: 5% 5% 200px auto;
     align-items: center;
     font-size: small;
 }
