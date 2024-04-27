@@ -8,6 +8,7 @@ class Genre(models.Model):
     def __str__(self):
         return self.name
     name = models.CharField(max_length=100, unique=True)
+    translated_name = models.CharField(max_length=100, unique=True, null=True)
 
 class StarRating(models.IntegerChoices):
     ZERO = 0, 'None' # kind of a hack to allow favorited without a rating :p

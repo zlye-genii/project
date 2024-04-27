@@ -10,6 +10,7 @@ from PyMovieDb import IMDB
 from django.core.cache import cache
 import json
 import datetime
+from utils.translate import translate
 
 imdb = IMDB()
     
@@ -73,11 +74,12 @@ def _create_movie(movie_id):
     runtime = time_obj.hour * 60 + time_obj.minute
 
     # Set the movie details
-    movie.title = movie_details.get("name")
+    translated = translate([movie_details.get("name"), movie_details.get("description")] + [genre for genre in genres])
+    movie.title = translated[0]
     movie.release_date = movie_details.get("datePublished")
     movie.runtime = runtime
     movie.imdb_rating = movie_details.get("rating").get("ratingValue")
-    movie.description = movie_details.get("description")
+    movie.description = translated[1]
     movie.content_rating = movie_details.get("contentRating")
     if movie_details.get("poster"):
         movie.thumbnail = compress_movie_media(movie_id, movie_details.get("poster"))
@@ -86,8 +88,11 @@ def _create_movie(movie_id):
 
     # Link the genres to the movie
     if genres:
-        for genre_name in genres:
+        for i, genre_name in enumerate(genres):
             genre, created = Genre.objects.get_or_create(name=genre_name)
+            if created:
+                genre.translated_name = translated[i+2]
+                genre.save()
             movie.genres.add(genre)
     if directors:
         for director in directors:

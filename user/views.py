@@ -11,6 +11,11 @@ def login(request):
         return redirect('account')
     return render(request, 'login2.html')
 
+def register(request):
+    if request.user.is_authenticated:
+        return redirect('account')
+    return render(request, 'register.html')
+
 @login_required
 def account(request):
     return render(request, 'account.html', {'user': request.user})

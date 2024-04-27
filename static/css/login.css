@@ -103,15 +103,6 @@
     font-weight: bold;
 }
 
-body {
-    /*Other existing styles*/
-    background-image: url('css-img/loginbg.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-}
-
 body::before {
     content: "";
     position: fixed;
@@ -123,7 +114,7 @@ body::before {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    filter: blur(15px); /* Adjust blur as needed */
+    filter: blur(15px);
     z-index: -1;
 }
 
