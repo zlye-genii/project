@@ -33,7 +33,8 @@ main .content {
 }
 
 .login-form input[type="text"],
-.login-form input[type="password"] {
+.login-form input[type="password"],
+.login-form input[type="email"] {
     width: calc(100% - 20px);
     padding: 10px;
     border: 1px solid #ccc;
