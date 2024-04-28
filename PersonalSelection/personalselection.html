@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="stylepersonalselection.css">
     <title>BookflixRecommender</title>
 </head>
 
@@ -61,7 +61,8 @@
         </div>
         <div class="content">
             <div class="top">
-                <h2>Подобрать   <button id="toggleButton">Книгу</button></h2>
+                <h2>Подобрать <button id="toggleButton">Книгу</button></h2>
+
             </div>
             <div class="search-box">
                 <label>Ключевое слово</label>
@@ -92,10 +93,12 @@
                     <option value="16">16+</option>
                     <option value="18">18+</option>
                 </select>
-                <button id="searchButton"> 
-                    <img src="поиск.png" alt="Поиск"> 
-                    <span>Найти</span>
-                </button>
+                <form action="replyselection.html">
+                    <button id="searchButton"> 
+                        <img src="поиск.png" alt="Поиск"> 
+                        <span>Найти</span>
+                    </button>
+                </form>
                
 
             </div>
@@ -108,6 +111,8 @@
 
     <script>
         const toggleButton = document.getElementById('toggleButton');
+        const circle = document.querySelector('.circle');
+        
         toggleButton.addEventListener('click', function () {
             if (toggleButton.textContent === 'Книгу') {
                 toggleButton.textContent = 'Фильм';
@@ -116,7 +121,9 @@
                 toggleButton.textContent = 'Книгу';
                 toggleButton.style.backgroundColor = '#FF6666';
             }
+            
         });
+       
     </script>
 
     <script>

@@ -118,86 +118,50 @@ nav img {
 }
 
 .top {    
-    
     display: flex;
     align-items: center;
     padding: 20px 0px 10px 0px;
     width: 100vw;
-    height: 15vh;
-    gap: 30px;
 }
 
 .top h2 {
-    margin: 0;
+    margin-top: 10;
     padding-left: 400px;
 }
 
-.search-box {
-    margin-left: 30px;
-    padding: 20px 30px 10px 30px;
-    width: 65vw;
-    height: 80vh;
-    background-color: rgb(253, 242, 233);
-    border: 2px solid black;
-
+.case {
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    text-align: center;
-
-}
-
-label {
-    font-weight: bold;
-}
-
-button {
-    width: 150px;
-    height: 50px;
-    margin-top:30px;
-    font-weight: bold;
-    padding: 10px;
-}
-
-input, select {
     
-    padding: 10px;
-    border: 1px solid #ccc;
-    border: 1px solid black;
+    width: 100vw;
 }
 
-#toggleButton {
-    width: 130px;
+.movie {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Добавляем выравнивание по краям */
+    margin-bottom: 10px;
+  }
+  .movie img {
+    width: 100px;
     height: auto;
-    background-color: #FF6666;
-    border: 1px solid black;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    -webkit-text-stroke: 0.5px black;
-    font-size: 1.1em;
-}
-
-#searchButton {
-    cursor: pointer;
-    display: flex; 
-    align-items: center; 
-    padding: 10px;
-    margin-left: 410px;
-    background-color: #fff266;
-    border: 1px solid black;
-    font-size: 1.1em;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    
-}
-
-
-#searchButton img {
-    width: 45px;
-    height: 30px;
-    margin-right: 5px;
-}
-
-
+    margin-right: 100px;
+  }
+  .separator {
+    border-bottom: 1px solid black;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  .movie-info {
+    display: flex;
+  }
+  .movie-info p {
+    margin-right: 20px;
+  }
+  .movie-rating {
+    display: flex; /* Добавляем display: flex чтобы элементы выравнивались в одну линию */
+    align-items: center; /* Выравниваем элементы по вертикали */
+  }
+  .movie-rating p {
+    margin-right: 5px; /* Отступ между текстом рейтинга и значком */
+  }
