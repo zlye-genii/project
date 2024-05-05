@@ -129,39 +129,88 @@ nav img {
     padding-left: 400px;
 }
 
-.case {
-    display: flex;
-    flex-direction: column;
-    
-    width: 100vw;
+.calendar-list {
+    list-style-type: none;
+    display: grid;
+    padding: 0px;
 }
 
-.movie {
-    display: flex;
+.calendar-item {
+    border-bottom: 2px solid black;
+    display: grid;
+    grid-template-columns: 6% 40% 10% 10% auto;
     align-items: center;
-    justify-content: space-between; /* Добавляем выравнивание по краям */
-    margin-bottom: 10px;
-  }
-  .movie img {
-    width: 100px;
+}
+
+.calendar-item ul {
+    list-style-type: none;
+    padding-left: 10px;
+}
+
+.calendar-item ul li {
+    text-align: center;
+    justify-content: center;
+    margin-bottom: 2px solid black;
+}
+
+.calendar-item-title {
+    text-align: center;
+}
+
+.calendar-item p {
+    text-align: center;
+}
+
+.calendar-item-img {
+    margin-left: 20px;
+    width: inherit;
     height: auto;
-    margin-right: 100px;
-  }
-  .separator {
-    border-bottom: 1px solid black;
-    width: 100%;
-    margin-bottom: 10px;
-  }
-  .movie-info {
+}
+
+.calendar-item-img img {
+    width: 50px;
+    height: 75px;
+}
+
+.mnogabukav li h3 {
+    margin: 0px 0px 10px 20px;
+    text-align: left;
+    
+}
+
+.mnogabukav li h4 {
+    text-align: left;
+    margin: 0px 0px 10px 20px;
+}
+
+.mnogabukav li p {
+    text-align: left;
+    margin: 0px 0px 10px 20px;
+}
+
+.mnogabukav li:first-child {
+    font-size: large;
+    font-weight: bold;
+    color: black;
+}
+
+.mnogabukav li:last-child {
+    font-size: small;
+    color: gray;
+}
+
+.rate ul li {
+    font-weight: bold;
+    font-size: large;
+    margin: 0px 0px 30px 30px;
+}
+
+.likee {
     display: flex;
-  }
-  .movie-info p {
-    margin-right: 20px;
-  }
-  .movie-rating {
-    display: flex; /* Добавляем display: flex чтобы элементы выравнивались в одну линию */
-    align-items: center; /* Выравниваем элементы по вертикали */
-  }
-  .movie-rating p {
-    margin-right: 5px; /* Отступ между текстом рейтинга и значком */
-  }
+    justify-content: center;
+}
+
+.likee button img{
+    width: 35px;
+    height: 35px;
+}
