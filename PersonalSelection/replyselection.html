@@ -6,6 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="stylereplyselection.css">
     <title>BookflixRecommender</title>
+
+    <script>
+        function toggleLike(button) {
+            var currentState = button.getAttribute('data-state');
+            if (currentState === 'true') {
+                button.setAttribute('data-state', 'false');
+                button.querySelector('img').src = 'неизбранное.png';
+            } else {
+                button.setAttribute('data-state', 'true');
+                button.querySelector('img').src = 'избранное.png';
+            }
+        }
+    </script>
+
 </head>
 
 <body>
@@ -63,27 +77,158 @@
             <div class="top">
                 <h2>Ваша персональная подборка</h2>
             </div>
-            <div class="case">
-                <div class="separator"></div>
-                <div class="movie">
-                  <span>1.</span>
-                  <img src="examplefilm.jpg" alt="Movie 1">
-                  <div>
-                    <p>Название: Фильм 1</p>
-                    <div class="movie-info">
-                      <p>Жанр: Драма</p>
-                      <p>Страна: США</p>
-                      <p>Год: 2020</p>
-                    </div>
-                  </div>
-                  <div class="movie-rating">
-                    <p>Рейтинг: 8.5</p>
-                    <img src="неизбранное.png" alt="Like 1">
-                  </div>
-                </div>
-                <div class="separator"></div>
+            <div class="calendar-list">
+                <ul>
+                    <li class="calendar-item">
+                        <div class="calendar-item-img">
+                            <img src="ex.jpg">
+                        </div>
+                        <div class="mnogabukav">
+                            <ul>
+                                <li>
+                                    <h3>Рекомендация1</h3>
+                                </li>
+                                <li><h4>Recomendation1, year1</h4></li>
+                                <li><p>
+                                    Страна1 ● Жанр1
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="rate">
+                            <ul>
+                                <li>Рейтинг</li>
+                                <li>10.00</li>
+                            </ul>
+                        </div>    
+                        <div class="likee">
+                            <button onclick="toggleLike(this)" data-state="false">
+                                <img src="неизбранное.png">
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="calendar-item">
+                        <div class="calendar-item-img">
+                            <img src="ex.jpg">
+                        </div>
+                        <div class="mnogabukav">
+                            <ul>
+                                <li>
+                                    <h3>Рекомендация2</h3>
+                                </li>
+                                <li><h4>Recomendation2, year2</h4></li>
+                                <li><p>
+                                    Страна2 ● Жанр2
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="rate">
+                            <ul>
+                                <li>Рейтинг</li>
+                                <li>10.00</li>
+                            </ul>
+                        </div>    
+                        <div class="likee">
+                            <button onclick="toggleLike(this)" data-state="false">
+                                <img src="неизбранное.png">
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="calendar-item">
+                        <div class="calendar-item-img">
+                            <img src="ex.jpg">
+                        </div>
+                        <div class="mnogabukav">
+                            <ul>
+                                <li>
+                                    <h3>Рекомендация3</h3>
+                                </li>
+                                <li><h4>Recomendation3, year3</h4></li>
+                                <li><p>
+                                    Страна3 ● Жанр3
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="rate">
+                            <ul>
+                                <li>Рейтинг</li>
+                                <li>10.00</li>
+                            </ul>
+                        </div>    
+                        <div class="likee">
+                            <button onclick="toggleLike(this)" data-state="false">
+                                <img src="неизбранное.png">
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="calendar-item">
+                        <div class="calendar-item-img">
+                            <img src="ex.jpg">
+                        </div>
+                        <div class="mnogabukav">
+                            <ul>
+                                <li>
+                                    <h3>Рекомендация4</h3>
+                                </li>
+                                <li><h4>Recomendation4, year4</h4></li>
+                                <li><p>
+                                    Страна4 ● Жанр4
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="rate">
+                            <ul>
+                                <li>Рейтинг</li>
+                                <li>10.00</li>
+                            </ul>
+                        </div>    
+                        <div class="likee">
+                            <button onclick="toggleLike(this)" data-state="false">
+                                <img src="неизбранное.png">
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="calendar-item">
+                        <div class="calendar-item-img">
+                            <img src="ex.jpg">
+                        </div>
+                        <div class="mnogabukav">
+                            <ul>
+                                <li>
+                                    <h3>Рекомендация5</h3>
+                                </li>
+                                <li><h4>Recomendation5, year5</h4></li>
+                                <li><p>
+                                    Страна5 ● Жанр5
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="rate">
+                            <ul>
+                                <li>Рейтинг</li>
+                                <li>10.00</li>
+                            </ul>
+                        </div>    
+                        <div class="likee">
+                            <button onclick="toggleLike(this)" data-state="false">
+                                <img src="неизбранное.png">
+                            </button>
+                        </div>
+                    </li>
+                </ul>
             </div>
-
         </div>
     </main>
 
