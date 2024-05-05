@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="stylefilmreply.css">
+    <title>BookflixRecommender</title>
+
+    <script>
+        function toggleLike(button) {
+            var currentState = button.getAttribute('data-state');
+            if (currentState === 'true') {
+                button.setAttribute('data-state', 'false');
+                button.querySelector('img').src = 'неизбранное.png';
+            } else {
+                button.setAttribute('data-state', 'true');
+                button.querySelector('img').src = 'избранное.png';
+            }
+        }
+    </script>
+
+    <script>
+        function toggleWatch(button) {
+            var currentState = button.getAttribute('data-state');
+            if (currentState === 'true') {
+                button.setAttribute('data-state', 'false');
+                button.querySelector('img').src = 'непросмотрено.png';
+            } else {
+                button.setAttribute('data-state', 'true');
+                button.querySelector('img').src = 'просмотрено.png';
+            }
+        }
+    </script>
+
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <img src="лого.png" alt="Лотип сайта">
+            <h1>BookflixRecommender</h1>
+        </div>
+
+        <div class="user-icon">
+            <img src="signin.png" alt="Иконка пользователя">
+        </div>
+    </header>
+    <main>
+        <div class="left-menu">
+            <nav>
+                <ul>
+                    <li>
+                        <a href="#">
+                            <img src="новинки.png" alt="Иконка Фильмы" />
+                            <span>Новинки</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="фильмы.png" alt="Иконка Фильмы" />
+                            <span>Фильмы</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="книги.png" alt="Иконка Книги" />
+                            <span>Книги</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="подборка.png" alt="Иконка Персональная подборка">
+                            <span>Персональная подборка</span>
+                        </a>
+                    </li>
+                </ul>
+                <div class="footer">
+                    <p>
+                        © 2024, Злые гении
+
+                    </p>
+                    <p>
+                        <a>Служба поддержки</a>
+                    </p>
+                </div>
+            </nav>
+        </div>
+        <div class="content">
+            <div class="calendar-list">
+                <ul>
+                    <li class="calendar-item">
+                        <div class="calendar-item-img">
+                            <img src="ex.jpg">
+                        </div>
+                        <div class="mnogabukav">
+                            <ul>
+                                <li>
+                                    <h3>Название</h3>
+                                </li>
+                                <li><h4>Name in English</h4></li>
+                                <li><h5>10.00</h5></li>
+
+                                <div class="likee">
+                                    <button onclick="toggleLike(this)" data-state="false">
+                                        <img src="неизбранное.png">
+                                    </button>
+                                </div>
+
+                                <div class="watch">
+                                    <button onclick="toggleWatch(this)" data-state="false">
+                                        <img src="непросмотрено.png">
+                                    </button>
+                                </div>
+
+                                <li>
+                                    <h4>О произведении</h4>
+                                </li>
+                                <li><p>Год выпуска:                *год*</p>
+                                    <p>Страна:                     *страна*</p>
+                                    <p>Жанр:                       *жанр*</p>
+                                    <p>Возрастное ограничение:     *+*</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+
+                <ul>
+                    <li class="calendar-item">
+                        <div class="mnogabukav">
+                            <ul>
+                                <li><h6>
+                                    Бухгалтер Энди Дюфрейн обвинён в убийстве собственной жены и её любовника. Оказавшись в тюрьме под названием Шоушенк, он сталкивается с жестокостью и беззаконием, царящими по обе стороны решётки. Каждый, кто попадает в эти стены, становится их рабом до конца жизни. Но Энди, обладающий живым умом и доброй душой, находит подход как к заключённым, так и к охранникам, добиваясь их особого к себе расположения.
+                                </h6>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                    </li>
+                </ul>
+            </div>
+            
+
+
+            
+            
+        </div>
+    </main>
+
+    
+
+</body>
+
+</html>
