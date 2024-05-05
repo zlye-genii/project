@@ -168,24 +168,25 @@ nav img {
 }
 
 .calendar-item-img img {
-    width: 50px;
-    height: 75px;
+    width: 100px;
+    height: 150px;
+    margin-bottom: 20px;
 }
 
 .mnogabukav li h3 {
-    margin: 0px 0px 10px 20px;
+    margin: 0px 0px 10px 60px;
     text-align: left;
     
 }
 
 .mnogabukav li h4 {
     text-align: left;
-    margin: 0px 0px 10px 20px;
+    margin: 0px 0px 10px 60px;
 }
 
 .mnogabukav li p {
     text-align: left;
-    margin: 0px 0px 10px 20px;
+    margin: 0px 0px 10px 60px;
 }
 
 .mnogabukav li:first-child {
