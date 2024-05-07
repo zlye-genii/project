@@ -161,7 +161,9 @@ nav img {
 }
 
 .calendar-item p {
-    text-align: center;
+    text-align: left;
+    width: 1000px;
+    margin: 0px 0px 10px 40px;
 }
 
 .calendar-item-img {
@@ -229,9 +231,11 @@ nav img {
 
 
 .likee,
-.watch {
+.watch,
+.star-rating {
     display: inline-block;
-    margin-right: 30px; /* Adjust as needed */
+    margin-right: 20px; /* Adjust as needed */
+    margin-bottom: 10px
 }
 
 .likee {
@@ -240,7 +244,7 @@ nav img {
 
 .likee button,
 .watch button {
-    margin-right: 30px; /* Добавляем отступ между кнопками */
+    margin-right: 20px; /* Добавляем отступ между кнопками */
 }
 
 
@@ -254,7 +258,25 @@ nav img {
     height: 35px;
 }
 
+.star-rating .fa-star {
+    font-size: 25px;
+    color: gray;
+}
 
+.star-rating .selected {
+    color: black;
+}
+
+.star-rating .rate-text {
+    font-size: 25px;
+    color: gray;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.star-rating .rate-text.selected {
+    color: black;
+}
 
 
 

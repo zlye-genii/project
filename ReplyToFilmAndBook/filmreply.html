@@ -33,6 +33,24 @@
         }
     </script>
 
+    <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js"></script>
+    <script>
+    function showRating(star) {
+        document.getElementById('starPopup').style.display = 'block';
+        document.getElementById('starPopup').style.position = 'absolute';
+        document.getElementById('starPopup').style.left = star.getBoundingClientRect().left + 'px';
+        document.getElementById('starPopup').style.top = star.getBoundingClientRect().bottom + 'px';
+    }
+
+    function setRating(value) {
+        var ratingText = document.getElementById('ratingText');
+        ratingText.textContent = value;
+        ratingText.classList.add('selected');
+        document.querySelector('.fa-star').classList.add('selected');
+        document.getElementById('starPopup').style.display = 'none';
+    }
+    </script>
+
 </head>
 
 <body>
@@ -113,6 +131,25 @@
                                     </button>
                                 </div>
 
+                                <div class="star-rating">
+                                    <span class="fa fa-star" onclick="showRating(this)"></span>
+                                    <span id="ratingText" class="rate-text" onclick="showRating(this)">Оценить</span>
+                                </div>
+                                  
+                                <div id="starPopup" style="display:none;">
+                                    <!-- Звезды для оценки -->
+                                    <span class="fa fa-star" onclick="setRating(1)"></span>
+                                    <span class="fa fa-star" onclick="setRating(2)"></span>
+                                    <span class="fa fa-star" onclick="setRating(3)"></span>
+                                    <span class="fa fa-star" onclick="setRating(4)"></span>
+                                    <span class="fa fa-star" onclick="setRating(5)"></span>
+                                    <span class="fa fa-star" onclick="setRating(6)"></span>
+                                    <span class="fa fa-star" onclick="setRating(7)"></span>
+                                    <span class="fa fa-star" onclick="setRating(8)"></span>
+                                    <span class="fa fa-star" onclick="setRating(9)"></span>
+                                    <span class="fa fa-star" onclick="setRating(10)"></span>
+                                </div>
+
                                 <li>
                                     <h4>О произведении</h4>
                                 </li>
@@ -128,15 +165,9 @@
 
                 <ul>
                     <li class="calendar-item">
-                        <div class="mnogabukav">
-                            <ul>
-                                <li><h6>
-                                    Бухгалтер Энди Дюфрейн обвинён в убийстве собственной жены и её любовника. Оказавшись в тюрьме под названием Шоушенк, он сталкивается с жестокостью и беззаконием, царящими по обе стороны решётки. Каждый, кто попадает в эти стены, становится их рабом до конца жизни. Но Энди, обладающий живым умом и доброй душой, находит подход как к заключённым, так и к охранникам, добиваясь их особого к себе расположения.
-                                </h6>
-                                </li>
-                            </ul>
-                        </div>
-                        
+                        <p>
+                            Бухгалтер Энди Дюфрейн обвинён в убийстве собственной жены и её любовника. Оказавшись в тюрьме под названием Шоушенк, он сталкивается с жестокостью и беззаконием, царящими по обе стороны решётки. Каждый, кто попадает в эти стены, становится их рабом до конца жизни. Но Энди, обладающий живым умом и доброй душой, находит подход как к заключённым, так и к охранникам, добиваясь их особого к себе расположения.
+                        </p>    
                     </li>
                 </ul>
             </div>
