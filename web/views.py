@@ -3,6 +3,7 @@ from django.utils import timezone
 from datetime import timedelta
 from .models import Movie
 from utils.movie import poster_exists
+from .models import Book
 
 # Create your views here.
 
@@ -18,3 +19,7 @@ def index(request):
 def movielist(request):
     movies = Movie.objects.all().prefetch_related('genres', 'directors')
     return render(request, 'movielist.html', {'movies': movies})
+
+def booklist(request):
+    books = Book.objects.all().prefetch_related('genres', 'authors')
+    return render(request, 'booklist.html', {'books': books})

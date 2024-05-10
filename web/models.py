@@ -21,7 +21,7 @@ class StarRating(models.IntegerChoices):
 class Person(models.Model):
     def __str__(self):
         return self.name
-    name = models.CharField(max_length=100)
+    name = models.TextField()
     url = models.URLField(null=True)
 
 # are you here because of a "non nullable field" error?
@@ -31,12 +31,12 @@ class Person(models.Model):
 # step 4: yippee!
 
 class Media(PolymorphicModel):
-    id = models.CharField(max_length=25, primary_key=True)
+    id = models.TextField(primary_key=True)
     title = models.TextField(null=True)
     description = models.TextField(null=True)
     release_date = models.DateField(null=True)
     genres = models.ManyToManyField(Genre, blank=True)
-    thumbnail = models.URLField(default='/static/banner404.png', null=True)
+    thumbnail = models.URLField(default='/static/banner404.png', max_length=10000, null=True)
 
     def __str__(self):
         return self.title
@@ -45,7 +45,7 @@ class Movie(Media):
     directors = models.ManyToManyField(Person, blank=True)
     runtime = models.IntegerField(null=True) # mins
     imdb_rating = models.FloatField(null=True)
-    content_rating = models.CharField(max_length=20, null=True)
+    content_rating = models.TextField(null=True)
 
 class Book(Media):
     authors = models.ManyToManyField(Person, blank=True)

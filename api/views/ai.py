@@ -43,8 +43,9 @@ def get_user_recommendations(request):
         # last_watched = profile.last_watched_movies.all().order_by('-watch_date')[:5]
         # last_watched_list = [movie.title for movie in last_watched]
     elif media_type == 'book':
+        favorites_list = _get_user_favorites(profile, media_type)
         # e
-        pass
+    
     else:
         return Response({"error": "Invalid media type"}, status=status.HTTP_400_BAD_REQUEST)
 
