@@ -10,14 +10,14 @@ GOOGLE_BOOKS_API_URL = "https://www.googleapis.com/books/v1/volumes"
 
 def _get_book_details(id=None):
     if id:
-        response = requests.get(f"{GOOGLE_BOOKS_API_URL}/{id}")
+        response = requests.get(f"{GOOGLE_BOOKS_API_URL}/{id}", params={"langRestrict": "ru"})
         if response.status_code == 200:
             return response.json()
     return None
 
 def get_book_by_id(book_id):
     GOOGLE_BOOKS_API_URL = f"https://www.googleapis.com/books/v1/volumes/{book_id}"
-    response = requests.get(GOOGLE_BOOKS_API_URL)
+    response = requests.get(GOOGLE_BOOKS_API_URL, params={"langRestrict": "ru"})
 
     if response.status_code == 200:
         return response.json()
@@ -66,12 +66,12 @@ def get_popular_books(request):
         sort_by = request.query_params.get('sort_by', 'relevance')  # получаем параметр сортировки, по умолчанию 'relevance'
         
         # Делаем первый запрос на 40 книг
-        response1 = requests.get(GOOGLE_BOOKS_API_URL, params={"q": genre, "orderBy": sort_by, "maxResults": 40})
+        response1 = requests.get(GOOGLE_BOOKS_API_URL, params={"q": genre, "orderBy": sort_by, "maxResults": 40, "langRestrict": "ru"})
         if response1.status_code != 200:
             return Response({'error': 'Не удалось получить популярные книги', 'response': response1.json()}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
         # Делаем второй запрос на оставшиеся 10 книг
-        response2 = requests.get(GOOGLE_BOOKS_API_URL, params={"q": genre, "orderBy": sort_by, "maxResults": 10, "startIndex": 40})
+        response2 = requests.get(GOOGLE_BOOKS_API_URL, params={"q": genre, "orderBy": sort_by, "maxResults": 10, "startIndex": 40, "langRestrict": "ru"})
         if response2.status_code != 200:
             return Response({'error': 'Не удалось получить популярные книги', 'response': response2.json()}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
@@ -127,6 +127,10 @@ def create_book(request):
     book.description = book_details.get("volumeInfo").get("description")
     book.pages = book_details.get("volumeInfo").get("pageCount")
     book.thumbnail = book_details.get("volumeInfo").get("imageLinks").get("thumbnail")
+
+    print(book.title)
+    print(book.description)
+    print(book.thumbnail)
     
     book.save()
 
