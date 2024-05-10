@@ -63,6 +63,11 @@
     display: inline-block;
 }
 
+.liked {
+    /* wow, magic! https://codepen.io/sosuke/pen/Pjoqqp */
+    filter: brightness(0) saturate(100%) invert(11%) sepia(92%) saturate(7467%) hue-rotate(8deg) brightness(95%) contrast(121%) !important;
+}
+
 .raiting {
     position: relative;
     top: 80px;
