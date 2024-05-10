@@ -14,7 +14,10 @@ def index(request):
     movies_with_posters = [movie for movie in movies if poster_exists(movie.thumbnail)]
     # Limit to the top 10 movies by IMDb rating
     top_movies = movies_with_posters[:10]
-    return render(request, 'novinki.html', {"movies": top_movies})
+    books = Book.objects.filter()#release_date__gte=one_month_ago) # todo get some proper books from google api -_-
+    # Limit to the top 10 books by IMDb rating
+    top_books = books[:10]
+    return render(request, 'novinki.html', {"movies": top_movies, "books": top_books})
 
 def movielist(request):
     movies = Movie.objects.all().prefetch_related('genres', 'directors')

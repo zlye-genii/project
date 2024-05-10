@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view, permission_classes, authenticati
 import requests
 from web.models import Book, Person, Genre
 import json
+from datetime import datetime
 
 GOOGLE_BOOKS_API_URL = "https://www.googleapis.com/books/v1/volumes"
 
@@ -56,6 +57,22 @@ def search_books(request):
     else:
         return Response({'error': 'Bad Request: Please provide a query'}, status=status.HTTP_400_BAD_REQUEST)
 
+def _format_published_date(date_str):
+    date_str = date_str.replace("“", '').replace('”', '')
+    # Try to parse the date with the complete format
+    try:
+        return datetime.strptime(date_str, "%Y-%m-%d").date()
+    except ValueError:
+        # If the day is missing (format YYYY-MM)
+        try:
+            return datetime.strptime(date_str, "%Y-%m").date().replace(day=1)
+        except ValueError:
+            # If only the year is present (format YYYY)
+            try:
+                return datetime.strptime(date_str, "%Y").date().replace(month=1, day=1)
+            except ValueError:
+                # If the date is not in a valid format, return None or a default date
+                return None
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
@@ -123,14 +140,10 @@ def create_book(request):
 
     # Set the book details
     book.title = book_details.get("volumeInfo").get("title")
-    book.release_date = book_details.get("volumeInfo").get("publishedDate")
+    book.release_date = _format_published_date(book_details.get("volumeInfo").get("publishedDate"))
     book.description = book_details.get("volumeInfo").get("description")
     book.pages = book_details.get("volumeInfo").get("pageCount")
     book.thumbnail = book_details.get("volumeInfo").get("imageLinks").get("thumbnail")
-
-    print(book.title)
-    print(book.description)
-    print(book.thumbnail)
     
     book.save()
 
