@@ -26,6 +26,7 @@ def get_book_by_id(book_id):
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
+@authentication_classes([])
 def get_book_details(request):
     id = request.query_params.get('id')
     if id:
@@ -46,6 +47,7 @@ def _search_books(query=None):
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
+@authentication_classes([])
 def search_books(request):
     query = request.query_params.get('query')
     if query:
@@ -57,6 +59,7 @@ def search_books(request):
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
+@authentication_classes([])
 def get_popular_books(request):
     try:
         genre = request.query_params.get('genre', 'book')  # получаем параметр жанра, по умолчанию 'book'
@@ -99,6 +102,7 @@ def get_popular_books(request):
 # https://developers.google.com/books/docs/v1/using?hl=ru#RetrievingVolume
 @api_view(["POST"])
 @permission_classes([AllowAny])
+@authentication_classes([])
 def create_book(request):
     # Extract book id from the request
     book_id = request.data.get("id")
