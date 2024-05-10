@@ -79,7 +79,10 @@ def _create_movie(movie_id):
     runtime = time_obj.hour * 60 + time_obj.minute
 
     # Set the movie details
-    translated = translate([movie_details.get("name"), movie_details.get("description")] + [genre for genre in genres])
+    if genres:
+        translated = translate([movie_details.get("name"), movie_details.get("description")] + [genre for genre in genres])
+    else:
+        translated = translate([movie_details.get("name"), movie_details.get("description")])
     movie.title = translated[0]
     movie.release_date = movie_details.get("datePublished")
     movie.runtime = runtime

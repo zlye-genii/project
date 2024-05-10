@@ -11,6 +11,9 @@ load_dotenv('..')
 DEEPLX_BASE = os.getenv("DEEPLX_API")
 DEEPLX_API_KEY = os.getenv("DEEPLX_API_KEY")
 
+# ratelimit managed by nginx
+# 1/s seems to be good enough
+# kinda
 def translate(text): # text MUST BE A LIST OF STRINGS
     r = requests.post(
         DEEPLX_BASE + '/v2/translate', 
