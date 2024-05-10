@@ -1,0 +1,258 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+    <link rel="stylesheet" href="{% static 'css/novinki.css' %}">
+    <title>BookflixRecommender</title>
+</head>
+
+<body>
+    {% include "templates/header.html" %}
+    <main>
+        {% include "templates/sidebar.html" %}
+        <div class="content">
+            <div class="top">
+                <img src="{% static 'logo/топ за месяц.jpg' %}" width="64" height="64">
+                <h2>Топ-10 за месяц</h2>
+            </div>
+            <div class="films">
+                <div class="scroll-container">
+                    {% for movie in movies %}
+                    <div class="card">
+                        <div>
+                            <img src="{{ movie.thumbnail }}">
+                        </div>
+                        <h3>{{ movie.title }}</h3>
+                        <p>{{ movie.release_date.year }}, {{ movie.genres.first.translated_name }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="books">
+                <div class="scroll-container">
+                    <div class="card">
+                        <div>
+                            <img src="books-img/forsait.jpg">
+                        </div>
+                        <h3>Форсайт</h3>
+                        <p>Сергей Лукьяненко</p>
+                    </div>
+                    <div class="card">
+                        <div>
+                            <img src="books-img/likely_blood.jpg">
+                        </div>
+                        <h3>Родная кровь</h3>
+                        <p>Anne Dar</p>
+                    </div>
+                    <div class="card">
+                        <div>
+                            <img src="books-img/Frerien.jpg">
+                        </div>
+                        <h3>Фрирен, провожающая в последний путь</h3>
+                        <p>Канэхито Ямада</p>
+                    </div>
+                    <div class="card">
+                        <div>
+                            <img src="books-img/no_time.jpg">
+                        </div>
+                        <h3>Нет времени</h3>
+                        <p>Алексей Брусницын</p>
+                    </div>
+                    <div class="card">
+                        <div>
+                            <img src="books-img/solo_leveling.jpg">
+                        </div>
+                        <h3>Поднятие уровня в одиночку</h3>
+                        <p>Чу-Гонг</p>
+                    </div>
+                    <div class="card">
+                        <div>
+                            <img src="books-img/hatun_step_on_notknown.jpg">
+                        </div>
+                        <h3>Шатун: Шаг в неизвестность</h3>
+                        <p>Ерофей Трофимов</p>
+                    </div>
+                    <div class="card">
+                        <div>
+                            <img src="books-img/in_one_time_i_relife_in_prince_of_the_north.jpg">
+                        </div>
+                        <h3>Однажды я переродилась принцем севера</h3>
+                        <p>Raf Milk</p>
+                    </div>
+                    <div class="card">
+                        <div>
+                            <img src="books-img/ledi_from_froingema.jpg">
+                        </div>
+                        <h3>Леди из Фроинтгема</h3>
+                        <p>Шарллота Брандиш</p>
+                    </div>
+                    <div class="card">
+                        <div>
+                            <img src="books-img/drama_in_the_grifin-hole.jpg">
+                        </div>
+                        <h3>Драма в Грифинхоле или отравленный уик-энд</h3>
+                        <p>Шарллота Брандиш</p>
+                    </div>
+                    <div class="card">
+                        <div>
+                            <img src="books-img/forsait.jpg">
+                        </div>
+                        <h3>Форсайт</h3>
+                        <p>Сергей Лукьяненко</p>
+                    </div>
+                    <div class="card">
+                        <div>
+                            <img src="books-img/forsait.jpg">
+                        </div>
+                        <h3>Форсайт</h3>
+                        <p>Сергей Лукьяненко</p>
+                    </div>
+                </div>
+            </div>
+            <div class="top">
+                <img src="logo/календарь релизов.png">
+                <h2>Календарь релизов</h2>
+            </div>
+            <div class="calendar-list">
+                <ul>
+                    <li class="calendar-item">
+                        <span>1.</span>
+                        <div class="calendar-item-img">
+                            <img src="kalendar/86.jpg">
+                        </div>
+                        <h4 class="calendar-item-title">86</h4>
+                        <p>10 марта</p>
+                        <button id='toggleButton' class="like">
+                            <svg width="50px" height="50px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 5.881C12.981 4.729 14.484 4 16.05 4C18.822 4 21 6.178 21 8.95C21 12.3492 17.945 15.1195 13.3164 19.3167L13.305 19.327L12 20.515L10.695 19.336L10.6595 19.3037C6.04437 15.1098 3 12.3433 3 8.95C3 6.178 5.178 4 7.95 4C9.516 4 11.019 4.729 12 5.881Z" fill="#dddddd"/>
+                                </svg>
+                        </button>
+                    </li>
+                    <li class="calendar-item">
+                        <span>2.</span>
+                        <div class="calendar-item-img">
+                            <img src="kalendar/claustrofobie_insomnie.jpg">
+                        </div>
+                        <h4 class="calendar-item-title">Клаустрофобия: Инсомния</h4>
+                        <p>10 марта</p>
+                        <button class="like">
+                            <svg width="50px" height="50px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 5.881C12.981 4.729 14.484 4 16.05 4C18.822 4 21 6.178 21 8.95C21 12.3492 17.945 15.1195 13.3164 19.3167L13.305 19.327L12 20.515L10.695 19.336L10.6595 19.3037C6.04437 15.1098 3 12.3433 3 8.95C3 6.178 5.178 4 7.95 4C9.516 4 11.019 4.729 12 5.881Z" fill="#dddddd"/>
+                                </svg>
+                        </button>
+                    </li>
+                    <li class="calendar-item">
+                        <span>3.</span>
+                        <div class="calendar-item-img">
+                            <img src="kalendar/adam_and_eva.jpg">
+                        </div>
+                        <h4 class="calendar-item-title">Адам и Ева</h4>
+                        <p>10 марта</p>
+                        <button class="like">
+                            <svg width="50px" height="50px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 5.881C12.981 4.729 14.484 4 16.05 4C18.822 4 21 6.178 21 8.95C21 12.3492 17.945 15.1195 13.3164 19.3167L13.305 19.327L12 20.515L10.695 19.336L10.6595 19.3037C6.04437 15.1098 3 12.3433 3 8.95C3 6.178 5.178 4 7.95 4C9.516 4 11.019 4.729 12 5.881Z" fill="#dddddd"/>
+                                </svg>
+                        </button>
+                    </li>
+                    <li class="calendar-item">
+                        <span>4.</span>
+                        <div class="calendar-item-img">
+                            <img src="kalendar/love_for_second_watch.jpg">
+                        </div>
+                        <h4 class="calendar-item-title">Любовь co второго взгляда</h4>
+                        <p>10 марта</p>
+                        <button class="like">
+                            <svg width="50px" height="50px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 5.881C12.981 4.729 14.484 4 16.05 4C18.822 4 21 6.178 21 8.95C21 12.3492 17.945 15.1195 13.3164 19.3167L13.305 19.327L12 20.515L10.695 19.336L10.6595 19.3037C6.04437 15.1098 3 12.3433 3 8.95C3 6.178 5.178 4 7.95 4C9.516 4 11.019 4.729 12 5.881Z" fill="#dddddd"/>
+                                </svg>
+                        </button>
+                    </li>
+                    <li class="calendar-item">
+                        <span>5.</span>
+                        <div class="calendar-item-img">
+                            <img src="kalendar/onegin.jpg">
+                        </div>
+                        <h4 class="calendar-item-title">Онегин</h4>
+                        <p>10 марта</p>
+                        <button class="like">
+                            <svg width="50px" height="50px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 5.881C12.981 4.729 14.484 4 16.05 4C18.822 4 21 6.178 21 8.95C21 12.3492 17.945 15.1195 13.3164 19.3167L13.305 19.327L12 20.515L10.695 19.336L10.6595 19.3037C6.04437 15.1098 3 12.3433 3 8.95C3 6.178 5.178 4 7.95 4C9.516 4 11.019 4.729 12 5.881Z" fill="#dddddd"/>
+                                </svg>
+                        </button>
+                    </li>
+                    <li class="calendar-item">
+                        <span>6.</span>
+                        <div class="calendar-item-img">
+                            <img src="kalendar/whisper_of_the_heart.jpg">
+                        </div>
+                        <h4 class="calendar-item-title">Шепот сердца</h4>
+                        <p>10 марта</p>
+                        <button class="like">
+                            <svg width="50px" height="50px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 5.881C12.981 4.729 14.484 4 16.05 4C18.822 4 21 6.178 21 8.95C21 12.3492 17.945 15.1195 13.3164 19.3167L13.305 19.327L12 20.515L10.695 19.336L10.6595 19.3037C6.04437 15.1098 3 12.3433 3 8.95C3 6.178 5.178 4 7.95 4C9.516 4 11.019 4.729 12 5.881Z" fill="#dddddd"/>
+                                </svg>
+                        </button>
+                    </li>
+                    <li class="calendar-item">
+                        <span>7.</span>
+                        <div class="calendar-item-img">
+                            <img src="kalendar/turn_of_fate.jpg">
+                        </div>
+                        <h4 class="calendar-item-title">Поворот судьбы</h4>
+                        <p>10 марта</p>
+                        <button class="like">
+                            <svg width="50px" height="50px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 5.881C12.981 4.729 14.484 4 16.05 4C18.822 4 21 6.178 21 8.95C21 12.3492 17.945 15.1195 13.3164 19.3167L13.305 19.327L12 20.515L10.695 19.336L10.6595 19.3037C6.04437 15.1098 3 12.3433 3 8.95C3 6.178 5.178 4 7.95 4C9.516 4 11.019 4.729 12 5.881Z" fill="#dddddd"/>
+                                </svg>
+                        </button>
+                    </li>
+                    <li class="calendar-item">
+                        <span>8.</span>
+                        <div class="calendar-item-img">
+                            <img src="kalendar/italian_santa_barbara_7_be the women.jpg">
+                        </div>
+                        <h4 class="calendar-item-title">Лучшие итальянские истории 7: Быть женщиной</h4>
+                        <p>10 марта</p>
+                        <button class="like">
+                            <svg width="50px" height="50px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 5.881C12.981 4.729 14.484 4 16.05 4C18.822 4 21 6.178 21 8.95C21 12.3492 17.945 15.1195 13.3164 19.3167L13.305 19.327L12 20.515L10.695 19.336L10.6595 19.3037C6.04437 15.1098 3 12.3433 3 8.95C3 6.178 5.178 4 7.95 4C9.516 4 11.019 4.729 12 5.881Z" fill="#dddddd"/>
+                                </svg>
+                        </button>
+                    </li>
+                    <li class="calendar-item">
+                        <span>9.</span>
+                        <div class="calendar-item-img">
+                            <img src="kalendar/kaidzu_number_8.jpg">
+                        </div>
+                        <h4 class="calendar-item-title">Кайдзю №8</h4>
+                        <p>10 марта</p>
+                        <button class="like" id="submit" type="submit">
+                            <svg width="50px" height="50px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 5.881C12.981 4.729 14.484 4 16.05 4C18.822 4 21 6.178 21 8.95C21 12.3492 17.945 15.1195 13.3164 19.3167L13.305 19.327L12 20.515L10.695 19.336L10.6595 19.3037C6.04437 15.1098 3 12.3433 3 8.95C3 6.178 5.178 4 7.95 4C9.516 4 11.019 4.729 12 5.881Z" fill="#dddddd"/>
+                                </svg>
+                        </button>
+                    </li>
+                    <li class="calendar-item">
+                        <span>10.</span>
+                        <div class="calendar-item-img">
+                            <img src="kalendar/storyabout_beautifull_girl_spring.jpg">
+                        </div>
+                        <h4 class="calendar-item-title">Сказка o красавице весне</h4>
+                        <p>10 марта</p>
+                        <button class="like">
+                            <svg width="50px" height="50px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 5.881C12.981 4.729 14.484 4 16.05 4C18.822 4 21 6.178 21 8.95C21 12.3492 17.945 15.1195 13.3164 19.3167L13.305 19.327L12 20.515L10.695 19.336L10.6595 19.3037C6.04437 15.1098 3 12.3433 3 8.95C3 6.178 5.178 4 7.95 4C9.516 4 11.019 4.729 12 5.881Z" fill="#dddddd"/>
+                                </svg>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

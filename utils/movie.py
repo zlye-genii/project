@@ -22,11 +22,16 @@ def compress_movie_media(movie_id, poster_url, regen=False):
         return img_path
     response = requests.get(poster_url)
     img = Image.open(BytesIO(response.content))
-    img = img.resize((100, 250), Image.ANTIALIAS) # adjust this
+    img = img.resize((150, 250), Image.ANTIALIAS) # adjust this
 
     img.save(img_path)
 
     return img_path.replace('\\', '/') # windows <3
+
+def poster_exists(path):
+    # checks if poster exists
+    # alternatively create a 404 default img but blehhhh :3
+    return os.path.isfile(path)
 
 def _get_movie_details(id, db_only=True):
     movie = cache.get(f'movie_{id}')
