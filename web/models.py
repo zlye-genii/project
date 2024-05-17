@@ -11,12 +11,17 @@ class Genre(models.Model):
     translated_name = models.CharField(max_length=100, unique=True, null=True)
 
 class StarRating(models.IntegerChoices):
-    ZERO = 0, 'None' # kind of a hack to allow favorited without a rating :p
-    ONE = 1, 'Terrible'
-    TWO = 2, 'Poor'
-    THREE = 3, 'Average'
-    FOUR = 4, 'Good'
-    FIVE = 5, 'Excellent'
+    ZERO = 0
+    ONE = 1
+    TWO = 2
+    THREE = 3
+    FOUR = 4
+    FIVE = 5
+    SIX = 6
+    SEVEN = 7
+    EIGHT = 8
+    NINE = 9
+    TEN = 10
 
 class Person(models.Model):
     def __str__(self):

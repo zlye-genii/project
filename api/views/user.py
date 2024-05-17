@@ -23,10 +23,10 @@ def change_media_rating(request):
     profile = request.user.profile
     rating = profile.ratings.filter(media=media).first()
 
-    star_rating = request.data.get('rating')  # 1 - 5
+    star_rating = request.data.get('rating')  # 1 - 10
     if star_rating:
         star_rating = int(star_rating)
-        if not 1 <= star_rating <= 5:
+        if not 1 <= star_rating <= 10:
             return Response({"error": "Invalid Star Rating"}, status=status.HTTP_400_BAD_REQUEST)
         if not rating:
             rating, created = Rating.objects.get_or_create(stars=star_rating, media=media, profile=profile)

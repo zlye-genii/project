@@ -89,7 +89,7 @@
     padding: 0px;
 }
 
-.calendar-item {
+.calendar-item > a {
     border-bottom: 2px solid gray;
     display: grid;
     grid-template-columns: 10% 150px 30% 10% 10%;

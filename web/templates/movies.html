@@ -23,7 +23,7 @@
         <div class="block-films">
             <div class="scroll-container">
                 {% for movie in top_movies %}
-                <div class="film">
+                <a href="/movie/details/{{ movie.id }}" class="film">
                     {% if movie.imdb_rating %}
                         <div class="rating">{{ movie.imdb_rating }}</div>
                     {% endif %}
@@ -33,14 +33,8 @@
                             <h3>{{ movie.title|fix_chars }}</h3>
                             <p>{{ movie.release_date.year }}, {{ movie.genres.first.translated_name }}</p>
                         </div>
-                        <div class="film-cell">
-                            <button class="elect" id="b{{ forloop.counter }}">
-                                <svg width="35px" height="35px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 5.881C12.981 4.729 14.484 4 16.05 4C18.822 4 21 6.178 21 8.95C21 12.3492 17.945 15.1195 13.3164 19.3167L13.305 19.327L12 20.515L10.695 19.336L10.6595 19.3037C6.04437 15.1098 3 12.3433 3 8.95C3 6.178 5.178 4 7.95 4C9.516 4 11.019 4.729 12 5.881Z" fill="#dddddd" stroke="#666" stroke-width="1"/></svg>
-                            </button>
-                        </div>
                     </div>
-                </div>
+                </a>
                 {% endfor %}
             </div>
         </div>
@@ -59,7 +53,7 @@
                         <div class="block-films">
                             <div class="scroll-container">
                                 {% for movie in genre_movies %}
-                                    <div class="film">
+                                    <a href="/movie/details/{{ movie.id }}" class="film">
                                         {% if movie.imdb_rating %}
                                             <div class="rating">{{ movie.imdb_rating }}</div>
                                         {% endif %}
@@ -69,13 +63,15 @@
                                                 <h3>{{ movie.title|fix_chars }}</h3>
                                                 <p>{{ movie.release_date.year }}, {{ genre.translated_name }}</p>
                                             </div>
-                                            <div class="film-cell">
-                                                <button class="elect" id="b{{ forloop.counter }}">
-                                                    <!-- SVG icon here -->
-                                                </button>
-                                            </div>
                                         </div>
-                                    </div>
+                                        <div class="film-cell">
+                                            <button class="elect" id="b{{ forloop.counter }}">
+                                                <svg width="35px" height="35px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M12 5.881C12.981 4.729 14.484 4 16.05 4C18.822 4 21 6.178 21 8.95C21 12.3492 17.945 15.1195 13.3164 19.3167L13.305 19.327L12 20.515L10.695 19.336L10.6595 19.3037C6.04437 15.1098 3 12.3433 3 8.95C3 6.178 5.178 4 7.95 4C9.516 4 11.019 4.729 12 5.881Z" fill="#dddddd" stroke="#666" stroke-width="1"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </a>
                                 {% endfor %}
                             </div>
                         </div>
@@ -84,9 +80,6 @@
                 {% endwith %}
             {% endfor %}
         </div>
-        <div class="interval"></div>
-        
-        
         
         {% comment %} <div class="title-main">
             <img src="logo/top sellers.png" alt="Иконка Хиты Продаж" style="max-width: 65px; height: 65px;">

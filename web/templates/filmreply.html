@@ -9,49 +9,7 @@
     <link rel="stylesheet" href="{% static 'css/stylefilmreply.css' %}">
     <title>BookflixRecommender</title>
 
-    <script>
-        function toggleLike(button) {
-            var currentState = button.getAttribute('data-state');
-            if (currentState === 'true') {
-                button.setAttribute('data-state', 'false');
-                button.querySelector('img').src = 'неизбранное.png';
-            } else {
-                button.setAttribute('data-state', 'true');
-                button.querySelector('img').src = 'избранное.png';
-            }
-        }
-    </script>
-
-    <script>
-        function toggleWatch(button) {
-            var currentState = button.getAttribute('data-state');
-            if (currentState === 'true') {
-                button.setAttribute('data-state', 'false');
-                button.querySelector('img').src = 'непросмотрено.png';
-            } else {
-                button.setAttribute('data-state', 'true');
-                button.querySelector('img').src = 'просмотрено.png';
-            }
-        }
-    </script>
-
     <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js"></script>
-    <script>
-    function showRating(star) {
-        document.getElementById('starPopup').style.display = 'block';
-        document.getElementById('starPopup').style.position = 'absolute';
-        document.getElementById('starPopup').style.left = star.getBoundingClientRect().left + 'px';
-        document.getElementById('starPopup').style.top = star.getBoundingClientRect().bottom + 'px';
-    }
-
-    function setRating(value) {
-        var ratingText = document.getElementById('ratingText');
-        ratingText.textContent = value;
-        ratingText.classList.add('selected');
-        document.querySelector('.fa-star').classList.add('selected');
-        document.getElementById('starPopup').style.display = 'none';
-    }
-    </script>
 
 </head>
 
@@ -64,32 +22,35 @@
                 <ul>
                     <li class="calendar-item">
                         <div class="calendar-item-img">
-                            <img src="ex.jpg">
+                            <img src="/{{ movie.thumbnail }}">
                         </div>
                         <div class="mnogabukav">
                             <ul>
                                 <li>
-                                    <h3>Название</h3>
+                                    <h3>{{ movie.title|default:'недоступно' }}</h3>
                                 </li>
-                                <li><h4>Name in English</h4></li>
-                                <li><h5>10.00</h5></li>
+                                {% if movie.imdb_rating %}
+                                <li><h5>{{ movie.imdb_rating }}⭐</h5></li>
+                                {% endif %}
 
-                                <div class="likee">
-                                    <button onclick="toggleLike(this)" data-state="false" data-item-id="{{ movie.id }}">
-                                        <img src="неизбранное.png">
-                                    </button>
-                                </div>
+                                {% if user.is_authenticated %}
+                                    <div class="likee">
+                                        <button data-state="false">
+                                            <img src="{% if user_rating.favorited %}/static/logo/избранное.png{% else %}/static/logo/неизбранное.png{% endif %}">
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="watch">
+                                        <button data-state="false">
+                                            <img src="{% if user_rating.completed %}/static/logo/просмотрено.png{% else %}/static/logo/непросмотрено.png{% endif %}">
+                                        </button>
+                                    </div>
                                 
-                                <div class="watch">
-                                    <button onclick="toggleWatch(this)" data-state="false" data-item-id="{{ movie.id }}">
-                                        <img src="непросмотрено.png">
-                                    </button>
-                                </div>
-
-                                <div class="star-rating">
-                                    <span class="fa fa-star" onclick="showRating(this)"></span>
-                                    <span id="ratingText" class="rate-text" onclick="showRating(this)">Оценить</span>
-                                </div>
+                                    <div class="star-rating">
+                                        <span class="fa fa-star" onclick="showRating(this)"></span>
+                                        <span id="ratingText" class="rate-text" onclick="showRating(this)">{{ user_rating.stars|default:'Оценить' }}</span>
+                                    </div>
+                                {% endif %}
                                   
                                 <div id="starPopup" style="display:none;">
                                     <!-- Звезды для оценки -->
@@ -108,23 +69,25 @@
                                 <li>
                                     <h4>О произведении</h4>
                                 </li>
-                                <li><p>Год выпуска:                *год*</p>
-                                    <p>Страна:                     *страна*</p>
-                                    <p>Жанр:                       *жанр*</p>
-                                    <p>Возрастное ограничение:     *+*</p>
+                                <li>
+                                    <p>Год выпуска: {{ movie.release_date.year|default:'недоступно' }}</p>
+                                    <p>Режиссер: {% for director in movie.directors.all %}{{ director.name|default:'недоступно' }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+                                    <p>Жанр: {% for genre in movie.genres.all %}{{ genre.translated_name|default:'недоступно' }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+                                    <p>Возрастное ограничение: {{ movie.content_rating|default:'недоступно' }}</p>
                                 </li>
                             </ul>
                         </div>
                     </li>
                 </ul>
-
+                {% if movie.description %}
                 <ul>
                     <li class="calendar-item">
                         <p>
-                            Бухгалтер Энди Дюфрейн обвинён в убийстве собственной жены и её любовника. Оказавшись в тюрьме под названием Шоушенк, он сталкивается с жестокостью и беззаконием, царящими по обе стороны решётки. Каждый, кто попадает в эти стены, становится их рабом до конца жизни. Но Энди, обладающий живым умом и доброй душой, находит подход как к заключённым, так и к охранникам, добиваясь их особого к себе расположения.
+                            {{ movie.description }}
                         </p>    
                     </li>
                 </ul>
+                {% endif %}
             </div>
         </div>
     </main>
@@ -134,6 +97,31 @@
             const parts = value.split('; ' + name + '=');
             if (parts.length === 2) return parts.pop().split(';').shift();
         }
+
+        function sendStatusUpdate(itemId, mediaType, statusType, status) {
+            var payload = {
+                media_id: itemId,
+                media_type: mediaType
+            };
+            payload[statusType] = status;
+
+            fetch('/api/user/ratings/set/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+        var movieId = "{{ movie.id }}";
     
         document.addEventListener('DOMContentLoaded', function() {
             var likeButtons = document.querySelectorAll('.likee button');
@@ -142,28 +130,6 @@
             function toggleClass(button, className) {
                 button.classList.toggle(className);
             }
-    
-            function sendStatusUpdate(itemId, mediaType, statusType, status) {
-                fetch('/api/user/ratings/set/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': getCookie('csrftoken')
-                    },
-                    body: JSON.stringify({
-                        media_id: itemId,
-                        media_type: mediaType,
-                        [statusType]: status
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            }
 
             likeButtons.forEach(function(button) {
                 button.addEventListener('click', function(event) {
@@ -171,8 +137,8 @@
                     var currentState = this.getAttribute('data-state') === 'true';
                     var newState = !currentState;
                     this.setAttribute('data-state', newState.toString());
-                    this.querySelector('img').src = newState ? 'избранное.png' : 'неизбранное.png';
-                    sendStatusUpdate(this.dataset.itemId, 'movie', 'favorited', newState);
+                    this.querySelector('img').src = newState ? '/static/logo/избранное.png' : '/static/logo/неизбранное.png';
+                    sendStatusUpdate(movieId, 'movie', 'favorited', newState);
                 });
             });
 
@@ -182,11 +148,52 @@
                     var currentState = this.getAttribute('data-state') === 'true';
                     var newState = !currentState;
                     this.setAttribute('data-state', newState.toString());
-                    this.querySelector('img').src = newState ? 'просмотрено.png' : 'непросмотрено.png';
-                    sendStatusUpdate(this.dataset.itemId, 'movie', 'completed', newState);
+                    this.querySelector('img').src = newState ? '/static/logo/просмотрено.png' : '/static/logo/непросмотрено.png';
+                    sendStatusUpdate(movieId, 'movie', 'completed', newState);
                 });
             });
+            var initialRating = parseInt(document.getElementById('ratingText').textContent);
+            if (!isNaN(initialRating)) {
+                setRating(initialRating);
+            }
         });
+
+        function showRating(star) {
+            var starPopup = document.getElementById('starPopup');
+            starPopup.style.display = 'block';
+            starPopup.style.position = 'absolute';
+            starPopup.style.left = star.getBoundingClientRect().left + 'px';
+            starPopup.style.top = star.getBoundingClientRect().bottom + 'px';
+        
+            // Highlight the stars based on the current rating
+            var currentRating = parseInt(document.getElementById('ratingText').textContent);
+            var stars = starPopup.querySelectorAll('.fa-star');
+            stars.forEach((star, index) => {
+                if (index < currentRating) {
+                    star.classList.add('selected');
+                } else {
+                    star.classList.remove('selected');
+                }
+            });
+        }
+
+        function setRating(value) {
+            var ratingText = document.getElementById('ratingText');
+            ratingText.textContent = value;
+            ratingText.classList.add('selected');
+            var stars = document.querySelectorAll('.fa-star');
+            stars.forEach((star, index) => {
+                if (index < value) {
+                    star.classList.add('selected');
+                } else {
+                    star.classList.remove('selected');
+                }
+            });
+            document.getElementById('starPopup').style.display = 'none';
+        
+            // Send the rating to the backend
+            sendStatusUpdate(movieId, 'movie', 'rating', value);
+        }
     </script>
 </body>
 

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.utils import timezone
 from datetime import timedelta
-from .models import Movie, Book, Genre
+from .models import Movie, Book, Genre, Rating
 from utils.movie import poster_exists
 from api.views.user import _get_user_favorites
 import json
@@ -43,5 +43,11 @@ def booklist(request):
     books = Book.objects.all().prefetch_related('genres', 'authors')
     return render(request, 'booklist.html', {'books': books})
 
-def infotest(request):
-    return render(request, 'filmreply.html')
+def moviedetails(request, movie_id):
+    movie = Movie.objects.get(id=movie_id)
+    if request.user.is_authenticated:
+        user_profile = request.user.profile
+        user_rating = Rating.objects.filter(profile=user_profile, media=movie).first()
+    else:
+        user_rating = None
+    return render(request, 'filmreply.html', {'movie': movie, 'user_rating': user_rating})

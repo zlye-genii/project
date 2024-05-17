@@ -1,13 +1,15 @@
 {% load static %}
 <header>
     <div class="logo">
-        <img src="{% static 'logo/logo.png' %}" alt="Лотип сайта">
+        <a href="/">
+            <img src="{% static 'logo/logo.png' %}" alt="Лотип сайта">
+        </a>
         <h1>BookflixRecommender</h1>
     </div>
 
     <div class="user-icon">
-        <button class="lk">
+        <a href="/user/account">
             <img src="{% static 'logo/лк.png' %}" alt="Иконка пользователя">
-        </button>
+        </a>
     </div>
 </header>
