@@ -3,6 +3,8 @@ from django.shortcuts import render, redirect
 from web.models import Movie
 from api.views.ai import get_user_recommendations
 from api.views.user import _get_user_watched
+from rest_framework.renderers import JSONRenderer
+from api.serializers import RatingSerializer
 
 # Create your views here.
 
@@ -18,7 +20,16 @@ def register(request):
 
 @login_required
 def account(request):
-    return render(request, 'account.html', {'user': request.user})
+    ratings = request.user.profile.ratings.all()
+    ratings_data = RatingSerializer(ratings, many=True).data
+    ratings_json = JSONRenderer().render(ratings_data)
+    ratings_json_str = ratings_json.decode('utf-8')
+    return render(request, 'account.html', {'ratings': ratings_json_str})
+
+@login_required
+def favmovies(request):
+    fav_movies = request.user.profile.ratings.filter(favorited=True, media__movie__isnull=False).select_related('media').prefetch_related('media__movie__directors')
+    return render(request, 'favmovies.html', {'fav_movies': fav_movies})
 
 @login_required
 def favorites(request):

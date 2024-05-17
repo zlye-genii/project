@@ -71,6 +71,7 @@
                                 </li>
                                 <li>
                                     <p>Год выпуска: {{ movie.release_date.year|default:'недоступно' }}</p>
+                                    <p>Продолжительность: {{ movie.runtime|default:'недоступно' }} мин.</p>
                                     <p>Режиссер: {% for director in movie.directors.all %}{{ director.name|default:'недоступно' }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
                                     <p>Жанр: {% for genre in movie.genres.all %}{{ genre.translated_name|default:'недоступно' }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
                                     <p>Возрастное ограничение: {{ movie.content_rating|default:'недоступно' }}</p>
@@ -83,7 +84,7 @@
                 <ul>
                     <li class="calendar-item">
                         <p>
-                            {{ movie.description }}
+                            {{ movie.description|fix_chars }}
                         </p>    
                     </li>
                 </ul>
