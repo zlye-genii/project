@@ -42,3 +42,6 @@ def movielist(request):
 def booklist(request):
     books = Book.objects.all().prefetch_related('genres', 'authors')
     return render(request, 'booklist.html', {'books': books})
+
+def infotest(request):
+    return render(request, 'filmreply.html')

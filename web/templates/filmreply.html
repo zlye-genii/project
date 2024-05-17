@@ -1,0 +1,193 @@
+{% load static %}
+{% load fix_chars %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/stylefilmreply.css' %}">
+    <title>BookflixRecommender</title>
+
+    <script>
+        function toggleLike(button) {
+            var currentState = button.getAttribute('data-state');
+            if (currentState === 'true') {
+                button.setAttribute('data-state', 'false');
+                button.querySelector('img').src = 'неизбранное.png';
+            } else {
+                button.setAttribute('data-state', 'true');
+                button.querySelector('img').src = 'избранное.png';
+            }
+        }
+    </script>
+
+    <script>
+        function toggleWatch(button) {
+            var currentState = button.getAttribute('data-state');
+            if (currentState === 'true') {
+                button.setAttribute('data-state', 'false');
+                button.querySelector('img').src = 'непросмотрено.png';
+            } else {
+                button.setAttribute('data-state', 'true');
+                button.querySelector('img').src = 'просмотрено.png';
+            }
+        }
+    </script>
+
+    <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js"></script>
+    <script>
+    function showRating(star) {
+        document.getElementById('starPopup').style.display = 'block';
+        document.getElementById('starPopup').style.position = 'absolute';
+        document.getElementById('starPopup').style.left = star.getBoundingClientRect().left + 'px';
+        document.getElementById('starPopup').style.top = star.getBoundingClientRect().bottom + 'px';
+    }
+
+    function setRating(value) {
+        var ratingText = document.getElementById('ratingText');
+        ratingText.textContent = value;
+        ratingText.classList.add('selected');
+        document.querySelector('.fa-star').classList.add('selected');
+        document.getElementById('starPopup').style.display = 'none';
+    }
+    </script>
+
+</head>
+
+<body>
+    {% include "templates/header.html" %}
+    <main>
+        {% include "templates/sidebar.html" %}
+        <div class="content">
+            <div class="calendar-list">
+                <ul>
+                    <li class="calendar-item">
+                        <div class="calendar-item-img">
+                            <img src="ex.jpg">
+                        </div>
+                        <div class="mnogabukav">
+                            <ul>
+                                <li>
+                                    <h3>Название</h3>
+                                </li>
+                                <li><h4>Name in English</h4></li>
+                                <li><h5>10.00</h5></li>
+
+                                <div class="likee">
+                                    <button onclick="toggleLike(this)" data-state="false" data-item-id="{{ movie.id }}">
+                                        <img src="неизбранное.png">
+                                    </button>
+                                </div>
+                                
+                                <div class="watch">
+                                    <button onclick="toggleWatch(this)" data-state="false" data-item-id="{{ movie.id }}">
+                                        <img src="непросмотрено.png">
+                                    </button>
+                                </div>
+
+                                <div class="star-rating">
+                                    <span class="fa fa-star" onclick="showRating(this)"></span>
+                                    <span id="ratingText" class="rate-text" onclick="showRating(this)">Оценить</span>
+                                </div>
+                                  
+                                <div id="starPopup" style="display:none;">
+                                    <!-- Звезды для оценки -->
+                                    <span class="fa fa-star" onclick="setRating(1)"></span>
+                                    <span class="fa fa-star" onclick="setRating(2)"></span>
+                                    <span class="fa fa-star" onclick="setRating(3)"></span>
+                                    <span class="fa fa-star" onclick="setRating(4)"></span>
+                                    <span class="fa fa-star" onclick="setRating(5)"></span>
+                                    <span class="fa fa-star" onclick="setRating(6)"></span>
+                                    <span class="fa fa-star" onclick="setRating(7)"></span>
+                                    <span class="fa fa-star" onclick="setRating(8)"></span>
+                                    <span class="fa fa-star" onclick="setRating(9)"></span>
+                                    <span class="fa fa-star" onclick="setRating(10)"></span>
+                                </div>
+
+                                <li>
+                                    <h4>О произведении</h4>
+                                </li>
+                                <li><p>Год выпуска:                *год*</p>
+                                    <p>Страна:                     *страна*</p>
+                                    <p>Жанр:                       *жанр*</p>
+                                    <p>Возрастное ограничение:     *+*</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+
+                <ul>
+                    <li class="calendar-item">
+                        <p>
+                            Бухгалтер Энди Дюфрейн обвинён в убийстве собственной жены и её любовника. Оказавшись в тюрьме под названием Шоушенк, он сталкивается с жестокостью и беззаконием, царящими по обе стороны решётки. Каждый, кто попадает в эти стены, становится их рабом до конца жизни. Но Энди, обладающий живым умом и доброй душой, находит подход как к заключённым, так и к охранникам, добиваясь их особого к себе расположения.
+                        </p>    
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+    <script>
+        function getCookie(name) {
+            const value = '; ' + document.cookie;
+            const parts = value.split('; ' + name + '=');
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+    
+        document.addEventListener('DOMContentLoaded', function() {
+            var likeButtons = document.querySelectorAll('.likee button');
+            var watchButtons = document.querySelectorAll('.watch button');
+    
+            function toggleClass(button, className) {
+                button.classList.toggle(className);
+            }
+    
+            function sendStatusUpdate(itemId, mediaType, statusType, status) {
+                fetch('/api/user/ratings/set/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({
+                        media_id: itemId,
+                        media_type: mediaType,
+                        [statusType]: status
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+
+            likeButtons.forEach(function(button) {
+                button.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    var currentState = this.getAttribute('data-state') === 'true';
+                    var newState = !currentState;
+                    this.setAttribute('data-state', newState.toString());
+                    this.querySelector('img').src = newState ? 'избранное.png' : 'неизбранное.png';
+                    sendStatusUpdate(this.dataset.itemId, 'movie', 'favorited', newState);
+                });
+            });
+
+            watchButtons.forEach(function(button) {
+                button.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    var currentState = this.getAttribute('data-state') === 'true';
+                    var newState = !currentState;
+                    this.setAttribute('data-state', newState.toString());
+                    this.querySelector('img').src = newState ? 'просмотрено.png' : 'непросмотрено.png';
+                    sendStatusUpdate(this.dataset.itemId, 'movie', 'completed', newState);
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
