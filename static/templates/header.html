@@ -1,5 +1,64 @@
 {% load static %}
 <header>
+    <style>
+        .user-icon {
+            position: relative;
+            /* Other styles for user icon */
+        }
+        
+        .user-icon:hover .user-options {
+            display: block;
+        }
+        
+        .user-options {
+            display: none;
+            position: absolute;
+            right: 14px; /* Give some space from the right edge to avoid scrollbar overlap */
+            background-color: #f9f9f9;
+            max-width: 240px; /* Set a max-width to prevent it from becoming too wide */
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        
+        .user-options ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .user-options ul li {
+            padding: 0; /* Remove padding from the <li> */
+            list-style-type: none;
+        }
+        
+        .user-options ul li a {
+            text-decoration: none;
+            color: black;
+            padding: 12px 16px; /* Apply padding to the <a> tag */
+            display: block; /* Make the <a> tag fill the entire space of the <li> */
+        }
+        
+        .user-options ul li a:hover {
+            background-color: #ddd;
+        }
+
+        .user-info {
+            padding: 12px 16px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .user-name {
+            display: block;
+            font-weight: bold;
+            color: black;
+        }
+        
+        .user-email {
+            display: block;
+            font-size: 0.9em;
+            color: #555;
+        }
+    </style>
     <div class="logo">
         <a href="/">
             <img src="{% static 'logo/logo.png' %}" alt="Лотип сайта">
@@ -11,5 +70,41 @@
         <a href="/user/account">
             <img src="{% static 'logo/лк.png' %}" alt="Иконка пользователя">
         </a>
+        <div class="user-options">
+            <div class="user-info">
+                <span class="user-name">{{ user.username }}</span>
+                <span class="user-email">{{ user.email }}</span>
+            </div>
+            <ul>
+                {% csrf_token %}
+                <li><a href="/user/favorites/movies">Избранные фильмы</a></li>
+                <li><a href="/user/favorites/books">Избранные книги</a></li>
+                <li><a href="/user/watched">Просмотренное</a></li>
+                <li><a href="/user/read">Прочитанное</a></li>
+                <li><a href="#" id="logoutButton">Выйти</a></li>
+            </ul>
+        </div>
     </div>
+
+    <script>
+        document.getElementById('logoutButton').addEventListener('click', function(event) {
+            event.preventDefault();
+            fetch('/api/user/logout/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                credentials: 'same-origin' // Necessary for including the cookie in the request
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = '/'; // Redirect to login after logout
+                } else {
+                    // handle error
+                    console.error('Logout failed');
+                }
+            });
+        });
+    </script>
 </header>

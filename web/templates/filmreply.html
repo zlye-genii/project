@@ -35,13 +35,13 @@
 
                                 {% if user.is_authenticated %}
                                     <div class="likee">
-                                        <button data-state="false">
+                                        <button data-state="{{ user_rating.favorited }}">
                                             <img src="{% if user_rating.favorited %}/static/logo/избранное.png{% else %}/static/logo/неизбранное.png{% endif %}">
                                         </button>
                                     </div>
                                     
                                     <div class="watch">
-                                        <button data-state="false">
+                                        <button data-state="{{ user_rating.completed }}">
                                             <img src="{% if user_rating.completed %}/static/logo/просмотрено.png{% else %}/static/logo/непросмотрено.png{% endif %}">
                                         </button>
                                     </div>
@@ -125,34 +125,27 @@
         var movieId = "{{ movie.id }}";
     
         document.addEventListener('DOMContentLoaded', function() {
-            var likeButtons = document.querySelectorAll('.likee button');
-            var watchButtons = document.querySelectorAll('.watch button');
+            var likeButton = document.querySelector('.likee button');
+            var watchButton = document.querySelector('.watch button');
     
-            function toggleClass(button, className) {
-                button.classList.toggle(className);
-            }
-
-            likeButtons.forEach(function(button) {
-                button.addEventListener('click', function(event) {
-                    event.preventDefault();
-                    var currentState = this.getAttribute('data-state') === 'true';
-                    var newState = !currentState;
-                    this.setAttribute('data-state', newState.toString());
-                    this.querySelector('img').src = newState ? '/static/logo/избранное.png' : '/static/logo/неизбранное.png';
-                    sendStatusUpdate(movieId, 'movie', 'favorited', newState);
-                });
+            likeButton.addEventListener('click', function(event) {
+                event.preventDefault();
+                var currentState = this.getAttribute('data-state') === 'True';
+                var newState = !currentState;
+                this.setAttribute('data-state', newState.toString());
+                this.querySelector('img').src = newState ? '/static/logo/избранное.png' : '/static/logo/неизбранное.png';
+                sendStatusUpdate(movieId, 'movie', 'favorited', newState);
             });
 
-            watchButtons.forEach(function(button) {
-                button.addEventListener('click', function(event) {
-                    event.preventDefault();
-                    var currentState = this.getAttribute('data-state') === 'true';
-                    var newState = !currentState;
-                    this.setAttribute('data-state', newState.toString());
-                    this.querySelector('img').src = newState ? '/static/logo/просмотрено.png' : '/static/logo/непросмотрено.png';
-                    sendStatusUpdate(movieId, 'movie', 'completed', newState);
-                });
+            watchButton.addEventListener('click', function(event) {
+                event.preventDefault();
+                var currentState = this.getAttribute('data-state') === 'True';
+                var newState = !currentState;
+                this.setAttribute('data-state', newState.toString());
+                this.querySelector('img').src = newState ? '/static/logo/просмотрено.png' : '/static/logo/непросмотрено.png';
+                sendStatusUpdate(movieId, 'movie', 'completed', newState);
             });
+            
             var initialRating = parseInt(document.getElementById('ratingText').textContent);
             if (!isNaN(initialRating)) {
                 setRating(initialRating);
