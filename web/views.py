@@ -40,8 +40,9 @@ def movielist(request):
     return render(request, 'movies.html', {'top_movies': top_movies, 'movies': mmovies_with_posters, 'genres': genres})
 
 def booklist(request):
-    books = Book.objects.all().prefetch_related('genres', 'authors')
-    return render(request, 'booklist.html', {'books': books})
+    genres = Genre.objects.all()
+    books = Book.objects.all().prefetch_related('genres')
+    return render(request, 'books.html', {'books': books, 'genres': genres})
 
 def moviedetails(request, movie_id):
     movie = Movie.objects.get(id=movie_id)
@@ -51,3 +52,12 @@ def moviedetails(request, movie_id):
     else:
         user_rating = None
     return render(request, 'filmreply.html', {'movie': movie, 'user_rating': user_rating})
+
+def bookdetails(request, book_id):
+    book = Book.objects.get(id=book_id)
+    if request.user.is_authenticated:
+        user_profile = request.user.profile
+        user_rating = Rating.objects.filter(profile=user_profile, media=book).first()
+    else:
+        user_rating = None
+    return render(request, 'bookdetails.html', {'book': book, 'user_rating': user_rating})

@@ -143,6 +143,7 @@ def create_book(request):
     book.release_date = _format_published_date(book_details.get("volumeInfo").get("publishedDate"))
     book.description = book_details.get("volumeInfo").get("description")
     book.pages = book_details.get("volumeInfo").get("pageCount")
+    book.service_rating = book_details.get("volumeInfo").get("averageRating")
     book.thumbnail = book_details.get("volumeInfo").get("imageLinks").get("thumbnail")
     
     book.save()
@@ -152,8 +153,8 @@ def create_book(request):
         book.authors.add(author_obj)
         
     # well books have category not genre but who cares
-    if book_details.get("mainCategory"):
-        genre, created = Genre.objects.get_or_create(name=book_details.get("mainCategory"))
+    if book_details.get("volumeInfo").get("mainCategory"):
+        genre, created = Genre.objects.get_or_create(name=book_details.get("volumeInfo").get("mainCategory"))
         book.genres.add(genre)
     
     return Response({"message": "Book created successfully", "book_id": book.id}, status=status.HTTP_201_CREATED)

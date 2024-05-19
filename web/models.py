@@ -54,6 +54,7 @@ class Movie(Media):
 
 class Book(Media):
     authors = models.ManyToManyField(Person, blank=True)
+    service_rating = models.FloatField(null=True)
     pages = models.IntegerField()
 
 class Rating(models.Model):
