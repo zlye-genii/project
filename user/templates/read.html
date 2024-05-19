@@ -1,5 +1,4 @@
 {% load static %}
-{% load fix_chars %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,43 +16,47 @@
         {% include "templates/sidebar.html" %}
         <div class="content">
             <div class="top">
-                <h2>Избранные фильмы</h2>
+                <h2>Прочитанное</h2>
             </div>
-            <div class='underline'></div>
+            <div class="underline"></div>
             <div class="calendar-list">
-                {% for rating in fav_movies %}
+                {% for book in read_books %}
                 <li class="calendar-item">
                     <div class="calendar-item-img">
-                        <img src="/{{ rating.media.thumbnail|default:'/static/images/default-thumbnail.png' }}" alt="{{ rating.media.title|fix_chars }}">
+                        <img src="{{ book.media.thumbnail }}">
                     </div>
                     <div class="mnogabukav">
                         <ul>
                             <li>
-                                <h3>{{ rating.media.title|default:'недоступно' }}</h3>
+                                <h3>{{ book.media.title }}</h3>
                             </li>
                             <li>
-                                <h4>{{ rating.media.release_date|default:'недоступно' }}{% if rating.media.movie.runtime %}, {{ rating.media.movie.runtime }} мин{% endif %}</h4>
+                                <h4>{{ book.media.release_date }}</h4>
                             </li>
                             <li>
-                                <p>Режиссер: {% for director in rating.media.movie.directors.all %}{{ director.name|default:'недоступно' }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+                                <p>
+                                {{ book.media.description|truncatechars:100 }}
+                                </p>
                             </li>
                         </ul>
                     </div>
                     <div class="rate">
                         <ul>
                             <li>Ваша оценка</li>
-                            <li>{{ rating.stars|default:'отсутствует' }}</li>
+                            <li>{{ book.stars|default:"отсутствует" }}</li>
                         </ul>
-                    </div>    
+                    </div>
                     <div class="likee">
                         <button>
-                            <img src="{% if rating.favorited %}{% static 'logo/избранное.png' %}{% else %}{% static 'logo/неизбранное.png' %}{% endif %}">
+                            <img src="{% if book.favorited %}{% static 'logo/избранное.png' %}{% else %}{% static 'logo/неизбранное.png' %}{% endif %}">
                         </button>
                     </div>
+                    <!-- <ul>
+                        <li><p>Ваш комментарий:</p></li>
+                        <li><textarea name="Here may be your add" cols="30" rows="5">{{ book.review }}</textarea></li>
+                    </ul> -->
                 </li>
-                <div class='underline'></div>
-                {% empty %}
-                    <li>Не найдено.</li>
+                <div class="underline"></div>
                 {% endfor %}
             </div>
         </div>

@@ -69,7 +69,7 @@ def _get_user_favorites(profile, media_type):
     serializer = RatingSerializer(favorites, many=True)
     return serializer.data
 
-def _get_user_watched(profile, media_type):
+def _get_user_completed(profile, media_type):
     watched = [rating for rating in profile.ratings.all() if isinstance(rating.media, (Movie if media_type == 'movie' else Book)) and rating.completed]
     serializer = RatingSerializer(watched, many=True)
     return serializer.data

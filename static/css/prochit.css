@@ -1,5 +1,4 @@
 .top {
-    border-bottom: 2px solid black;
     display: flex;
     padding: 20px 0px 10px 0px;
     width: 100vw;
@@ -9,18 +8,17 @@
     text-align: center;
 }
 
-
 .calendar-list {
     list-style-type: none;
     display: grid;
-    padding: 0px;
 }
 
 .calendar-item {
-    border-bottom: 2px solid gray;
     display: grid;
-    grid-template-columns: 6% 40% 10% 10% auto;
+    grid-template-columns: 6% 40% auto 10% 10%;
     align-items: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .calendar-item ul {
@@ -31,7 +29,6 @@
 .calendar-item ul li {
     text-align: center;
     justify-content: center;
-    margin-bottom: 2px solid gray;
 }
 
 .calendar-item-title {
@@ -45,6 +42,16 @@
 .calendar-item-img {
     width: inherit;
     height: auto;
+}
+
+.underline {
+    width: 100%;
+    border-bottom: 3px solid black;
+    margin: 0px;
+}
+
+.main-content {
+    margin: 0;
 }
 
 .calendar-item-img img {
@@ -78,6 +85,11 @@
     color: gray;
 }
 
+.rate {
+    display: flex;
+    justify-content: flex-end;
+}
+
 .rate ul li {
     font-weight: bold;
     font-size: large;
@@ -86,7 +98,7 @@
 
 .likee {
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
 }
 
 .likee button img{

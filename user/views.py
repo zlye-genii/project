@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from web.models import Movie
 from api.views.ai import get_user_recommendations
-from api.views.user import _get_user_watched
+from api.views.user import _get_user_completed
 from rest_framework.renderers import JSONRenderer
 from api.serializers import RatingSerializer
 
@@ -38,10 +38,15 @@ def favorites(request):
 @login_required
 def recommendations(request):
     recommendations = get_user_recommendations(request) # convert this to internal call?
-    return render(request, 'recom.html', {'recommendations': recommendations})
+    return render(request, 'read.html', {'recommendations': recommendations})
 
 @login_required
 def watched(request):
-    watched_movies = _get_user_watched(request.user.profile, 'movie')
-    print(watched_movies)
-    return render(request, 'prochit.html', {'watched_movies': watched_movies})
+    watched_movies = _get_user_completed(request.user.profile, 'movie')
+    return render(request, 'watched.html', {'watched_movies': watched_movies})
+
+@login_required
+def read(request):
+    read_books = _get_user_completed(request.user.profile, 'book')
+    return render(request, 'read.html', {'read_books': read_books})
+

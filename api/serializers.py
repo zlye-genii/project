@@ -55,5 +55,5 @@ class BookSerializer(serializers.ModelSerializer):
     authors = PersonSerializer(many=True, read_only=True)
 
     class Meta:
-        model = Movie
+        model = Book
         fields = ['id', 'title', 'description', 'release_date', 'genres', 'thumbnail', 'authors', 'pages']
