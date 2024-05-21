@@ -1,0 +1,58 @@
+<body>
+    <button id="populateMovies">Populate Movies (refresh after)</button>
+    <button id="populateMoviesUpcoming">Populate Movies Upcoming (refresh after)</button>
+    <script>
+        document.getElementById("populateMovies").addEventListener("click", function() {
+            fetch('/api/movies/popular/')
+            .then(response => response.json())
+            .then(data => {
+                data.results.forEach(movie => {
+                    fetch('/api/movies/create/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({id: movie.id}),
+                    })
+                    .then(response => response.json())
+                    .then(data => console.log(data))
+                    .catch((error) => console.error('Error:', error));
+                });
+            })
+            .catch((error) => console.error('Error:', error));
+        });
+        document.getElementById("populateMoviesUpcoming").addEventListener("click", function() {
+            fetch('/api/movies/upcoming/')
+            .then(response => response.json())
+            .then(data => {
+                data.results.forEach(movie => {
+                    fetch('/api/movies/create/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({id: movie.id}),
+                    })
+                    .then(response => response.json())
+                    .then(data => console.log(data))
+                    .catch((error) => console.error('Error:', error));
+                });
+            })
+            .catch((error) => console.error('Error:', error));
+        });
+    </script>
+    <h1>Popular Movies</h1>
+    <ul id="movie-list">
+        {% for movie in movies %}
+            <li>
+                Title: {{ movie.title }},
+                Directors:
+                {% for director in movie.directors.all %}
+                    {{ director.name }}{% if not loop.last %}, {% endif %}
+                {% endfor %}
+                Release Date: {{ movie.release_date }},
+                IMDB Rating: {{ movie.imdb_rating }}
+            </li>
+        {% endfor %}
+    </ul>
+</body>

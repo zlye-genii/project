@@ -1,0 +1,286 @@
+{% load static %}
+{% load fix_chars %}
+{% load genre_filter %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/styles_for_films.css' %}">
+    <title>BookflixRecommender</title>
+</head>
+
+<body>
+    {% include "templates/header.html" %}
+    <main>
+        {% include "templates/sidebar.html" %}
+        <div class="content">
+            <div class="title-main">
+            <img src="{% static 'logo/золотая коллекция.png' %}" alt="Иконка Золотой Коллекции" style="max-width: 65px; height: 65px;">
+            <h1>Золотая коллекция</h1></div>
+            <div class="underline"></div>
+        <div class="block-films">
+            <div class="scroll-container">
+                {% for movie in top_movies %}
+                <a href="/movie/details/{{ movie.id }}" class="film">
+                    {% if movie.imdb_rating %}
+                        <div class="rating">{{ movie.imdb_rating }}</div>
+                    {% endif %}
+                    <img src="/{{ movie.thumbnail }}" alt="{{ movie.title|fix_chars }}">
+                    <div class="film-text">
+                        <div class="film-cell">
+                            <h3>{{ movie.title|fix_chars }}</h3>
+                            <p>{{ movie.release_date.year }}, {{ movie.genres.first.translated_name }}</p>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="interval"></div>
+        <div class="title-main">
+            <img src="{% static 'logo/золотая коллекция.png' %}" alt="Иконка Лидеры Жанров" style="max-width: 65px; height: 65px;">
+            <h1>Лидеры Жанров</h1></div>
+            <div class="underline"></div>
+            {% for genre in genres %}
+                {% with genre_movies=movies|filter_genre:genre %}
+                    {% if genre_movies %}
+                        <div class="title-main">
+                            <h1>{{ genre.translated_name }}</h1>
+                        </div>
+                        <div class="underline"></div>
+                        <div class="block-films">
+                            <div class="scroll-container">
+                                {% for movie in genre_movies %}
+                                    <a href="/movie/details/{{ movie.id }}" class="film">
+                                        {% if movie.imdb_rating %}
+                                            <div class="rating">{{ movie.imdb_rating }}</div>
+                                        {% endif %}
+                                        <img src="/{{ movie.thumbnail }}" alt="{{ movie.title|fix_chars }}">
+                                        <div class="film-text">
+                                            <div class="film-cell">
+                                                <h3>{{ movie.title|fix_chars }}</h3>
+                                                <p>{{ movie.release_date.year }}, {{ genre.translated_name }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="film-cell">
+                                            <button class="elect" id="b{{ forloop.counter }}">
+                                                <svg width="35px" height="35px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M12 5.881C12.981 4.729 14.484 4 16.05 4C18.822 4 21 6.178 21 8.95C21 12.3492 17.945 15.1195 13.3164 19.3167L13.305 19.327L12 20.515L10.695 19.336L10.6595 19.3037C6.04437 15.1098 3 12.3433 3 8.95C3 6.178 5.178 4 7.95 4C9.516 4 11.019 4.729 12 5.881Z" fill="#dddddd" stroke="#666" stroke-width="1"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="interval"></div>
+                    {% endif %}
+                {% endwith %}
+            {% endfor %}
+        </div>
+        
+        {% comment %} <div class="title-main">
+            <img src="logo/top sellers.png" alt="Иконка Хиты Продаж" style="max-width: 65px; height: 65px;">
+            <h1>Хиты продаж</h1></div>
+        <div class="underline"></div>
+        <div class="scroll-container-sell">
+        <div class="calendar-list">
+                <ul>
+                    <h3>Россия и СНГ</h3>
+                    <li class="calendar-item">
+                        <span>1.</span>
+                        <div class="calendar-item-img">
+                            <img src="img/master_and_margarite.jpg">
+                        </div>
+                        <ul>
+                            <li>Мастер и Маргарита</li>
+                            <li>17 млн $ за 4 недели</li>
+                        </ul>
+                        <p>27 млн $</p>
+                        </button>
+                    </li>
+                    <li class="calendar-item">
+                        <span>2.</span>
+                        <div class="calendar-item-img">
+                            <img src="img/ice3.jpg">
+                        </div>
+                        <ul>
+                            <li>Лед 3</li>
+                            <li>14 млн $ за 4 недели</li>
+                        </ul>
+                        <p>21 млн $</p>
+                        </button>
+                    </li>
+                    <li class="calendar-item">
+                        <span>3.</span>
+                        <div class="calendar-item-img">
+                            <img src="img/flying_ship.jpg">
+                        </div>
+                        <ul>
+                            <li>Летучий корабль</li>
+                            <li>8 млн $ за 4 недели</li>
+                        </ul>
+                        <p>11 млн $</p>
+                        </button>
+                    </li>
+                    <li class="calendar-item">
+                        <span>4.</span>
+                        <div class="calendar-item-img">
+                            <img src="img/onegin.jpg">
+                        </div>
+                        <ul>
+                            <li>Онегин</li>
+                            <li>5 млн $ за 4 недели</li>
+                        </ul>
+                        <p>8 млн $</p>
+                        </button>
+                    </li>
+                    <li class="calendar-item">
+                        <span>5.</span>
+                        <div class="calendar-item-img">
+                            <img src="img/oxygen.jpg">
+                        </div>
+                        <ul>
+                            <li>Воздух</li>
+                            <li>3 млн $ за 4 недели</li>
+                        </ul>
+                        <p>5 млн $</p>
+                        </button>
+                    </li>
+                </ul>
+                <ul>
+                    <h3>Мир</h3>
+                    <li class="calendar-item">
+                        <span>1.</span>
+                        <div class="calendar-item-img">
+                            <img src="img/duna.jpg">
+                        </div>
+                        <ul>
+                            <li>Дюна 2</li>
+                            <li>230 млн $ за 4 недели</li>
+                        </ul>
+                        <p>695 млн $</p>
+                        </button>
+                    </li>
+                    <li class="calendar-item">
+                        <span>2.</span>
+                        <div class="calendar-item-img">
+                            <img src="img/godzila_kong.jpg">
+                        </div>
+                        <ul>
+                            <li>Годзила и Конг</li>
+                            <li>280 млн $ за 4 недели</li>
+                        </ul>
+                        <p>486 млн $</p>
+                        </button>
+                    </li>
+                    <li class="calendar-item">
+                        <span>3.</span>
+                        <div class="calendar-item-img">
+                            <img src="img/yolo.jpg">
+                        </div>
+                        <ul>
+                            <li>Йоло</li>
+                            <li>312 млн $ за 4 недели</li>
+                        </ul>
+                        <p>480 млн $</p>
+                        </button>
+                    </li>
+                    <li class="calendar-item">
+                        <span>4.</span>
+                        <div class="calendar-item-img">
+                            <img src="img/pegas2.jpg">
+                        </div>
+                        <ul>
+                            <li>Пегас 2</li>
+                            <li>297 млн $ за 4 недели</li>
+                        </ul>
+                        <p>469 млн $</p>
+                        </button>
+                    </li>
+                    <li class="calendar-item">
+                        <span>5.</span>
+                        <div class="calendar-item-img">
+                            <img src="img/statya20.jpg">
+                        </div>
+                        <ul>
+                            <li>Статья 20</li>
+                            <li>196 млн $ за 4 недели</li>
+                        </ul>
+                        <p>339 млн $</p>
+                        </button>
+                    </li>
+                </ul>
+                <ul>
+                    <h3>США и Канада</h3>
+                    <li class="calendar-item">
+                        <span>1.</span>
+                        <div class="calendar-item-img">
+                            <img src="img/panda4.jpg">
+                        </div>
+                        <ul>
+                            <li>Кунгфу панда 4</li>
+                            <li>132 млн $ за 4 недели</li>
+                        </ul>
+                        <p>181 млн $</p>
+                        </button>
+                    </li>
+                    <li class="calendar-item">
+                        <span>2.</span>
+                        <div class="calendar-item-img">
+                            <img src="img/claustrofobie_insomnie.jpg">
+                        </div>
+                        <ul>
+                            <li>Клаустрофобия: Инсомния</li>
+                            <li>89 млн $ за 4 недели</li>
+                        </ul>
+                        <p>136 млн $</p>
+                        </button>
+                    </li>
+                    <li class="calendar-item">
+                        <span>3.</span>
+                        <div class="calendar-item-img">
+                            <img src="img/ghost_hunters.jpg">
+                        </div>
+                        <ul>
+                            <li>Охотники за приведениями</li>
+                            <li>85 млн $ за 4 недели</li>
+                        </ul>
+                        <p>103 млн $</p>
+                        </button>
+                    </li>
+                    <li class="calendar-item">
+                        <span>4.</span>
+                        <div class="calendar-item-img">
+                            <img src="img/bob_marley.jpg">
+                        </div>
+                        <ul>
+                            <li>Боб Марли: Одна любовь</li>
+                            <li>68 млн $ за 4 недели</li>
+                        </ul>
+                        <p>96 млн $</p>
+                        </button>
+                    </li>
+                    <li class="calendar-item">
+                        <span>5.</span>
+                        <div class="calendar-item-img">
+                            <img src="img/bad_girls.jpg">
+                        </div>
+                        <ul>
+                            <li>Дрянные Девчонки</li>
+                            <li>50 млн $ за 4 недели</li>
+                        </ul>
+                        <p>72 млн $</p>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+       </div> {% endcomment %}
+       </div>
+    </main>
+    {% comment %} <script src="button.js"></script> {% endcomment %}
+</body>
+
+</html>
