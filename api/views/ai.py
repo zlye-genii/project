@@ -11,6 +11,7 @@ import json
 load_dotenv('../..')
 AI_BASE_URL = os.getenv('AI_BASE_URL')
 AI_TOKEN = os.getenv('AI_TOKEN')
+AI_MODEL = os.getenv("AI_MODEL")
 
 # if this doesnt work properly try the <AIROLE> from AP-3
 PROMPT = '''You are a {{CONTENT_TYPE}} expert and your task is to recommend {{CONTENT_TYPE_PLURAL}} based on the User's past {{CONTENT_TYPE_PLURAL_ACTION}} and favorites.
@@ -71,7 +72,7 @@ def get_user_recommendations(request):
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3' # me when cloudflare moment
         },
         json={
-            'model': 'gpt-4', # TODO: change to gigachat later
+            'model': {AI_MODEL},
             'messages': messages,
             "temperature": 0.5,
             "top_p": 0.5,
