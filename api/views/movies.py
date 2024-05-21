@@ -52,7 +52,11 @@ def search_movies(request):
     query = request.query_params.get('query')
     year = request.query_params.get('year')  # recommended
     res = imdb.search(query, year=year)
-    return Response(json.loads(res))
+    return Response(json.loads(res)['results'])
+
+def _search_movies(query):
+    res = imdb.search(query)
+    return json.loads(res)['results']
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
