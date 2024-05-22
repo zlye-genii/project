@@ -23,6 +23,11 @@ def favmovies(request):
     return render(request, 'favmovies.html', {'fav_movies': fav_movies})
 
 @login_required
+def favbooks(request):
+    fav_books = request.user.profile.ratings.filter(favorited=True, media__book__isnull=False).select_related('media').prefetch_related('media__book__authors')
+    return render(request, 'favbooks.html', {'fav_books': fav_books})
+
+@login_required
 def favorites(request):
     return render(request, 'favorites.html')
 

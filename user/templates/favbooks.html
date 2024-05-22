@@ -17,14 +17,14 @@
         {% include "templates/sidebar.html" %}
         <div class="content">
             <div class="top">
-                <h2>Избранные фильмы</h2>
+                <h2>Избранные книги</h2>
             </div>
             <div class='underline'></div>
             <div class="calendar-list">
-                {% for rating in fav_movies %}
+                {% for rating in fav_books %}
                 <li class="calendar-item">
                     <div class="calendar-item-img">
-                        <img src="/{{ rating.media.thumbnail }}" alt="{{ rating.media.title|fix_chars }}">
+                        <img src="{{ rating.media.thumbnail }}" alt="{{ rating.media.title|fix_chars }}">
                     </div>
                     <div class="mnogabukav">
                         <ul>
@@ -32,10 +32,10 @@
                                 <h3>{{ rating.media.title|default:'недоступно' }}</h3>
                             </li>
                             <li>
-                                <h4>{{ rating.media.release_date|default:'недоступно' }}{% if rating.media.movie.runtime %}, {{ rating.media.movie.runtime }} мин{% endif %}</h4>
+                                <h4>{{ rating.media.release_date|default:'недоступно' }}, {{ rating.media.book.pages|default:"недоступно" }} стр</h4>
                             </li>
                             <li>
-                                <p>Режиссер: {% for director in rating.media.movie.directors.all %}{{ director.name|default:'недоступно' }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+                                <p>Автор: {% for author in rating.media.book.authors.all %}{{ author.name|default:'недоступно' }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
                             </li>
                         </ul>
                     </div>
