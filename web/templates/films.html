@@ -1,0 +1,423 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/styles_for_films.css">
+    <title>BookflixRecommender</title>
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <img src="/static/logo/logo.png" alt="Лотип сайта">
+            <h1>BookflixRecommender</h1>
+        </div>
+
+        <div class="user-icon">
+            <img src="/static/logo/personal cabinet.png" alt="Иконка пользователя">
+        </div>
+    </header>
+    <main>
+        <div class="left-menu">
+            <nav>
+                <ul>
+                    <li>
+                        <a href="#">
+                            <img src="/static/logo/novelties.png" alt="Иконка Фильмы" />
+                            <span>Новинки</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://127.0.0.1:8080/movies/">
+                            <img src="/static/logo/films.png" alt="Иконка Фильмы" />
+                            <span>Фильмы</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://127.0.0.1:8080/books/">
+                            <img src="/static/logo/books.png" alt="Иконка Книги" />
+                            <span>Книги</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://127.0.0.1:8080/user/recommendations/">
+                            <img src="/static/logo/selection.png" alt="Иконка Персональная подборка">
+                            <span>Персональная подборка</span>
+                        </a>
+                    </li>
+                </ul>
+                <div class="footer">
+                    <p>
+                        © 2024, Злые гении
+
+                    </p>
+                    <p>
+                        <a>Служба поддержки</a>
+                    </p>
+                </div>
+            </nav>
+        </div>
+        <div class="content">
+            <div class="title-main">
+            <img src="/static/logo/golden collection.png" alt="Иконка Золотой Коллекции" style="max-width: 65px; height: 65px;">
+            <h1>Золотая коллекция</h1>
+
+            <div class="underline"></div>
+            <div class="block-films">
+                <div class="scroll-container">
+                    {% for movie in movies %}
+                        {% if movie.imdb_rating >= 8 %}
+                            <div class="film">
+                                <div class="rating">{{ movie.imdb_rating }}</div>
+                                <img src="/static/img/{{ movie.image }}" alt="{{ movie.title }}">
+                                <div class="film-text">
+                                    <div class="film-cell">
+                                        <h3>{{ movie.title }}</h3>
+                                        <p>{{ movie.release_date.year }}, {{ movie.genre }}</p>
+                                    </div>
+                                    <div class="film-cell">
+                                        <button class="elect" id="b1">
+                                            <svg width="35px" height="35px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M12 5.881C12.981 4.729 14.484 4 16.05 4C18.822 4 21 6.178 21 8.95C21 12.3492 17.945 15.1195 13.3164 19.3167L13.305 19.327L12 20.515L10.695 19.336L10.6595 19.3037C6.04437 15.1098 3 12.3433 3 8.95C3 6.178 5.178 4 7.95 4C9.516 4 11.019 4.729 12 5.881Z" fill="#dddddd" stroke="#666" stroke-width="1"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="interval"></div>
+            
+            
+            <div class="title-main">
+                <img src="/static/logo/genre_leaders.png" alt="Иконка Лидеры Жанров" style="max-width: 65px; height: 65px;">
+            <h1>Лидеры Жанров</h1></div>
+            <div class="underline"></div>
+       <div class="block-films">
+        <div class="scroll-container">
+            <div class="film">
+		<div class="rating">8.5</div>
+		<img src="/static/img/1.jpg" alt="Название фильма 1">
+    		<div class="film-text">
+    		    <div class="film-cell">
+    		    <h3>Труднопроизносимое название</h3>
+    		    <p>2022, мистика</p></div>
+    		    <div class="film-cell">
+    		    <button class="elect" id="b1">
+    		        <svg width="35px" height="35px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    		        <path d="M12 5.881C12.981 4.729 14.484 4 16.05 4C18.822 4 21 6.178 21 8.95C21 12.3492 17.945 15.1195 13.3164 19.3167L13.305 19.327L12 20.515L10.695 19.336L10.6595 19.3037C6.04437 15.1098 3 12.3433 3 8.95C3 6.178 5.178 4 7.95 4C9.516 4 11.019 4.729 12 5.881Z" fill="#dddddd" stroke="#666" stroke-width="1"/></svg>
+    		    </button></div>
+    		</div>
+	    </div>
+	    <div class="film">
+	        <div class="rating">9.5</div>
+	        <img src="/static/img/2.jpg" alt="Название фильма 2">
+	        <div class="film-text">
+    		    <div class="film-cell">
+    		    <h3>Название фильма 2</h3>
+    		    <p>2022, мюзикл</p></div>
+    		    <div class="film-cell">
+    		    <button class="elect" id="b1">
+    		        <svg width="35px" height="35px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    		        <path d="M12 5.881C12.981 4.729 14.484 4 16.05 4C18.822 4 21 6.178 21 8.95C21 12.3492 17.945 15.1195 13.3164 19.3167L13.305 19.327L12 20.515L10.695 19.336L10.6595 19.3037C6.04437 15.1098 3 12.3433 3 8.95C3 6.178 5.178 4 7.95 4C9.516 4 11.019 4.729 12 5.881Z" fill="#dddddd" stroke="#666" stroke-width="1"/></svg>
+    		    </button></div>
+    		</div>
+	    </div>
+	    <div class="film">
+	    	<div class="rating">8.5</div>
+	        <img src="/static/img/3.jpg" alt="Название фильма 3">
+	        <div class="film-text">
+    		    <div class="film-cell">
+    		    <h3>Название 3</h3>
+    		    <p>2035, мультфильм</p></div>
+    		    <div class="film-cell">
+    		    <button class="elect" id="b1">
+    		        <svg width="35px" height="35px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    		        <path d="M12 5.881C12.981 4.729 14.484 4 16.05 4C18.822 4 21 6.178 21 8.95C21 12.3492 17.945 15.1195 13.3164 19.3167L13.305 19.327L12 20.515L10.695 19.336L10.6595 19.3037C6.04437 15.1098 3 12.3433 3 8.95C3 6.178 5.178 4 7.95 4C9.516 4 11.019 4.729 12 5.881Z" fill="#dddddd" stroke="#666" stroke-width="1"/></svg>
+    		    </button></div>
+    		</div>
+	    </div>
+	    <div class="film">
+	        <div class="rating">0.0</div>
+	        <img src="/static/img/4.jpg" alt="Название фильма 4">
+	        <div class="film-text">
+    		    <div class="film-cell">
+    		    <h3>Невозможное возможно</h3>
+    		    <p>2019, криминал</p></div>
+    		    <div class="film-cell">
+    		    <button class="elect" id="b1">
+    		        <svg width="35px" height="35px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    		        <path d="M12 5.881C12.981 4.729 14.484 4 16.05 4C18.822 4 21 6.178 21 8.95C21 12.3492 17.945 15.1195 13.3164 19.3167L13.305 19.327L12 20.515L10.695 19.336L10.6595 19.3037C6.04437 15.1098 3 12.3433 3 8.95C3 6.178 5.178 4 7.95 4C9.516 4 11.019 4.729 12 5.881Z" fill="#dddddd" stroke="#666" stroke-width="1"/></svg>
+    		    </button></div>
+    		</div>
+	    </div>
+	    <div class="film">
+	        <div class="rating">4.3</div>
+	        <img src="/static/img/5.jpg" alt="Название фильма 5">
+	        <div class="film-text">
+    		    <div class="film-cell">
+    		    <h3>Часики тикают</h3>
+    		    <p>2013, аниме</p></div>
+    		    <div class="film-cell">
+    		    <button class="elect" id="b1">
+    		        <svg width="35px" height="35px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    		        <path d="M12 5.881C12.981 4.729 14.484 4 16.05 4C18.822 4 21 6.178 21 8.95C21 12.3492 17.945 15.1195 13.3164 19.3167L13.305 19.327L12 20.515L10.695 19.336L10.6595 19.3037C6.04437 15.1098 3 12.3433 3 8.95C3 6.178 5.178 4 7.95 4C9.516 4 11.019 4.729 12 5.881Z" fill="#dddddd" stroke="#666" stroke-width="1"/></svg>
+    		    </button></div>
+    		</div>
+	    </div>
+	    <div class="film">
+	        <div class="rating">8.1</div>
+	        <img src="/static/img/6.jpg" alt="Название фильма 6">
+	        <div class="film-text">
+    		    <div class="film-cell">
+    		    <h3>Котик!</h3>
+    		    <p>2022, детектив</p></div>
+    		    <div class="film-cell">
+    		    <button class="elect" id="b1">
+    		        <svg width="35px" height="35px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    		        <path d="M12 5.881C12.981 4.729 14.484 4 16.05 4C18.822 4 21 6.178 21 8.95C21 12.3492 17.945 15.1195 13.3164 19.3167L13.305 19.327L12 20.515L10.695 19.336L10.6595 19.3037C6.04437 15.1098 3 12.3433 3 8.95C3 6.178 5.178 4 7.95 4C9.516 4 11.019 4.729 12 5.881Z" fill="#dddddd" stroke="#666" stroke-width="1"/></svg>
+    		    </button></div>
+    		</div>
+	    </div>
+	    <div class="film">
+	        <div class="rating">1.0</div>
+	        <img src="/static/img/7.jpg" alt="Название фильма 7">
+	        <div class="film-text">
+    		    <div class="film-cell">
+    		    <h3>На большом воздушном шаре</h3>
+    		    <p>2022, комедия</p></div>
+    		    <div class="film-cell">
+    		    <button class="elect" id="b1">
+    		        <svg width="35px" height="35px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    		        <path d="M12 5.881C12.981 4.729 14.484 4 16.05 4C18.822 4 21 6.178 21 8.95C21 12.3492 17.945 15.1195 13.3164 19.3167L13.305 19.327L12 20.515L10.695 19.336L10.6595 19.3037C6.04437 15.1098 3 12.3433 3 8.95C3 6.178 5.178 4 7.95 4C9.516 4 11.019 4.729 12 5.881Z" fill="#dddddd" stroke="#666" stroke-width="1"/></svg>
+    		    </button></div>
+    		</div>
+	    </div>
+	    <div class="film">
+	        <div class="rating">10</div>
+	        <img src="/static/img/8.png" alt="Название фильма 8">
+	        <div class="film-text">
+    		    <div class="film-cell">
+    		    <h3>f</h3>
+    		    <p>f</p></div>
+    		    <div class="film-cell">
+    		    <button class="elect" id="b1">
+    		        <svg width="35px" height="35px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    		        <path d="M12 5.881C12.981 4.729 14.484 4 16.05 4C18.822 4 21 6.178 21 8.95C21 12.3492 17.945 15.1195 13.3164 19.3167L13.305 19.327L12 20.515L10.695 19.336L10.6595 19.3037C6.04437 15.1098 3 12.3433 3 8.95C3 6.178 5.178 4 7.95 4C9.516 4 11.019 4.729 12 5.881Z" fill="#dddddd" stroke="#666" stroke-width="1"/></svg>
+    		    </button></div>
+    		</div>
+	    </div>
+        </div>
+        </div>
+        <div class="interval"></div>
+        
+        
+        
+        <div class="title-main">
+            <img src="/static/logo/top sellers.png" alt="Иконка Хиты Продаж" style="max-width: 65px; height: 65px;">
+            <h1>Хиты продаж</h1></div>
+        <div class="underline"></div>
+        <div class="scroll-container-sell">
+        <div class="calendar-list">
+                <ul>
+                    <h3>Россия и СНГ</h3>
+                    <li class="calendar-item">
+                        <span>2.</span>
+                        <div class="calendar-item-img">
+                            <img src="kalendar/claustrofobie_insomnie.jpg">
+                        </div>
+                        <ul>
+                            <li>Клаустрофобия</li>
+                            <li>130 млн $ за 3 недели</li>
+                        </ul>
+                        <p>130 млн $</p>
+                        </button>
+                    </li>
+                    <li class="calendar-item">
+                        <span>2.</span>
+                        <div class="calendar-item-img">
+                            <img src="kalendar/claustrofobie_insomnie.jpg">
+                        </div>
+                        <ul>
+                            <li>Клаустрофобия</li>
+                            <li>130 млн $ за 3 недели</li>
+                        </ul>
+                        <p>130 млн $</p>
+                        </button>
+                    </li>
+                    <li class="calendar-item">
+                        <span>2.</span>
+                        <div class="calendar-item-img">
+                            <img src="kalendar/claustrofobie_insomnie.jpg">
+                        </div>
+                        <ul>
+                            <li>Клаустрофобия</li>
+                            <li>130 млн $ за 3 недели</li>
+                        </ul>
+                        <p>130 млн $</p>
+                        </button>
+                    </li>
+                    <li class="calendar-item">
+                        <span>2.</span>
+                        <div class="calendar-item-img">
+                            <img src="kalendar/claustrofobie_insomnie.jpg">
+                        </div>
+                        <ul>
+                            <li>Клаустрофобия</li>
+                            <li>130 млн $ за 3 недели</li>
+                        </ul>
+                        <p>130 млн $</p>
+                        </button>
+                    </li>
+                    <li class="calendar-item">
+                        <span>2.</span>
+                        <div class="calendar-item-img">
+                            <img src="kalendar/claustrofobie_insomnie.jpg">
+                        </div>
+                        <ul>
+                            <li>Клаустрофобия</li>
+                            <li>130 млн $ за 3 недели</li>
+                        </ul>
+                        <p>130 млн $</p>
+                        </button>
+                    </li>
+                </ul>
+                <ul>
+                    <h3>Мир</h3>
+                    <li class="calendar-item">
+                        <span>2.</span>
+                        <div class="calendar-item-img">
+                            <img src="kalendar/claustrofobie_insomnie.jpg">
+                        </div>
+                        <ul>
+                            <li>Клаустрофобия</li>
+                            <li>130 млн $ за 3 недели</li>
+                        </ul>
+                        <p>130 млн $</p>
+                        </button>
+                    </li>
+                    <li class="calendar-item">
+                        <span>2.</span>
+                        <div class="calendar-item-img">
+                            <img src="kalendar/claustrofobie_insomnie.jpg">
+                        </div>
+                        <ul>
+                            <li>Клаустрофобия</li>
+                            <li>130 млн $ за 3 недели</li>
+                        </ul>
+                        <p>130 млн $</p>
+                        </button>
+                    </li>
+                    <li class="calendar-item">
+                        <span>2.</span>
+                        <div class="calendar-item-img">
+                            <img src="kalendar/claustrofobie_insomnie.jpg">
+                        </div>
+                        <ul>
+                            <li>Клаустрофобия</li>
+                            <li>130 млн $ за 3 недели</li>
+                        </ul>
+                        <p>130 млн $</p>
+                        </button>
+                    </li>
+                    <li class="calendar-item">
+                        <span>2.</span>
+                        <div class="calendar-item-img">
+                            <img src="kalendar/claustrofobie_insomnie.jpg">
+                        </div>
+                        <ul>
+                            <li>Клаустрофобия</li>
+                            <li>130 млн $ за 3 недели</li>
+                        </ul>
+                        <p>130 млн $</p>
+                        </button>
+                    </li>
+                    <li class="calendar-item">
+                        <span>2.</span>
+                        <div class="calendar-item-img">
+                            <img src="kalendar/claustrofobie_insomnie.jpg">
+                        </div>
+                        <ul>
+                            <li>Клаустрофобия</li>
+                            <li>130 млн $ за 3 недели</li>
+                        </ul>
+                        <p>130 млн $</p>
+                        </button>
+                    </li>
+                </ul>
+                <ul>
+                    <h3>США и Канада</h3>
+                    <li class="calendar-item">
+                        <span>2.</span>
+                        <div class="calendar-item-img">
+                            <img src="kalendar/claustrofobie_insomnie.jpg">
+                        </div>
+                        <ul>
+                            <li>Клаустрофобия</li>
+                            <li>130 млн $ за 3 недели</li>
+                        </ul>
+                        <p>130 млн $</p>
+                        </button>
+                    </li>
+                    <li class="calendar-item">
+                        <span>2.</span>
+                        <div class="calendar-item-img">
+                            <img src="kalendar/claustrofobie_insomnie.jpg">
+                        </div>
+                        <ul>
+                            <li>Клаустрофобия</li>
+                            <li>130 млн $ за 3 недели</li>
+                        </ul>
+                        <p>130 млн $</p>
+                        </button>
+                    </li>
+                    <li class="calendar-item">
+                        <span>2.</span>
+                        <div class="calendar-item-img">
+                            <img src="kalendar/claustrofobie_insomnie.jpg">
+                        </div>
+                        <ul>
+                            <li>Клаустрофобия</li>
+                            <li>130 млн $ за 3 недели</li>
+                        </ul>
+                        <p>130 млн $</p>
+                        </button>
+                    </li>
+                    <li class="calendar-item">
+                        <span>2.</span>
+                        <div class="calendar-item-img">
+                            <img src="kalendar/claustrofobie_insomnie.jpg">
+                        </div>
+                        <ul>
+                            <li>Клаустрофобия</li>
+                            <li>130 млн $ за 3 недели</li>
+                        </ul>
+                        <p>130 млн $</p>
+                        </button>
+                    </li>
+                    <li class="calendar-item">
+                        <span>2.</span>
+                        <div class="calendar-item-img">
+                            <img src="/static/img/2.jpg">
+                        </div>
+                        <ul>
+                            <li>Клаустрофобия</li>
+                            <li>130 млн $ за 3 недели</li>
+                        </ul>
+                        <p>130 млн $</p>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+       </div>
+       </div>
+    </main>
+    <script src="button.js"></script>
+</body>
+
+</html>

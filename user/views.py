@@ -22,10 +22,16 @@ def favorites(request):
 @login_required
 def recommendations(request):
     recommendations = get_user_recommendations(request) # convert this to internal call?
-    return render(request, 'recom.html', {'recommendations': recommendations})
+    return render(request, 'personalselection.html', {'recommendations': recommendations})
+
+@login_required
+def read(request):
+    watched_movies = _get_user_watched(request.user.profile, 'movie')
+    print(watched_movies)
+    return render(request, 'prochit.html', {'watched_movies': watched_movies})
 
 @login_required
 def watched(request):
     watched_movies = _get_user_watched(request.user.profile, 'movie')
     print(watched_movies)
-    return render(request, 'prochit.html', {'watched_movies': watched_movies})
+    return render(request, 'prosmotr.html', {'watched_movies': watched_movies})

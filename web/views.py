@@ -12,7 +12,7 @@ def index(request):
 
 def movielist(request):
     movies = Movie.objects.all().prefetch_related('genres', 'directors')
-    return render(request, 'movielist.html', {'movies': movies})
+    return render(request, 'films.html', {'movies': movies})
 
 def booklist(request):
     books = Book.objects.all().prefetch_related('genres', 'authors')

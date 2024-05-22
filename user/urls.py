@@ -7,5 +7,6 @@ urlpatterns = [
     path('account/', views.account, name='account'),
     path('favorites/', views.favorites, name='favorites'),
     path('recommendations/', views.recommendations, name='recommendations'),
+    path('read/', views.read),
     path('watched/', views.watched)
 ]
