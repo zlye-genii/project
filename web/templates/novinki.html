@@ -106,17 +106,20 @@
             likeButtons.forEach(function(button) {
                 button.addEventListener('click', function(event) {
                     event.preventDefault();
-            
+
                     var itemId = this.dataset.itemId;
                     var isCurrentlyFavorited = isFavorited(itemId);
                     
+                    // Disable the button while processing
+                    this.disabled = true;
+
                     // Optimistically toggle the 'liked' class
                     if (isCurrentlyFavorited) {
-                        this.classList.remove('liked'); // Remove the red color if it was favorited
+                        this.classList.remove('liked');
                     } else {
-                        this.classList.add('liked'); // Make the button red if it was not favorited
+                        this.classList.add('liked');
                     }
-            
+
                     fetch('/api/user/ratings/set/', {
                         method: 'POST',
                         headers: {
@@ -131,8 +134,8 @@
                     })
                     .then(response => response.json())
                     .then(data => {
-                        console.log(data)
-                        isCurrentlyFavorited = !isCurrentlyFavorited
+                        console.log(data);
+                        isCurrentlyFavorited = !isCurrentlyFavorited;
                     })
                     .catch(error => {
                         // If there's an error, revert the class change
@@ -142,6 +145,10 @@
                             this.classList.remove('liked');
                         }
                         console.error('Error:', error);
+                    })
+                    .finally(() => {
+                        // Re-enable the button after processing is complete
+                        this.disabled = false;
                     });
                 });
             });

@@ -47,7 +47,7 @@
                 {% for media in search_results %}
                 <li class="calendar-item" data-media-id="{{ media.id }}" style="cursor: pointer;">
                     <div class="calendar-item-img">
-                        {% if 'http' in media.thumbnail %}
+                        {% if 'http' in media.thumbnail or 'banner404' in media.thumbnail %}
                             <img src="{{ media.thumbnail }}" alt="{{ media.title|fix_chars }}">
                         {% else %}
                             <img src="/{{ media.thumbnail }}" alt="{{ media.title|fix_chars }}">

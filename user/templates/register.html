@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{% static 'css/global.css' %}">
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
 
-    <title>Register - BookflixRecommender</title>
+    <title>BookflixRecommender</title>
 </head>
 
 <body>
@@ -18,37 +18,37 @@
         <div class="content">
             <div class="login-container">
                 <div class="top">
-                    <h2>Register</h2>
+                    <h2>Регистрация</h2>
                 </div>
                 <div class="form-wrapper">
                     <form class="login-form" id="loginForm" action="/api/user/login/" method="post">
                         {% csrf_token %}
                         <div class="form-group">
-                            <label for="username">Username:</label>
+                            <label for="username">Имя пользователя:</label>
                             <input type="text" id="username" name="username" required>
                         </div>
                         <div class="form-group">
-                            <label for="email">Email:</label>
+                            <label for="email">Электронная почта:</label>
                             <input type="email" id="email" name="email" required>
                         </div>
                         <div class="form-group">
-                            <label for="password1">Password:</label>
+                            <label for="password1">Пароль:</label>
                             <input type="password" id="password1" name="password1" required>
                         </div>
                         <div class="form-group">
-                            <label for="password2">Confirm Password:</label>
+                            <label for="password2">Подтвердите пароль:</label>
                             <input type="password" id="password2" name="password2" required>
                         </div>
                     </form>
                 </div>
                 <div class="buttons">
                     <div class="registration-prompt">
-                        <p>Already have an account?</p>
-                        <a href="/user/login/">Login</a>
+                        <p>Уже есть аккаунт?</p>
+                        <a href="/user/login/">Войти</a>
                     </div>
                     <div class="form-group">
                         <div class="button-wrapper">
-                            <button id="submitButton" class="login-button">Register</button>
+                            <button id="submitButton" class="login-button">Зарегистрироваться</button>
                         </div>
                         <div class="error-message" id="error-message"></div>
                     </div>

@@ -64,7 +64,6 @@ def search_results(request):
 
     serialized_media = MovieSerializer(media_objects, many=True) if media_type == 'movie' else BookSerializer(media_objects, many=True)
     context = {'search_results': serialized_media.data}
-    print(context)
     return render(request, 'search.html', context)
 
 def movielist(request):

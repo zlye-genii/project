@@ -59,6 +59,8 @@ def _format_published_date(date_str):
 
 import re
 def remove_html_tags(text):
+    if not text:
+        return None
     clean = re.compile('<.*?>')
     return re.sub(clean, '', text)
 
@@ -76,7 +78,7 @@ def _create_book(book_id):
             return {"error": "Book not found"}, status.HTTP_404_NOT_FOUND
     authors = book_details.get("volumeInfo").get("authors")
     categories = book_details.get("volumeInfo").get("categories")
-    translated = translate([book_details.get("volumeInfo").get("title"), book_details.get("volumeInfo").get("description")])
+    translated = translate([book_details.get("volumeInfo").get("title"), remove_html_tags(book_details.get("volumeInfo").get("description"))])
     book.title = translated[0]
     book.release_date = _format_published_date(book_details.get("volumeInfo").get("publishedDate"))
     book.description = translated[1]
