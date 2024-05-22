@@ -1,0 +1,79 @@
+{% load static %}
+{% load fix_chars %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+    <link rel="stylesheet" href="{% static 'css/prochit.css' %}">
+    <title>Generation Results</title>
+</head>
+
+<body>
+    {% include "templates/header.html" %}
+    <main>
+        {% include "templates/sidebar.html" %}
+        <div class="content">
+            <div class="top">
+                <h2>Generation Results</h2>
+            </div>
+            <div class='underline'></div>
+            <div class="calendar-list">
+                {% for item in generation_results.all %}
+                <li class="calendar-item" data-media-id="{{ item.id }}">
+                    <div class="calendar-item-img">
+                        {% if 'http' in item.thumbnail %}
+                            <img src="{{ item.thumbnail }}" alt="{{ item.title|fix_chars }}">
+                        {% else %}
+                            <img src="/{{ item.thumbnail }}" alt="{{ item.title|fix_chars }}">
+                        {% endif %}
+                    </div>
+                    <div class="mnogabukav">
+                        <ul>
+                            <li>
+                                <h3>{{ item.title|default:'недоступно' }}</h3>
+                            </li>
+                            <li>
+                                <h4>{{ item.release_date|default:'недоступно' }}
+                                    {% if item.runtime %}, {{ item.runtime }} мин{% endif %}
+                                    {% if item.pages %}, {{ item.pages }} стр{% endif %}
+                                </h4>
+                            </li>
+                            <li>
+                                {% if item.directors %}
+                                    <p>Режиссер: {% for director in item.directors.all %}{{ director.name|default:'недоступно' }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+                                {% endif %}
+                                {% if item.authors %}
+                                    <p>Автор: {% for author in item.authors.all %}{{ author.name|default:'недоступно' }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <div class='underline'></div>
+                {% empty %}
+                    <li>Не найдено.</li>
+                {% endfor %}
+            </div>
+        </div>
+    </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var clickableItems = document.querySelectorAll('.calendar-item');
+            clickableItems.forEach(function(item) {
+                item.addEventListener('click', function() {
+                    var mediaId = this.getAttribute('data-media-id');
+                    if (mediaId) {
+                        mediaType = mediaId.includes('tt') ? 'movie': 'book'
+                        var detailUrl = '/' + mediaType + '/details/' + mediaId + '/';
+                        window.location.href = detailUrl;
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
