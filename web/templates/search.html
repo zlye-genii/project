@@ -48,9 +48,9 @@
                 <li class="calendar-item" data-media-id="{{ media.id }}" style="cursor: pointer;">
                     <div class="calendar-item-img">
                         {% if 'http' in media.thumbnail %}
-                            <img src="{{ media.thumbnail|default:'/static/images/default-thumbnail.png' }}" alt="{{ media.title|fix_chars }}">
+                            <img src="{{ media.thumbnail }}" alt="{{ media.title|fix_chars }}">
                         {% else %}
-                            <img src="/{{ media.thumbnail|default:'/static/images/default-thumbnail.png' }}" alt="{{ media.title|fix_chars }}">
+                            <img src="/{{ media.thumbnail }}" alt="{{ media.title|fix_chars }}">
                         {% endif %}
                     </div>
                     <div class="mnogabukav">

@@ -18,7 +18,7 @@ def compress_book_cover(book_id, cover_url, regen=False):
         return img_path
     response = requests.get(cover_url)
     img = Image.open(BytesIO(response.content))
-    img = img.resize((100, 250), Image.ANTIALIAS)
+    img = img.resize((500, 500), Image.ANTIALIAS)
 
     img.save(img_path)
 
@@ -56,6 +56,11 @@ def _format_published_date(date_str):
             except ValueError:
                 # If the date is not in a valid format, return None or a default date
                 return None
+
+import re
+def remove_html_tags(text):
+    clean = re.compile('<.*?>')
+    return re.sub(clean, '', text)
 
 def _create_book(book_id):
     if Book.objects.filter(id=book_id).exists():

@@ -24,7 +24,7 @@
                 {% for item in generation_results.all %}
                 <li class="calendar-item" data-media-id="{{ item.id }}">
                     <div class="calendar-item-img">
-                        {% if 'http' in item.thumbnail %}
+                        {% if 'http' in item.thumbnail or 'banner404' in item.thumbnail %}
                             <img src="{{ item.thumbnail }}" alt="{{ item.title|fix_chars }}">
                         {% else %}
                             <img src="/{{ item.thumbnail }}" alt="{{ item.title|fix_chars }}">
