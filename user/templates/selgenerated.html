@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/global.css' %}">
     <link rel="stylesheet" href="{% static 'css/prochit.css' %}">
-    <title>Generation Results</title>
+    <title>BookflixRecommender</title>
 </head>
 
 <body>
@@ -17,7 +17,7 @@
         {% include "templates/sidebar.html" %}
         <div class="content">
             <div class="top">
-                <h2>Generation Results</h2>
+                <h2>Ваша подборка:</h2>
             </div>
             <div class='underline'></div>
             <div class="calendar-list">
@@ -42,10 +42,10 @@
                                 </h4>
                             </li>
                             <li>
-                                {% if item.directors %}
+                                {% if item.directors.exists %}
                                     <p>Режиссер: {% for director in item.directors.all %}{{ director.name|default:'недоступно' }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
                                 {% endif %}
-                                {% if item.authors %}
+                                {% if item.authors.exists %}
                                     <p>Автор: {% for author in item.authors.all %}{{ author.name|default:'недоступно' }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
                                 {% endif %}
                             </li>

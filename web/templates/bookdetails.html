@@ -27,7 +27,7 @@
                         <div class="mnogabukav">
                             <ul>
                                 <li>
-                                    <h3>{{ book.title|default:'недоступно' }}</h3>
+                                    <h3>{{ book.title|fix_chars }}</h3>
                                 </li>
                                 {% if book.service_rating %}
                                 <li><h5>{{ book.service_rating }}⭐</h5></li>
@@ -70,9 +70,15 @@
                                     <h4>О произведении</h4>
                                 </li>
                                 <li>
-                                    <p>Год выпуска: {{ book.release_date.year|default:'недоступно' }}</p>
-                                    <p>Количество страниц: {{ book.pages|default:'недоступно' }}</p>
-                                    <p>Автор: {% for author in book.authors.all %}{{ author.name|default:'недоступно' }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+                                    {% if book.release_date %}
+                                    <p>Год выпуска: {{ book.release_date.year }}</p>
+                                    {% endif %}
+                                    {% if book.pages %}
+                                    <p>Количество страниц: {{ book.pages }}</p>
+                                    {% endif %}
+                                    {% if book.authors.exists %}
+                                    <p>Автор: {% for author in book.authors.all %}{{ author.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+                                    {% endif %}
                                     <!-- <p>Жанр: {% for genre in book.genres.all %}{{ genre.translated_name|default:'недоступно' }}{% if not forloop.last %}, {% endif %}{% endfor %}</p> -->
                                 </li>
 

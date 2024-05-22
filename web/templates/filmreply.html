@@ -27,7 +27,7 @@
                         <div class="mnogabukav">
                             <ul>
                                 <li>
-                                    <h3>{{ movie.title|default:'недоступно' }}</h3>
+                                    <h3>{{ movie.title|fix_chars }}</h3>
                                 </li>
                                 {% if movie.imdb_rating %}
                                 <li><h5>{{ movie.imdb_rating }}⭐</h5></li>
@@ -70,11 +70,21 @@
                                     <h4>О произведении</h4>
                                 </li>
                                 <li>
-                                    <p>Год выпуска: {{ movie.release_date.year|default:'недоступно' }}</p>
-                                    <p>Продолжительность: {{ movie.runtime|default:'недоступно' }} мин.</p>
-                                    <p>Режиссер: {% for director in movie.directors.all %}{{ director.name|default:'недоступно' }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
-                                    <p>Жанр: {% for genre in movie.genres.all %}{{ genre.translated_name|default:'недоступно' }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
-                                    <p>Возрастное ограничение: {{ movie.content_rating|default:'недоступно' }}</p>
+                                    {% if movie.release_date.year %}
+                                    <p>Год выпуска: {{ movie.release_date.year }}</p>
+                                    {% endif %}
+                                    {% if movie.runtime %}
+                                    <p>Продолжительность: {{ movie.runtime }} мин.</p>
+                                    {% endif %}
+                                    {% if movie.directors.exists %}
+                                    <p>Режиссер: {% for director in movie.directors.all %}{{ director.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+                                    {% endif %}
+                                    {% if movie.genres.exists %}
+                                    <p>Жанр: {% for genre in movie.genres.all %}{{ genre.translated_name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+                                    {% endif %}
+                                    {% if movie.content_rating %}
+                                    <p>Возрастное ограничение: {{ movie.content_rating }}</p>
+                                    {% endif %}
                                 </li>
                             </ul>
                         </div>
