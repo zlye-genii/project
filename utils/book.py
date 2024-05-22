@@ -7,7 +7,7 @@ import os
 import requests
 from io import BytesIO
 import json
-import datetime
+from datetime import datetime
 
 GOOGLE_BOOKS_API_URL = "https://www.googleapis.com/books/v1/volumes"
 
@@ -37,6 +37,25 @@ def _get_book_details(id, db_only=True):
         
     return results if not book else BookSerializer(book).data
 
+def _format_published_date(date_str):
+    if not date_str:
+        return None
+    date_str = date_str.replace("“", '').replace('”', '')
+    # Try to parse the date with the complete format
+    try:
+        return datetime.strptime(date_str, "%Y-%m-%d").date()
+    except ValueError:
+        # If the day is missing (format YYYY-MM)
+        try:
+            return datetime.strptime(date_str, "%Y-%m").date().replace(day=1)
+        except ValueError:
+            # If only the year is present (format YYYY)
+            try:
+                return datetime.strptime(date_str, "%Y").date().replace(month=1, day=1)
+            except ValueError:
+                # If the date is not in a valid format, return None or a default date
+                return None
+
 def _create_book(book_id):
     if Book.objects.filter(id=book_id).exists():
         return {"error": "Book with this ID already exists"}, status.HTTP_400_BAD_REQUEST
@@ -49,16 +68,14 @@ def _create_book(book_id):
     if 'status' in book_details:
         if book_details['status'] == 404:
             return {"error": "Book not found"}, status.HTTP_404_NOT_FOUND
-
     authors = book_details.get("volumeInfo").get("authors")
     categories = book_details.get("volumeInfo").get("categories")
-
     book.title = book_details.get("volumeInfo").get("title")
-    book.release_date = book_details.get("volumeInfo").get("publishedDate")
+    book.release_date = _format_published_date(book_details.get("volumeInfo").get("publishedDate"))
     book.description = book_details.get("volumeInfo").get("description")
     book.pages = book_details.get("volumeInfo").get("pageCount")
     if book_details.get("volumeInfo").get("imageLinks"):
-        book.thumbnail = compress_book_cover(book_id, book_details.get("volumeInfo").get("imageLinks").get("thumbnail"))
+        book.thumbnail = book_details.get("volumeInfo").get("imageLinks").get("thumbnail")
     
     book.save()
 

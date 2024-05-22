@@ -18,13 +18,13 @@ imdb = IMDB()
 # books are fine (common google W)
 def compress_movie_media(movie_id, poster_url, regen=False):
     img_path = os.path.join('static', 'movieposters', os.path.basename(movie_id) + '.png')
-    if not regen and img_path:
+    if not regen and os.path.isfile(img_path):
         return img_path
     response = requests.get(poster_url)
     img = Image.open(BytesIO(response.content))
-    img = img.resize((150, 250), Image.ANTIALIAS) # adjust this
+    img = img.resize((500, 500), Image.ANTIALIAS) # adjust this
 
-    img.save(img_path)
+    img.convert('RGB').save(img_path, "PNG", optimize=True)
 
     return img_path.replace('\\', '/') # windows <3
 
@@ -86,7 +86,10 @@ def _create_movie(movie_id):
     movie.title = translated[0]
     movie.release_date = movie_details.get("datePublished")
     movie.runtime = runtime
-    movie.imdb_rating = movie_details.get("rating").get("ratingValue")
+    try:
+        movie.imdb_rating = movie_details.get("rating").get("ratingValue")
+    except:
+        pass
     movie.description = translated[1]
     movie.content_rating = movie_details.get("contentRating")
     if movie_details.get("poster"):

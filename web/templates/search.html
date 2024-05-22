@@ -1,0 +1,99 @@
+{% load static %}
+{% load fix_chars %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+    <link rel="stylesheet" href="{% static 'css/prochit.css' %}">
+    <title>BookflixRecommender</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var clickableItems = document.querySelectorAll('.calendar-item');
+            clickableItems.forEach(function(item) {
+                item.addEventListener('click', function() {
+                    var mediaId = this.getAttribute('data-media-id');
+                    if (mediaId) {
+                        mediaType = mediaId.includes('tt') ? 'movie': 'book'
+                        var detailUrl = '/' + mediaType + 's/details/' + mediaId + '/';
+                        window.location.href = detailUrl;
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+
+<body>
+    {% include "templates/header.html" %}
+    <main>
+        {% include "templates/sidebar.html" %}
+        <div class="content">
+            <div class="top">
+                <h2>Поиск</h2>
+                <form action="{% url 'search_results' %}" method="get">
+                    <input type="text" name="query" placeholder="Search...">
+                    <select name="media_type">
+                        <option value="movie">Movie</option>
+                        <option value="book">Book</option>
+                    </select>
+                    <input type="submit" value="Search">
+                </form>
+            </div>
+            <div class='underline'></div>
+            <div class="calendar-list">
+                {% for media in search_results %}
+                <li class="calendar-item" data-media-id="{{ media.id }}" style="cursor: pointer;">
+                    <div class="calendar-item-img">
+                        {% if 'http' in media.thumbnail %}
+                            <img src="{{ media.thumbnail|default:'/static/images/default-thumbnail.png' }}" alt="{{ media.title|fix_chars }}">
+                        {% else %}
+                            <img src="/{{ media.thumbnail|default:'/static/images/default-thumbnail.png' }}" alt="{{ media.title|fix_chars }}">
+                        {% endif %}
+                    </div>
+                    <div class="mnogabukav">
+                        <ul>
+                            <li>
+                                <h3>{{ media.title|default:'недоступно' }}</h3>
+                            </li>
+                            <li>
+                                <h4>{{ media.release_date|default:'недоступно' }}
+                                    {% if media.id|slice:":2" == "tt" %}, {{ media.runtime|default:"недоступно" }} мин
+                                    {% else %}, {{ media.pages|default:"недоступно" }} стр
+                                    {% endif %}
+                                </h4>
+                            </li>
+                            <li>
+                                {% if media.id|slice:":2" == "tt" %}
+                                    <p>Режиссер: {% for director in media.directors %}{{ director.name|default:'недоступно' }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+                                {% else %}
+                                    <p>Автор: {% for author in media.authors %}{{ author.name|default:'недоступно' }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="rate">
+                        <ul>
+                            <li>Ваша оценка</li>
+                            <li>{{ rating.stars|default:'отсутствует' }}</li>
+                        </ul>
+                    </div>    
+                    <div class="likee">
+                        <button>
+                            <img src="{% if rating.favorited %}{% static 'logo/избранное.png' %}{% else %}{% static 'logo/неизбранное.png' %}{% endif %}">
+                        </button>
+                    </div>
+                </li>
+                <div class='underline'></div>
+                {% empty %}
+                    <li>Не найдено.</li>
+                {% endfor %}
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>
+

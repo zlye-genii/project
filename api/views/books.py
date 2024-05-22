@@ -6,6 +6,7 @@ import requests
 from web.models import Book, Person, Genre
 import json
 from datetime import datetime
+from utils.book import _create_book
 
 GOOGLE_BOOKS_API_URL = "https://www.googleapis.com/books/v1/volumes"
 
@@ -56,23 +57,6 @@ def search_books(request):
         return Response(books)
     else:
         return Response({'error': 'Bad Request: Please provide a query'}, status=status.HTTP_400_BAD_REQUEST)
-
-def _format_published_date(date_str):
-    date_str = date_str.replace("“", '').replace('”', '')
-    # Try to parse the date with the complete format
-    try:
-        return datetime.strptime(date_str, "%Y-%m-%d").date()
-    except ValueError:
-        # If the day is missing (format YYYY-MM)
-        try:
-            return datetime.strptime(date_str, "%Y-%m").date().replace(day=1)
-        except ValueError:
-            # If only the year is present (format YYYY)
-            try:
-                return datetime.strptime(date_str, "%Y").date().replace(month=1, day=1)
-            except ValueError:
-                # If the date is not in a valid format, return None or a default date
-                return None
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
@@ -130,31 +114,6 @@ def create_book(request):
     if Book.objects.filter(id=book_id).exists():
         return Response({"error": "Book with this ID already exists"}, status=status.HTTP_400_BAD_REQUEST)
     
-    # Create a new Book instance with the provided ID
-    book = Book(id=book_id)
-
-    # Extract additional book details from the get_book_details API
-    book_details = _get_book_details(id=book_id)
-    if not book_details:
-        return Response({"error": "Failed to retrieve book details"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    # Set the book details
-    book.title = book_details.get("volumeInfo").get("title")
-    book.release_date = _format_published_date(book_details.get("volumeInfo").get("publishedDate"))
-    book.description = book_details.get("volumeInfo").get("description")
-    book.pages = book_details.get("volumeInfo").get("pageCount")
-    book.service_rating = book_details.get("volumeInfo").get("averageRating")
-    book.thumbnail = book_details.get("volumeInfo").get("imageLinks").get("thumbnail")
-    
-    book.save()
-
-    for author in book_details.get("volumeInfo").get("authors"):
-        author_obj, created = Person.objects.get_or_create(name=author) # google does not provide a url
-        book.authors.add(author_obj)
-        
-    # well books have category not genre but who cares
-    if book_details.get("volumeInfo").get("mainCategory"):
-        genre, created = Genre.objects.get_or_create(name=book_details.get("volumeInfo").get("mainCategory"))
-        book.genres.add(genre)
-    
-    return Response({"message": "Book created successfully", "book_id": book.id}, status=status.HTTP_201_CREATED)
+    # Use the _create_book function from utils/book.py to create the book
+    result, stat = _create_book(book_id)
+    return Response(result, status=stat)
