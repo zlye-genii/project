@@ -75,6 +75,7 @@
                                     <p>Автор: {% for author in book.authors.all %}{{ author.name|default:'недоступно' }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
                                     <!-- <p>Жанр: {% for genre in book.genres.all %}{{ genre.translated_name|default:'недоступно' }}{% if not forloop.last %}, {% endif %}{% endfor %}</p> -->
                                 </li>
+
                             </ul>
                         </div>
                     </li>
@@ -87,6 +88,8 @@
                         </p>    
                     </li>
                 </ul>
+                <button id="summarizeButton">Получить краткое содержание</button>
+                <div id="summaryResult"></div>
                 {% endif %}
             </div>
         </div>
@@ -97,6 +100,30 @@
             const parts = value.split('; ' + name + '=');
             if (parts.length === 2) return parts.pop().split(';').shift();
         }
+
+        document.getElementById('summarizeButton').addEventListener('click', function() {
+            var button = this;
+            button.textContent = 'Загрузка...'; // Show loading text
+            var bookId = "{{ book.id }}";
+    
+            fetch('/api/books/summarize', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({ book_id: bookId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                button.textContent = 'Получить краткое содержание'; // Reset button text
+                document.getElementById('summaryResult').textContent = data.summary; // Display the summary
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                button.textContent = 'Получить краткое содержание'; // Reset button text
+            });
+        });
 
         function sendStatusUpdate(itemId, mediaType, statusType, status) {
             var payload = {

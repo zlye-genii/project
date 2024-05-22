@@ -17,7 +17,7 @@
                     var mediaId = this.getAttribute('data-media-id');
                     if (mediaId) {
                         mediaType = mediaId.includes('tt') ? 'movie': 'book'
-                        var detailUrl = '/' + mediaType + 's/details/' + mediaId + '/';
+                        var detailUrl = '/' + mediaType + '/details/' + mediaId + '/';
                         window.location.href = detailUrl;
                     }
                 });

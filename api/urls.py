@@ -22,5 +22,6 @@ urlpatterns = [
     path('books/search/', books.search_books),
     path('books/upcoming/', books.get_popular_books),
     path('books/popular/', books.get_popular_books),
-    path('books/create/', books.create_book)
+    path('books/create/', books.create_book),
+    path('books/summarize', ai.summarize_book_description)
 ]

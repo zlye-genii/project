@@ -111,3 +111,47 @@ def get_user_recommendations(request):
         return Response({"recommendations": serialized_media.data}, status=status.HTTP_200_OK)
     else:
         return Response({"error": "AI service unavailable"}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def summarize_book_description(request):
+    book_id = request.data.get('book_id')
+    if not book_id:
+        return Response({"error": "Book ID is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        book = Book.objects.get(id=book_id)
+    except Book.DoesNotExist:
+        return Response({"error": "Book not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    prompt = f'''You are an AI trained to summarize texts. Please provide a concise summary of the following book description in RUSSIAN.
+<BookDescription>
+{book.description}
+</BookDescription>
+Your output must be IN RUSSIAN ONLY.
+'''
+
+    response = requests.post(
+        AI_BASE_URL + '/v1/chat/completions',
+        headers={
+            'Authorization': f'Bearer {AI_TOKEN}',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
+        },
+        json={
+            'model': AI_MODEL,
+            'messages': [
+                {"role": "system", "content": prompt},
+                {"role": "user", "content": "Summary:"}
+            ],
+            "temperature": 0.5,
+            "top_p": 0.5,
+            "max_tokens": 150
+        }
+    )
+
+    if response.ok:
+        summary = response.json()['choices'][0]['message']['content']
+        return Response({"summary": summary}, status=status.HTTP_200_OK)
+    else:
+        return Response({"error": "AI service unavailable"}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
