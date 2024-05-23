@@ -2,8 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from web.models import Media, Movie, Book
 from api.views.user import _get_user_completed
-from rest_framework.renderers import JSONRenderer
-from api.serializers import RatingSerializer
+from web.models import Genre
+
 
 # Create your views here.
 
@@ -50,3 +50,7 @@ def selgenerated(request):
     media_ids = request.GET.get('ids').split(',')
     generation_results = Media.objects.filter(id__in=media_ids)
     return render(request, 'selgenerated.html', {'generation_results': generation_results})
+
+def genres_selection(request):
+    genres = Genre.objects.all()
+    return render(request, 'genrepref.html', {'genres': genres})

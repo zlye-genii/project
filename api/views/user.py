@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from ..serializers import ProfileSerializer, RatingSerializer
 from django.contrib.contenttypes.models import ContentType
-from web.models import Rating, Movie, Book
+from web.models import Rating, Movie, Book, Genre
 from utils.media import get_media
 
 @api_view(["GET"])
@@ -73,6 +73,21 @@ def _get_user_completed(profile, media_type):
     watched = [rating for rating in profile.ratings.all() if isinstance(rating.media, (Movie if media_type == 'movie' else Book)) and rating.completed]
     serializer = RatingSerializer(watched, many=True)
     return serializer.data
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def update_preferred_genres(request):
+    profile = request.user.profile
+    genre_ids = request.data.get('genres', [])
+
+    if not genre_ids:
+        return Response({"error": "No genres provided"}, status=status.HTTP_400_BAD_REQUEST)
+
+    genres = Genre.objects.filter(id__in=genre_ids)
+    profile.preferred_genres.set(genres)
+    profile.save()
+
+    return Response({"message": "Preferred genres updated successfully"}, status=status.HTTP_200_OK)
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])

@@ -22,6 +22,7 @@
                 <input type="text" id="keyword" placeholder="Введите ключевое слово">
                 <label>Жанр</label>
                 <select id="genre">
+                    <option value='none'>Использовать мои настройки</option>
                     <option value="war">Военное</option>
                     <option value="detective">Детектив</option>
                     <option value="drama">Драма</option>
@@ -45,7 +46,11 @@
                     <option value="12">12+</option>
                     <option value="16">16+</option>
                     <option value="18">18+</option>
-                </select>  
+                </select>
+                <div class="check-box">
+                    <input type="checkbox" id="considerFavorites">
+                    <label for="considerFavorites">Учитывать произведения из Избранного и Архива</label>
+                </div>
             </div>
             <button id="searchButton" style="justify-content: center;"> 
                 <img src="{% static 'logo/поиск.png' %}" alt="Поиск"> 
@@ -71,6 +76,9 @@
         }
         const searchButton = document.getElementById('searchButton');
         searchButton.addEventListener('click', function () {
+            searchButton.disabled = true;
+            searchButton.innerHTML = '<span>Загрузка...</span>';
+
             const keyword = document.getElementById('keyword').value;
             const genre = document.getElementById('genre').value;
             const country = document.getElementById('country').value;
@@ -85,7 +93,8 @@
                 country: country,
                 creator: author,
                 year: year,
-                age: age
+                age: age,
+                consider_favorites: document.getElementById('considerFavorites').checked
             }).toString();
         
             fetch('/api/user/recommendations?' + queryParams, {
@@ -103,6 +112,8 @@
             })
             .catch(error => {
                 console.error('Error fetching data: ', error);
+                searchButton.disabled = false;
+                searchButton.innerHTML = '<img src="{% static 'logo/поиск.png' %}" alt="Поиск"><span>Найти</span>';
             });
         });
     </script>

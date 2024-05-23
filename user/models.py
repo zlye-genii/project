@@ -13,6 +13,7 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    preferred_genres = models.ManyToManyField('web.Genre', blank=True, related_name='preferred_by_users')
 
 @receiver(user_signed_up)
 def create_profile(sender, **kwargs):

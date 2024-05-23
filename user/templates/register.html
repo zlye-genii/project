@@ -74,7 +74,7 @@
             .then(response => {
                   if (response.status === 204) { // whyyyyy does registration return 204!??!
                       var nextUrl = new URLSearchParams(window.location.search).get('next');
-                      window.location.href = nextUrl ? nextUrl : '/user/account';
+                      window.location.href = nextUrl ? nextUrl : '/user/genrepref';
                   } else {
                       return response.json();
                   }
@@ -82,7 +82,7 @@
             .then(data => {
                 if (!data.error) {
                   var nextUrl = new URLSearchParams(window.location.search).get('next');
-                  window.location.href = nextUrl ? nextUrl : '/user/account';
+                  window.location.href = nextUrl ? nextUrl : '/user/genrepref';
                 } else {
                     // handle error
                 }

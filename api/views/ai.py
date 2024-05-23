@@ -52,20 +52,41 @@ def get_user_recommendations(request):
     profile = request.user.profile
     media_type = request.query_params.get('media_type')
     keyword = request.query_params.get('keyword', 'not specified')
-    genre = request.query_params.get('genre', 'not specified')
+    genre = request.query_params.get('genre')
+    if genre == 'none':
+        print('using preferred_genres')
+        genre = ', '.join([g.translated_name for g in profile.preferred_genres.all()])
     country = request.query_params.get('country', 'not specified')
     creator = request.query_params.get('creator', 'not specified')
     year = request.query_params.get('year', 'not specified')
     age_rating = request.query_params.get('age', 'not specified')
+    # ¯\_(ツ)_/¯
+    keyword = 'not specified' if keyword == '' else keyword
+    country = 'not specified' if country == '' else country
+    creator = 'not specified' if creator == '' else creator
+    year = 'not specified' if year == '' else year
+    age_rating = 'not specified' if age_rating == '' else age_rating
 
-    favorites_list = _get_user_favorites(profile, media_type)
-    completed_list = _get_user_completed(profile, media_type)
 
     if media_type not in ['movie', 'book']:
         return Response({"error": "Invalid media type"}, status=status.HTTP_400_BAD_REQUEST)
 
-    prompt_filled = PROMPT.replace("{{FAVORITES}}", FAVORITES_BASE + " " + ", ".join(x['media']['title'] for x in favorites_list))
-    prompt_filled = prompt_filled.replace("{{LASTWATCHED}}", LASTWATCHED_BASE + " " + ", ".join(x['media']['title'] for x in completed_list))
+    if request.query_params.get('consider_favorites'):
+        completed_list = _get_user_completed(profile, media_type)
+        favorites_list = _get_user_favorites(profile, media_type)
+    else:
+        completed_list = []
+        favorites_list = []
+        print('toggle disable consider fav')
+
+    if len(favorites_list) != 0:
+        prompt_filled = PROMPT.replace("{{FAVORITES}}", FAVORITES_BASE + " " + ", ".join(x['media']['title'] for x in favorites_list))
+    else:
+        prompt_filled = PROMPT.replace("{{FAVORITES}}\n", '')
+    if len(completed_list) != 0:
+        prompt_filled = prompt_filled.replace("{{LASTWATCHED}}", LASTWATCHED_BASE + " " + ", ".join(x['media']['title'] for x in completed_list))
+    else:
+        prompt_filled = prompt_filled.replace("{{LASTWATCHED}}\n", '')
     prompt_filled = prompt_filled.replace("{{CONTENT_TYPE}}", media_type) \
         .replace("{{CONTENT_TYPE_PLURAL}}", content_type_plural[media_type]) \
         .replace("{{CONTENT_TYPE_PLURAL_ACTION}}", content_type_plural_action[media_type]) \
@@ -75,6 +96,7 @@ def get_user_recommendations(request):
         .replace("{{CREATOR}}", creator) \
         .replace("{{YEAR}}", year) \
         .replace("{{AGE_RATING}}", age_rating)
+    print(prompt_filled)
 
     messages = [
         {"role": "system", "content": prompt_filled},
@@ -98,6 +120,7 @@ def get_user_recommendations(request):
 
     if response.ok:
         recommendations = response.json()['choices'][0]['message']['content'].split(', ')
+        print(recommendations)
         media_objects = []
         for rec in recommendations:
             if media_type == 'movie':
@@ -130,6 +153,8 @@ def get_user_recommendations(request):
         serialized_media = MovieSerializer(media_objects, many=True) if media_type == 'movie' else BookSerializer(media_objects, many=True)
         return Response({"recommendations": serialized_media.data}, status=status.HTTP_200_OK)
     else:
+        # :/ filter?
+        print(response.json())
         return Response({"error": "AI service unavailable"}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
 
 
