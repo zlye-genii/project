@@ -105,3 +105,47 @@
     width: 35px;
     height: 35px;
 }
+
+.genre-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.genre-item:hover label {
+    color: #007BFF;
+}
+
+.genre-item input[type="checkbox"] {
+    display: none;
+}
+
+.genre-item label {
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+/* Add this style to change the appearance of the selected genre */
+.genre-item input[type="checkbox"]:checked + label {
+    font-weight: bold;
+    color: #007BFF;
+}
+
+#save-genres {
+    display: inline-block;
+    background-color: #007BFF;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-top: 20px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+#save-genres:hover {
+    background-color: #0056b3;
+}

@@ -28,9 +28,9 @@ SECRET_KEY = os.getenv("DJANGO_SECRET")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localtunnel.shruc.dev','localhost', '127.0.0.1']
+ALLOWED_HOSTS = [os.getenv('HOST_URL'),'localhost', '127.0.0.1']
 
-CSRF_TRUSTED_ORIGINS = ['https://*.shruc.dev']
+CSRF_TRUSTED_ORIGINS = [f'https://{os.getenv("HOST_URL")}']
 
 # Application definition
 
