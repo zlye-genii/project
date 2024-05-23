@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
+import random
 from .user import _get_user_favorites, _get_user_completed
 from api.serializers import BookSerializer, MovieSerializer
 import requests
@@ -72,8 +73,8 @@ def get_user_recommendations(request):
         return Response({"error": "Invalid media type"}, status=status.HTTP_400_BAD_REQUEST)
 
     if request.query_params.get('consider_favorites'):
-        completed_list = _get_user_completed(profile, media_type)
-        favorites_list = _get_user_favorites(profile, media_type)
+        completed_list = random.sample(_get_user_completed(profile, media_type), 5)
+        favorites_list = random.sample(_get_user_favorites(profile, media_type), 5)
     else:
         completed_list = []
         favorites_list = []
@@ -120,8 +121,9 @@ def get_user_recommendations(request):
 
     if response.ok:
         recommendations = response.json()['choices'][0]['message']['content'].split(', ')
-        print(recommendations)
+        recommendations[0] = recommendations[0].replace("Recommendations:",'')
         media_objects = []
+        print(recommendations)
         for rec in recommendations:
             if media_type == 'movie':
                 # Search for the movie by title
