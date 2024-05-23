@@ -85,17 +85,12 @@
                             </ul>
                         </div>
                     </li>
+                <button id="summarizeButton" style="background-color: #f44336; color: white; border: none; padding: 10px 20px; font-size: 16px; cursor: pointer; border-radius: 5px; display: block; margin: 0 auto; width: auto; max-width: 90%;">Получить краткое содержание</button>
                 </ul>
                 {% if book.description %}
-                <ul>
-                    <li class="calendar-item">
-                        <p>
-                            {{ book.description|fix_chars }}
-                        </p>    
-                    </li>
-                </ul>
-                <button id="summarizeButton">Получить краткое содержание</button>
-                <div id="summaryResult"></div>
+                <div class="description-container">
+                    <div id="summaryResult"></div>
+                </div>
                 {% endif %}
             </div>
         </div>
@@ -123,7 +118,9 @@
             .then(response => response.json())
             .then(data => {
                 button.textContent = 'Получить краткое содержание'; // Reset button text
-                document.getElementById('summaryResult').textContent = data.summary; // Display the summary
+                var summaryResult = document.getElementById('summaryResult');
+                // Вставить описание книги в элемент summaryResult
+                summaryResult.innerHTML = '<ul><li class="calendar-item"><p>' + data.summary + '</p></li></ul>';
             })
             .catch(error => {
                 console.error('Error:', error);
