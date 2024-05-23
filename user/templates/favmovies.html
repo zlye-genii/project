@@ -9,6 +9,21 @@
     <link rel="stylesheet" href="{% static 'css/global.css' %}">
     <link rel="stylesheet" href="{% static 'css/prochit.css' %}">
     <title>BookflixRecommender</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var clickableItems = document.querySelectorAll('.calendar-item');
+            clickableItems.forEach(function(item) {
+                item.addEventListener('click', function() {
+                    var mediaId = this.getAttribute('data-media-id');
+                    if (mediaId) {
+                        mediaType = mediaId.includes('tt') ? 'movie': 'book'
+                        var detailUrl = '/' + mediaType + '/details/' + mediaId + '/';
+                        window.location.href = detailUrl;
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 
 <body>
@@ -22,7 +37,7 @@
             <div class='underline'></div>
             <div class="calendar-list">
                 {% for rating in fav_movies %}
-                <li class="calendar-item">
+                <li class="calendar-item" data-media-id="{{ rating.media.id }}">
                     <div class="calendar-item-img">
                         <img src="/{{ rating.media.thumbnail }}" alt="{{ rating.media.title|fix_chars }}">
                     </div>
@@ -46,7 +61,7 @@
                         </ul>
                     </div>    
                     <div class="likee">
-                        <button>
+                        <button data-media-id="{{ rating.media.id }}" data-state="{{ rating.favorited|lower }}">
                             <img src="{% if rating.favorited %}{% static 'logo/избранное.png' %}{% else %}{% static 'logo/неизбранное.png' %}{% endif %}">
                         </button>
                     </div>
@@ -58,6 +73,54 @@
             </div>
         </div>
     </main>
+    <script>
+        function getCookie(name) {
+            const value = '; ' + document.cookie;
+            const parts = value.split('; ' + name + '=');
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+    
+        function sendStatusUpdate(mediaId, status) {
+            var payload = {
+                media_type: 'movie',
+                media_id: mediaId,
+                favorited: status
+            };
+    
+            fetch('/api/user/ratings/set/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    
+        document.addEventListener('DOMContentLoaded', function() {
+            var likeButtons = document.querySelectorAll('.likee button');
+    
+            likeButtons.forEach(function(button) {
+                button.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    var mediaId = this.dataset.mediaId; // Ensure you have data-media-id attribute on each button
+                    var currentState = this.getAttribute('data-state') == 'true';
+                    var newState = !currentState;
+                    this.setAttribute('data-state', newState.toString());
+                    this.querySelector('img').src = newState ? '{% static 'logo/избранное.png' %}' : '{% static 'logo/неизбранное.png' %}';
+                    sendStatusUpdate(mediaId, newState);
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

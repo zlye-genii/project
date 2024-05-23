@@ -35,13 +35,13 @@
 
                                 {% if user.is_authenticated %}
                                     <div class="likee">
-                                        <button data-state="{{ user_rating.favorited }}">
+                                        <button data-state="{{ user_rating.favorited|lower }}">
                                             <img src="{% if user_rating.favorited %}/static/logo/избранное.png{% else %}/static/logo/неизбранное.png{% endif %}">
                                         </button>
                                     </div>
                                     
                                     <div class="watch">
-                                        <button data-state="{{ user_rating.completed }}">
+                                        <button data-state="{{ user_rating.completed|lower }}">
                                             <img src="{% if user_rating.completed %}/static/logo/просмотрено.png{% else %}/static/logo/непросмотрено.png{% endif %}">
                                         </button>
                                     </div>
@@ -162,7 +162,7 @@
     
             likeButton.addEventListener('click', function(event) {
                 event.preventDefault();
-                var currentState = this.getAttribute('data-state') === 'True';
+                var currentState = this.getAttribute('data-state') === 'true';
                 var newState = !currentState;
                 this.setAttribute('data-state', newState.toString());
                 this.querySelector('img').src = newState ? '/static/logo/избранное.png' : '/static/logo/неизбранное.png';
@@ -171,7 +171,7 @@
 
             watchButton.addEventListener('click', function(event) {
                 event.preventDefault();
-                var currentState = this.getAttribute('data-state') === 'True';
+                var currentState = this.getAttribute('data-state') === 'true';
                 var newState = !currentState;
                 this.setAttribute('data-state', newState.toString());
                 this.querySelector('img').src = newState ? '/static/logo/просмотрено.png' : '/static/logo/непросмотрено.png';

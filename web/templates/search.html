@@ -74,17 +74,6 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="rate">
-                        <ul>
-                            <li>Ваша оценка</li>
-                            <li>{{ rating.stars|default:'отсутствует' }}</li>
-                        </ul>
-                    </div>    
-                    <div class="likee">
-                        <button>
-                            <img src="{% if rating.favorited %}{% static 'logo/избранное.png' %}{% else %}{% static 'logo/неизбранное.png' %}{% endif %}">
-                        </button>
-                    </div>
                 </li>
                 <div class='underline'></div>
                 {% empty %}
