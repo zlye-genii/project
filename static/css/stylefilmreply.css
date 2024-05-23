@@ -144,7 +144,7 @@ nav img {
 }
 
 .calendar-item {
-    border-bottom: 2px solid black;
+    /* border-bottom: 2px solid black; */
     display: grid;
     grid-template-columns: 6% 80% 10% 10% auto;
     align-items: center;
@@ -283,6 +283,10 @@ nav img {
     color: black;
 }
 
-
+.description-container {
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #000;
+    margin-top: auto;
+}
 
 

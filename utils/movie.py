@@ -31,6 +31,8 @@ def compress_movie_media(movie_id, poster_url, regen=False):
 def poster_exists(path):
     # checks if poster exists
     # alternatively create a 404 default img but blehhhh :3
+    if os.name == 'posix':
+        path = path.replace('\\', '/')
     return os.path.isfile(path)
 
 def _get_movie_details(id, db_only=True):

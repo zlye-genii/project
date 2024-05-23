@@ -146,7 +146,7 @@ Your output must be IN RUSSIAN ONLY.
             ],
             "temperature": 0.5,
             "top_p": 0.5,
-            "max_tokens": 150
+            "max_tokens": 512
         }
     )
 
