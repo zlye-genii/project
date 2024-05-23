@@ -29,6 +29,7 @@ SECRET_KEY = os.getenv("DJANGO_SECRET")
 DEBUG = True
 
 ALLOWED_HOSTS = ['localtunnel.shruc.dev','localhost']
+ALLOWED_HOSTS = ['127.0.0.1']
 
 CSRF_TRUSTED_ORIGINS = ['https://*.shruc.dev']
 
