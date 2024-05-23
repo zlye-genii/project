@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{% static 'css/global.css' %}">
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
 
-    <title>Login - BookflixRecommender</title>
+    <title>BookflixRecommender</title>
 </head>
 
 <body>
@@ -18,29 +18,29 @@
         <div class="content">
             <div class="login-container">
                 <div class="top">
-                    <h2>Login</h2>
+                    <h2>Вход</h2>
                 </div>
                 <div class="form-wrapper">
                     <form class="login-form" id="loginForm" action="/api/user/login/" method="post">
                         {% csrf_token %}
                         <div class="form-group">
-                            <label for="username">Username/Email:</label>
+                            <label for="username">Имя пользователя:</label>
                             <input type="text" id="username" name="username" required>
                         </div>
                         <div class="form-group">
-                            <label for="password">Password:</label>
+                            <label for="password">Пароль:</label>
                             <input type="password" id="password" name="password" required>
                         </div>
                     </form>
                 </div>
                 <div class="buttons">
                     <div class="registration-prompt">
-                        <p>Don't have an account?</p>
-                        <a href="/user/register/">Register</a>
+                        <p>У вас нет аккаунта?</p>
+                        <a href="/user/register/">Регистрация</a>
                     </div>
                     <div class="form-group">
                         <div class="button-wrapper">
-                            <button id="submitButton" class="login-button">Login</button>
+                            <button id="submitButton" class="login-button">Войти</button>
                         </div>
                         <div class="error-message" id="error-message"></div>
                     </div>
@@ -69,7 +69,7 @@
             .then(data => {
                 if (!data.error) {
                     var nextUrl = new URLSearchParams(window.location.search).get('next');
-                    window.location.href = nextUrl ? nextUrl : '/user/account';
+                    window.location.href = nextUrl ? nextUrl : '/';
                 } else {
                     document.getElementById('error-message').innerText = data.error;
                 }

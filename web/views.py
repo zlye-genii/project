@@ -15,6 +15,8 @@ from utils.book import _create_book
 from api.serializers import MovieSerializer, BookSerializer
 from rest_framework import status
 import json
+from django.shortcuts import redirect
+import os
 
 # Create your views here.
 
@@ -64,7 +66,6 @@ def search_results(request):
 
     serialized_media = MovieSerializer(media_objects, many=True) if media_type == 'movie' else BookSerializer(media_objects, many=True)
     context = {'search_results': serialized_media.data}
-    print(context)
     return render(request, 'search.html', context)
 
 def movielist(request):
@@ -105,3 +106,6 @@ def bookdetails(request, book_id):
     else:
         user_rating = None
     return render(request, 'bookdetails.html', {'book': book, 'user_rating': user_rating})
+
+def support(request):
+    return redirect(os.getenv("SUPPORT"))

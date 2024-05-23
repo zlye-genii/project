@@ -19,11 +19,18 @@ AI_TOKEN = os.getenv('AI_TOKEN')
 AI_MODEL = os.getenv("AI_MODEL")
 
 # if this doesnt work properly try the <AIROLE> from AP-3
-PROMPT = '''You are a {{CONTENT_TYPE}} expert and your task is to recommend {{CONTENT_TYPE_PLURAL}} based on the User's past {{CONTENT_TYPE_PLURAL_ACTION}} and favorites.
-You will be given the User's preferences in the <UserPreferences> tag. You must provide a list of FIVE {{CONTENT_TYPE_PLURAL}}, outputting ONLY COMMA-SEPERATED NAMES, after the "Recommendations" line.
+PROMPT = '''You are a {{CONTENT_TYPE}} expert and your task is to recommend {{CONTENT_TYPE_PLURAL}} based on the User's past {{CONTENT_TYPE_PLURAL_ACTION}}, favorites, and specific preferences.
+You will be given the User's preferences in the <UserPreferences> tag. You must provide a list of FIVE {{CONTENT_TYPE_PLURAL}}, outputting ONLY COMMA-SEPARATED NAMES, after the "Recommendations" line.
 Your response MUST BE IN ENGLISH. Write all media titles IN ENGLISH.
 <UserPreferences>
 {{FAVORITES}}
+{{LASTWATCHED}}
+Keyword: {{KEYWORD}}
+Genre: {{GENRE}}
+Country: {{COUNTRY}}
+Creator: {{CREATOR}}
+Year: {{YEAR}}
+Age Rating: {{AGE_RATING}}
 </UserPreferences>
 '''
 FAVORITES_BASE = "User has added the following {{CONTENT_TYPE_PLURAL}} to their favorites:"
@@ -44,17 +51,30 @@ content_type_plural_action = {
 def get_user_recommendations(request):
     profile = request.user.profile
     media_type = request.query_params.get('media_type')
+    keyword = request.query_params.get('keyword', 'not specified')
+    genre = request.query_params.get('genre', 'not specified')
+    country = request.query_params.get('country', 'not specified')
+    creator = request.query_params.get('creator', 'not specified')
+    year = request.query_params.get('year', 'not specified')
+    age_rating = request.query_params.get('age', 'not specified')
+
     favorites_list = _get_user_favorites(profile, media_type)
     completed_list = _get_user_completed(profile, media_type)
 
-    if not favorites_list or not completed_list:
-        return Response({"error": "Invalid media type or no data available"}, status=status.HTTP_400_BAD_REQUEST)
+    if media_type not in ['movie', 'book']:
+        return Response({"error": "Invalid media type"}, status=status.HTTP_400_BAD_REQUEST)
 
     prompt_filled = PROMPT.replace("{{FAVORITES}}", FAVORITES_BASE + " " + ", ".join(x['media']['title'] for x in favorites_list))
     prompt_filled = prompt_filled.replace("{{LASTWATCHED}}", LASTWATCHED_BASE + " " + ", ".join(x['media']['title'] for x in completed_list))
     prompt_filled = prompt_filled.replace("{{CONTENT_TYPE}}", media_type) \
         .replace("{{CONTENT_TYPE_PLURAL}}", content_type_plural[media_type]) \
-        .replace("{{CONTENT_TYPE_PLURAL_ACTION}}", content_type_plural_action[media_type])
+        .replace("{{CONTENT_TYPE_PLURAL_ACTION}}", content_type_plural_action[media_type]) \
+        .replace("{{KEYWORD}}", keyword) \
+        .replace("{{GENRE}}", genre) \
+        .replace("{{COUNTRY}}", country) \
+        .replace("{{CREATOR}}", creator) \
+        .replace("{{YEAR}}", year) \
+        .replace("{{AGE_RATING}}", age_rating)
 
     messages = [
         {"role": "system", "content": prompt_filled},
@@ -68,7 +88,7 @@ def get_user_recommendations(request):
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
         },
         json={
-            'model': {AI_MODEL},
+            'model': AI_MODEL,
             'messages': messages,
             "temperature": 0.5,
             "top_p": 0.5,

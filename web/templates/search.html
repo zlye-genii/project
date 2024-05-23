@@ -47,43 +47,32 @@
                 {% for media in search_results %}
                 <li class="calendar-item" data-media-id="{{ media.id }}" style="cursor: pointer;">
                     <div class="calendar-item-img">
-                        {% if 'http' in media.thumbnail %}
-                            <img src="{{ media.thumbnail|default:'/static/images/default-thumbnail.png' }}" alt="{{ media.title|fix_chars }}">
+                        {% if 'http' in media.thumbnail or 'banner404' in media.thumbnail %}
+                            <img src="{{ media.thumbnail }}" alt="{{ media.title|fix_chars }}">
                         {% else %}
-                            <img src="/{{ media.thumbnail|default:'/static/images/default-thumbnail.png' }}" alt="{{ media.title|fix_chars }}">
+                            <img src="/{{ media.thumbnail }}" alt="{{ media.title|fix_chars }}">
                         {% endif %}
                     </div>
                     <div class="mnogabukav">
                         <ul>
                             <li>
-                                <h3>{{ media.title|default:'недоступно' }}</h3>
+                                <h3>{{ media.title|fix_chars }}</h3>
                             </li>
                             <li>
-                                <h4>{{ media.release_date|default:'недоступно' }}
-                                    {% if media.id|slice:":2" == "tt" %}, {{ media.runtime|default:"недоступно" }} мин
-                                    {% else %}, {{ media.pages|default:"недоступно" }} стр
-                                    {% endif %}
+                                <h4>
+                                    {% if media.release_date %}{{ media.release_date }}{% endif %}
+                                    {% if media.id|slice:":2" == "tt" and media.runtime %}, {{ media.runtime }} мин{% endif %}
+                                    {% if media.id|slice:":2" != "tt" and media.pages %}, {{ media.pages }} стр{% endif %}
                                 </h4>
                             </li>
                             <li>
-                                {% if media.id|slice:":2" == "tt" %}
-                                    <p>Режиссер: {% for director in media.directors %}{{ director.name|default:'недоступно' }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
-                                {% else %}
-                                    <p>Автор: {% for author in media.authors %}{{ author.name|default:'недоступно' }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+                                {% if media.id|slice:":2" == "tt" and media.directors|length > 0 %}
+                                    <p>Режиссер: {% for director in media.directors %}{{ director.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+                                {% elif media.authors|length > 0 %}
+                                    <p>Автор: {% for author in media.authors %}{{ author.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
                                 {% endif %}
                             </li>
                         </ul>
-                    </div>
-                    <div class="rate">
-                        <ul>
-                            <li>Ваша оценка</li>
-                            <li>{{ rating.stars|default:'отсутствует' }}</li>
-                        </ul>
-                    </div>    
-                    <div class="likee">
-                        <button>
-                            <img src="{% if rating.favorited %}{% static 'logo/избранное.png' %}{% else %}{% static 'logo/неизбранное.png' %}{% endif %}">
-                        </button>
                     </div>
                 </li>
                 <div class='underline'></div>

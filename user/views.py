@@ -1,7 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from web.models import Movie
-from api.views.ai import get_user_recommendations
+from web.models import Media, Movie, Book
 from api.views.user import _get_user_completed
 from rest_framework.renderers import JSONRenderer
 from api.serializers import RatingSerializer
@@ -19,17 +18,14 @@ def register(request):
     return render(request, 'register.html')
 
 @login_required
-def account(request):
-    ratings = request.user.profile.ratings.all()
-    ratings_data = RatingSerializer(ratings, many=True).data
-    ratings_json = JSONRenderer().render(ratings_data)
-    ratings_json_str = ratings_json.decode('utf-8')
-    return render(request, 'account.html', {'ratings': ratings_json_str})
-
-@login_required
 def favmovies(request):
     fav_movies = request.user.profile.ratings.filter(favorited=True, media__movie__isnull=False).select_related('media').prefetch_related('media__movie__directors')
     return render(request, 'favmovies.html', {'fav_movies': fav_movies})
+
+@login_required
+def favbooks(request):
+    fav_books = request.user.profile.ratings.filter(favorited=True, media__book__isnull=False).select_related('media').prefetch_related('media__book__authors')
+    return render(request, 'favbooks.html', {'fav_books': fav_books})
 
 @login_required
 def favorites(request):
@@ -37,8 +33,7 @@ def favorites(request):
 
 @login_required
 def recommendations(request):
-    recommendations = get_user_recommendations(request) # convert this to internal call?
-    return render(request, 'read.html', {'recommendations': recommendations})
+    return render(request, 'personalselection.html')
 
 @login_required
 def watched(request):
@@ -50,3 +45,8 @@ def read(request):
     read_books = _get_user_completed(request.user.profile, 'book')
     return render(request, 'read.html', {'read_books': read_books})
 
+@login_required
+def selgenerated(request):
+    media_ids = request.GET.get('ids').split(',')
+    generation_results = Media.objects.filter(id__in=media_ids)
+    return render(request, 'selgenerated.html', {'generation_results': generation_results})

@@ -1,4 +1,5 @@
 {% load static %}
+{% load fix_chars %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -31,47 +32,43 @@
         {% include "templates/sidebar.html" %}
         <div class="content">
             <div class="top">
-                <h2>Просмотренное</h2>
+                <h2>Избранные книги</h2>
             </div>
-            <div class="underline"></div>
+            <div class='underline'></div>
             <div class="calendar-list">
-                {% for movie in watched_movies %}
-                <li class="calendar-item" data-media-id="{{ movie.media.id }}">
+                {% for rating in fav_books %}
+                <li class="calendar-item" data-media-id="{{ rating.media.id }}">
                     <div class="calendar-item-img">
-                        <img src="/{{ movie.media.thumbnail }}">
+                        <img src="{{ rating.media.thumbnail }}" alt="{{ rating.media.title|fix_chars }}">
                     </div>
                     <div class="mnogabukav">
                         <ul>
                             <li>
-                                <h3>{{ movie.media.title }}</h3>
+                                <h3>{{ rating.media.title|default:'недоступно' }}</h3>
                             </li>
                             <li>
-                                <h4>{{ movie.media.release_date }}</h4>
+                                <h4>{{ rating.media.release_date|default:'недоступно' }}, {{ rating.media.book.pages|default:"недоступно" }} стр</h4>
                             </li>
                             <li>
-                                <p>
-                                {{ movie.media.description }}
-                                </p>
+                                <p>Автор: {% for author in rating.media.book.authors.all %}{{ author.name|default:'недоступно' }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
                             </li>
                         </ul>
                     </div>
                     <div class="rate">
                         <ul>
                             <li>Ваша оценка</li>
-                            <li>{{ movie.stars }}</li>
+                            <li>{{ rating.stars|default:'отсутствует' }}</li>
                         </ul>
-                    </div>
+                    </div>    
                     <div class="likee">
-                        <button data-media-id="{{ movie.media.id }}" data-state="{{ movie.favorited|lower }}">
-                            <img src="{% if movie.favorited %}{% static 'logo/избранное.png' %}{% else %}{% static 'logo/неизбранное.png' %}{% endif %}">
+                        <button data-media-id="{{ rating.media.id }}" data-state="{{ rating.favorited|lower }}">
+                            <img src="{% if rating.favorited %}{% static 'logo/избранное.png' %}{% else %}{% static 'logo/неизбранное.png' %}{% endif %}">
                         </button>
                     </div>
-                    <!-- <ul>
-                        <li><p>Ваш комментарий:</p></li>
-                        <li><textarea name="Here may be your add" cols="30" rows="5">{{ movie.review }}</textarea></li>
-                    </ul> -->
                 </li>
-                <div class="underline"></div>
+                <div class='underline'></div>
+                {% empty %}
+                    <li>Не найдено.</li>
                 {% endfor %}
             </div>
         </div>
@@ -85,7 +82,7 @@
     
         function sendStatusUpdate(mediaId, status) {
             var payload = {
-                media_type: 'movie',
+                media_type: 'book',
                 media_id: mediaId,
                 favorited: status
             };
