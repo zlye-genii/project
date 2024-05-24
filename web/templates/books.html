@@ -19,7 +19,7 @@
         <div class="content">
             <div class="title-main">
                 <img src="{% static 'logo/золотая коллекция.png' %}" alt="Иконка Золотой Коллекции" style="max-width: 65px; height: 65px;">
-                <h1>Золотая коллекция</h1>
+                <h1>Лидеры жанров</h1>
             </div>
             <div class="underline"></div>
             {% with sorted_genres=genres|sort_by_book_count:books %}
