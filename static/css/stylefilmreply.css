@@ -250,17 +250,14 @@ nav img {
 .likee button,
 .watch button {
     margin-right: 20px; /* Добавляем отступ между кнопками */
+    width: 45px;
+    height: 45px;
 }
 
-
-.likee button img{
-    width: 35px;
-    height: 35px;
-}
-
-.watch button img{
-    width: 35px;
-    height: 35px;
+.likee button img,
+.watch button img {
+    width: 100%;
+    height: 100%;
 }
 
 .star-rating .fa-star {
