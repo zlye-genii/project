@@ -39,7 +39,7 @@
                 {% for rating in fav_books %}
                 <li class="calendar-item" data-media-id="{{ rating.media.id }}">
                     <div class="calendar-item-img">
-                        <img src="{{ rating.media.thumbnail }}" alt="{{ rating.media.title|fix_chars }}">
+                        <img src="{{ rating.media.thumbnail|default:'/static/banner404.png' }}" alt="{{ rating.media.title|fix_chars }}">
                     </div>
                     <div class="mnogabukav">
                         <ul>

@@ -9,6 +9,21 @@
     <link rel="stylesheet" href="{% static 'css/global.css' %}">
     <link rel="stylesheet" href="{% static 'css/favorite.css' %}">
     <title>BookflixRecommender</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var clickableItems = document.querySelectorAll('.calendar-item');
+            clickableItems.forEach(function(item) {
+                item.addEventListener('click', function() {
+                    var mediaId = this.getAttribute('data-media-id');
+                    if (mediaId) {
+                        mediaType = mediaId.includes('tt') ? 'movie': 'book'
+                        var detailUrl = '/' + mediaType + '/details/' + mediaId + '/';
+                        window.location.href = detailUrl;
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 
 <body>
@@ -22,7 +37,7 @@
             <div class='underline'></div>
             <div class="calendar-list">
                 {% for rating in fav_movies %}
-                <li class="calendar-item">
+                <li class="calendar-item" data-media-id="{{ rating.media.id }}">
                     <div class="calendar-item-img">
                         <img src="/{{ rating.media.thumbnail|default:'/static/banner404.png' }}" alt="{{ rating.media.title|fix_chars }}">
                     </div>
@@ -52,8 +67,6 @@
                     </div>
                 </li>
                 <div class='underline'></div>
-                {% empty %}
-                    <li>Не найдено.</li>
                 {% endfor %}
             </div>
         </div>
