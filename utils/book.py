@@ -84,7 +84,7 @@ def _create_book(book_id):
     book.description = translated[1]
     book.pages = book_details.get("volumeInfo").get("pageCount")
     if book_details.get("volumeInfo").get("imageLinks"):
-        book.thumbnail = book_details.get("volumeInfo").get("imageLinks").get("thumbnail")
+        book.thumbnail = book_details.get("volumeInfo").get("imageLinks").get("medium")
     
     book.save()
 
