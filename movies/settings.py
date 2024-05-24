@@ -27,7 +27,8 @@ SECRET_KEY = os.getenv("DJANGO_SECRET")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = os.getenv("DEBUG")
+from str2bool import str2bool
+DEBUG = str2bool(os.getenv('DEBUG', 'True'))
 
 ALLOWED_HOSTS = [os.getenv('HOST_URL'),'localhost', '127.0.0.1']
 

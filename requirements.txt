@@ -10,3 +10,4 @@ requests
 PyMovieDB
 Pillow
 lxml_html_clean
+str2bool
