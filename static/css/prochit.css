@@ -55,8 +55,12 @@
 }
 
 .calendar-item-img img {
-    width: 50px;
-    height: 75px;
+    width: 80px;
+    height: 120px;
+}
+
+.mnogabukav li {
+    margin-bottom: 10px;
 }
 
 .mnogabukav li h3 {
@@ -78,6 +82,16 @@
     font-size: large;
     font-weight: bold;
     color: black;
+}
+
+.comento button {
+    height: 40px;
+    border: 2px solid;
+    border-radius: 10px;
+    border-color: silver;
+    color: red;
+    width: 160px;
+    margin-top: 10px;
 }
 
 .mnogabukav li:last-child {
@@ -109,12 +123,9 @@
 }
 
 .likee button img{
-    width: 100%;
-    height: 50%;
-}
-
-.coments ul li p {
-    font-weight: bold;
+<<<<<<< Updated upstream
+    width: 35px;
+    height: 35px;
 }
 
 .genre-item {
@@ -160,3 +171,12 @@
 #save-genres:hover {
     background-color: #0056b3;
 }
+=======
+    width: 100%;
+    height: 50%;
+}
+
+.coments ul li p {
+    font-weight: bold;
+}
+>>>>>>> Stashed changes
