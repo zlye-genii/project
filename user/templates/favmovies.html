@@ -24,7 +24,7 @@
                 {% for rating in fav_movies %}
                 <li class="calendar-item">
                     <div class="calendar-item-img">
-                        <img src="/{{ rating.media.thumbnail|default:'/static/images/default-thumbnail.png' }}" alt="{{ rating.media.title|fix_chars }}">
+                        <img src="/{{ rating.media.thumbnail|default:'/static/banner404.png' }}" alt="{{ rating.media.title|fix_chars }}">
                     </div>
                     <div class="mnogabukav">
                         <ul>
@@ -46,7 +46,7 @@
                         </ul>
                     </div>    
                     <div class="likee">
-                        <button>
+                        <button data-media-id="{{ rating.media.id }}" data-state="{{ rating.favorited|lower }}">
                             <img src="{% if rating.favorited %}{% static 'logo/избранное.png' %}{% else %}{% static 'logo/неизбранное.png' %}{% endif %}">
                         </button>
                     </div>

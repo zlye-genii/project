@@ -34,7 +34,7 @@ class Media(PolymorphicModel):
     description = models.TextField(null=True, max_length=10000)
     release_date = models.DateField(null=True)
     genres = models.ManyToManyField(Genre, blank=True)
-    thumbnail = models.TextField(default='/static/banner404.png', max_length=10000, null=True) # :<
+    thumbnail = models.TextField(default='/static/banner404.png', max_length=10000) # :<
 
     def __str__(self):
         return self.title
