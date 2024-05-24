@@ -46,6 +46,11 @@
     height: 250px;
 }
 
+.films .card .liketxt,
+.books .card .liketxt {
+    height: 100px;
+}
+
 .films .card div img,
 .books .card div img {
     width: 100%;
