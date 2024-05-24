@@ -119,7 +119,7 @@ def get_user_recommendations(request):
 
     if response.ok:
         recommendations = response.json()['choices'][0]['message']['content'].split(', ')
-        recommendations[0] = recommendations[0].replace("Recommendations:",'')
+        recommendations[0] = recommendations[0].replace("Recommendations:",'').strip()
         media_objects = []
         print(recommendations)
         for rec in recommendations:
