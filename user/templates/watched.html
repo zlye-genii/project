@@ -10,7 +10,7 @@
     <title>BookflixRecommender</title>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            var clickableItems = document.querySelectorAll('.calendar-item');
+            var clickableItems = document.querySelectorAll('.redirectable');
             clickableItems.forEach(function(item) {
                 item.addEventListener('click', function() {
                     var mediaId = this.getAttribute('data-media-id');
@@ -37,10 +37,10 @@
             <div class="calendar-list">
                 {% for movie in watched_movies %}
                 <li class="calendar-item" data-media-id="{{ movie.media.id }}">
-                    <div class="calendar-item-img">
+                    <div class="calendar-item-img redirectable">
                         <img src="/{{ movie.media.thumbnail }}">
                     </div>
-                    <div class="mnogabukav">
+                    <div class="mnogabukav redirectable">
                         <ul>
                             <li>
                                 <h3>{{ movie.media.title }}</h3>
@@ -58,7 +58,7 @@
                     <div class="rate">
                         <ul>
                             <li>Ваша оценка</li>
-                            <li>{{ movie.stars }}</li>
+                            <li>{{ movie.stars|default:'отсутствует' }}</li>
                         </ul>
                     </div>
                     <div class="likee">
@@ -69,10 +69,10 @@
                     <div class="comento">
                         <ul>
                             <li><p>Ваш комментарий:</p></li>
-                            <li><textarea name="Here may be your add" cols="30" rows="5">{{ movie.review }}</textarea></li>
-                            <li><button>Оставить отзыв</button></li>
+                            <li><textarea id="review-text-{{ movie.media.id }}" name="Here may be your add" cols="30" rows="5">{{ movie.review|default_if_none:"" }}</textarea></li>
+                            <li><button onclick="submitReview('{{ movie.media.id }}')">Оставить отзыв</button></li>
                         </ul>
-                    </div>    
+                    </div>
                 </li>
                 <div class="underline"></div>
                 {% endfor %}
@@ -80,6 +80,34 @@
         </div>
     </main>
     <script>
+        function submitReview(mediaId) {
+            event.stopPropagation();
+            var reviewText = document.getElementById('review-text-' + mediaId).value;
+            fetch('/api/user/review/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    media_id: mediaId,
+                    review: reviewText
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                const button = document.querySelector(`button[onclick="submitReview('${mediaId}')"]`);
+                const originalText = button.textContent;
+                button.textContent = 'Успешно';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 1000);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
         function getCookie(name) {
             const value = '; ' + document.cookie;
             const parts = value.split('; ' + name + '=');

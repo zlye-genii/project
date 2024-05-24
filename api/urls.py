@@ -9,6 +9,7 @@ urlpatterns = [
     path('user/ratings/', user.get_ratings_by_media_type),
     path('user/ratings/set/', user.change_media_rating),
     path('user/genres/update/', user.update_preferred_genres),
+    path('user/review/', user.update_media_review),
 
     path('user/recommendations', ai.get_user_recommendations),
     

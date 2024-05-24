@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from ..serializers import ProfileSerializer, RatingSerializer
 from django.contrib.contenttypes.models import ContentType
-from web.models import Rating, Movie, Book, Genre
+from web.models import Rating, Movie, Book, Genre, Media
 from utils.media import get_media
 
 @api_view(["GET"])
@@ -63,6 +63,31 @@ def change_media_rating(request):
         else:
             return Response({"error": "Media not marked as completed"}, status=status.HTTP_400_BAD_REQUEST)
         return Response({"message": "Media completed status changed"}, status=status.HTTP_200_OK)
+    
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def update_media_review(request):
+    media_id = request.data.get('media_id')
+    review_text = request.data.get('review')
+
+    if not media_id or review_text is None:
+        return Response({"error": "Media ID and review text are required"}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        media = Media.objects.get(id=media_id)
+    except Media.DoesNotExist:
+        return Response({"error": "Media not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    profile = request.user.profile
+    rating = Rating.objects.filter(media=media, profile=profile).first()
+
+    if not rating:
+        return Response({"error": "No existing rating found. Please rate before adding a review."}, status=status.HTTP_404_NOT_FOUND)
+
+    rating.review = review_text
+    rating.save()
+
+    return Response({"message": "Review updated successfully"}, status=status.HTTP_200_OK)
 
 def _get_user_favorites(profile, media_type):
     favorites = [rating for rating in profile.ratings.all() if isinstance(rating.media, (Movie if media_type == 'movie' else Book)) and rating.favorited]
