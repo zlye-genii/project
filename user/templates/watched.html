@@ -66,10 +66,13 @@
                             <img src="{% if movie.favorited %}{% static 'logo/избранное.png' %}{% else %}{% static 'logo/неизбранное.png' %}{% endif %}">
                         </button>
                     </div>
-                    <!-- <ul>
-                        <li><p>Ваш комментарий:</p></li>
-                        <li><textarea name="Here may be your add" cols="30" rows="5">{{ movie.review }}</textarea></li>
-                    </ul> -->
+                    <div class="comento">
+                        <ul>
+                            <li><p>Ваш комментарий:</p></li>
+                            <li><textarea name="Here may be your add" cols="30" rows="5">{{ movie.review }}</textarea></li>
+                            <li><button>Оставить отзыв</button></li>
+                        </ul>
+                    </div>    
                 </li>
                 <div class="underline"></div>
                 {% endfor %}

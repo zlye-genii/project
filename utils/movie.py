@@ -77,6 +77,8 @@ def _create_movie(movie_id):
         duration = '0H0M'
     if 'M' not in duration:
         duration += '0M'
+    if 'H' not in duration:
+        duration = '0H' + duration
     time_obj = datetime.datetime.strptime(duration.replace("PT", ''), "%HH%MM")
     runtime = time_obj.hour * 60 + time_obj.minute
 

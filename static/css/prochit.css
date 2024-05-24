@@ -14,10 +14,10 @@
 }
 
 .calendar-item {
+    border-bottom: 2px solid gray;
     display: grid;
-    grid-template-columns: 6% 40% auto 10% 10%;
+    grid-template-columns: 10% 40% 10% 10% auto;
     align-items: center;
-    padding-top: 10px;
     padding-bottom: 10px;
 }
 
@@ -55,8 +55,12 @@
 }
 
 .calendar-item-img img {
-    width: 50px;
-    height: 75px;
+    width: 80px;
+    height: 120px;
+}
+
+.mnogabukav li {
+    margin-bottom: 10px;
 }
 
 .mnogabukav li h3 {
@@ -80,6 +84,16 @@
     color: black;
 }
 
+.comento button {
+    height: 40px;
+    border: 2px solid;
+    border-radius: 10px;
+    border-color: silver;
+    color: red;
+    width: 160px;
+    margin-top: 10px;
+}
+
 .mnogabukav li:last-child {
     font-size: small;
     color: gray;
@@ -98,7 +112,14 @@
 
 .likee {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
+}
+
+.likee button {
+    width: 65px;
+    height: 65px;
+    border-radius: 5px;
+    border: none;
 }
 
 .likee button img{
@@ -148,4 +169,8 @@
 
 #save-genres:hover {
     background-color: #0056b3;
+}
+
+.coments ul li p {
+    font-weight: bold;
 }
