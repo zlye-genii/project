@@ -103,18 +103,16 @@
             likeButtons.forEach(function(button) {
                 button.addEventListener('click', function(event) {
                     event.preventDefault();
-
+    
                     var itemId = this.dataset.itemId;
-                    var isCurrentlyFavorited = isFavorited(itemId);
-                    
                     this.disabled = true;
-
-                    if (isCurrentlyFavorited) {
+    
+                    if (this.classList.contains('liked')) {
                         this.classList.remove('liked');
                     } else {
                         this.classList.add('liked');
                     }
-
+    
                     fetch('/api/user/ratings/set/', {
                         method: 'POST',
                         headers: {
@@ -124,19 +122,18 @@
                         body: JSON.stringify({
                             media_id: itemId,
                             media_type: "movie",
-                            favorited: !isCurrentlyFavorited
+                            favorited: !this.classList.contains('liked')
                         })
                     })
                     .then(response => response.json())
                     .then(data => {
                         console.log(data);
-                        isCurrentlyFavorited = !isCurrentlyFavorited;
                     })
                     .catch(error => {
-                        if (isCurrentlyFavorited) {
-                            this.classList.add('liked');
-                        } else {
+                        if (this.classList.contains('liked')) {
                             this.classList.remove('liked');
+                        } else {
+                            this.classList.add('liked');
                         }
                         console.error('Error:', error);
                     })
