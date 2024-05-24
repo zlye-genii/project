@@ -13,7 +13,7 @@
             var clickableItems = document.querySelectorAll('.redirectable');
             clickableItems.forEach(function(item) {
                 item.addEventListener('click', function() {
-                    var mediaId = this.getAttribute('data-media-id');
+                    var mediaId = item.parentElement.getAttribute('data-media-id');
                     if (mediaId) {
                         mediaType = mediaId.includes('tt') ? 'movie': 'book'
                         var detailUrl = '/' + mediaType + '/details/' + mediaId + '/';

@@ -47,7 +47,7 @@
                                     </div>
                                 
                                     <div class="star-rating">
-                                        <span class="fa fa-star" onclick="showRating(this)"></span>
+                                        <span class="fa fa-star {% if user_rating.stars and user_rating.stars != 0 %}selected{% endif %}" onclick="showRating(this)"></span>
                                         <span id="ratingText" class="rate-text" onclick="showRating(this)">{{ user_rating.stars|default:'Оценить' }}</span>
                                     </div>
                                 {% endif %}

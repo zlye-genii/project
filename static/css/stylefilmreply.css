@@ -250,7 +250,7 @@ nav img {
 .likee button,
 .watch button {
     margin-right: 20px; /* Добавляем отступ между кнопками */
-    width: 45px;
+    width: 55px;
     height: 45px;
 }
 
@@ -266,7 +266,7 @@ nav img {
 }
 
 .star-rating .selected {
-    color: black;
+    color: gold;
 }
 
 .star-rating .rate-text {
