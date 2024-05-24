@@ -50,6 +50,7 @@
                         <div class="button-wrapper">
                             <button id="submitButton" class="login-button">Зарегистрироваться</button>
                         </div>
+                        <br>
                         <div class="error-message" id="error-message"></div>
                     </div>
                 </div>
@@ -80,11 +81,13 @@
                   }
               })
             .then(data => {
-                if (!data.error) {
-                  var nextUrl = new URLSearchParams(window.location.search).get('next');
-                  window.location.href = nextUrl ? nextUrl : '/user/genrepref';
+                console.log(data);
+                if (Object.keys(data).length === 0) {
+                    var nextUrl = new URLSearchParams(window.location.search).get('next');
+                    window.location.href = nextUrl ? nextUrl : '/';
                 } else {
-                    // handle error
+                    let errorMessages = Object.values(data).map(errors => errors.join(', ')).join('\n');
+                    document.getElementById('error-message').innerText = errorMessages;
                 }
             });
         });
