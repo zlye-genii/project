@@ -7,23 +7,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/global.css' %}">
-    <link rel="stylesheet" href="{% static 'css/prochit.css' %}">
+    <link rel="stylesheet" href="{% static 'css/favorite.css' %}">
     <title>BookflixRecommender</title>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var clickableItems = document.querySelectorAll('.calendar-item');
-            clickableItems.forEach(function(item) {
-                item.addEventListener('click', function() {
-                    var mediaId = this.getAttribute('data-media-id');
-                    if (mediaId) {
-                        mediaType = mediaId.includes('tt') ? 'movie': 'book'
-                        var detailUrl = '/' + mediaType + '/details/' + mediaId + '/';
-                        window.location.href = detailUrl;
-                    }
-                });
-            });
-        });
-    </script>
 </head>
 
 <body>
@@ -37,9 +22,9 @@
             <div class='underline'></div>
             <div class="calendar-list">
                 {% for rating in fav_movies %}
-                <li class="calendar-item" data-media-id="{{ rating.media.id }}">
+                <li class="calendar-item">
                     <div class="calendar-item-img">
-                        <img src="/{{ rating.media.thumbnail }}" alt="{{ rating.media.title|fix_chars }}">
+                        <img src="/{{ rating.media.thumbnail|default:'/static/images/default-thumbnail.png' }}" alt="{{ rating.media.title|fix_chars }}">
                     </div>
                     <div class="mnogabukav">
                         <ul>
@@ -61,12 +46,14 @@
                         </ul>
                     </div>    
                     <div class="likee">
-                        <button data-media-id="{{ rating.media.id }}" data-state="{{ rating.favorited|lower }}">
+                        <button>
                             <img src="{% if rating.favorited %}{% static 'logo/избранное.png' %}{% else %}{% static 'logo/неизбранное.png' %}{% endif %}">
                         </button>
                     </div>
                 </li>
                 <div class='underline'></div>
+                {% empty %}
+                    <li>Не найдено.</li>
                 {% endfor %}
             </div>
         </div>
