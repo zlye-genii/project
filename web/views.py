@@ -84,7 +84,8 @@ def movielist(request):
 def booklist(request):
     genres = Genre.objects.all()
     books = Book.objects.all().prefetch_related('genres')
-    return render(request, 'books.html', {'books': books, 'genres': genres})
+    books_w = [book for book in books if book.thumbnail != '/static/banner404.png']
+    return render(request, 'books.html', {'books': books_w, 'genres': genres})
 
 def moviedetails(request, movie_id):
     movie = Movie.objects.get(id=movie_id)

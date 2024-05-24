@@ -1,5 +1,7 @@
 {% load static %}
 {% load fix_chars %}
+{% load genre_filter %}
+{% load sort_book %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,46 +18,40 @@
         {% include "templates/sidebar.html" %}
         <div class="content">
             <div class="title-main">
-            <img src="{% static 'logo/золотая коллекция.png' %}" alt="Иконка Золотой Коллекции" style="max-width: 65px; height: 65px;">
-            <h1>Золотая коллекция</h1></div>
-            <div class="underline"></div>
-        <div class="block-films">
-            <div class="scroll-container">
-                {% for book in books|dictsort:"pages" %}
-                {% if forloop.counter <= 10 %}
-                <a href="/book/details/{{ book.id }}" class="film">
-                    <img src="{{ book.thumbnail }}" alt="{{ book.title|fix_chars }}">
-                    <div class="film-text">
-                        <div class="film-cell">
-                            <h3>{{ book.title|fix_chars }}</h3>
-                            <p>{{ book.release_date.year }}</p>
-                        </div>
-                    </div>
-                </a>
-                {% endif %}
-                {% endfor %}
+                <img src="{% static 'logo/золотая коллекция.png' %}" alt="Иконка Золотой Коллекции" style="max-width: 65px; height: 65px;">
+                <h1>Золотая коллекция</h1>
             </div>
-        </div>
-        <div class="interval"></div>
-        <div class="title-main">
             <div class="underline"></div>
-            <div class="block-films">
-                <div class="scroll-container">
-                    {% for book in books %}
-                    {% if forloop.counter > 10 %}
-                        <a href="/book/details/{{ book.id }}" class="film">
-                            <img src="{{ book.thumbnail }}" alt="{{ book.title|fix_chars }}">
-                            <div class="film-text">
-                                <div class="film-cell">
-                                    <h3>{{ book.title|fix_chars }}</h3>
-                                    <p>{{ book.release_date.year }}</p>
+            {% with sorted_genres=genres|sort_by_book_count:books %}
+                {% for genre in sorted_genres %}
+                    {% if genre.translated_name %}
+                        {% with genre_books=books|filter_genre:genre %}
+                            {% if genre_books %}
+                                <div class="title-main">
+                                    <h1>{{ genre.translated_name }}</h1>
                                 </div>
-                            </div>
-                        </a>
+                                <div class="underline"></div>
+                                <div class="block-books">
+                                    <div class="scroll-container">
+                                        {% for book in genre_books %}
+                                            <a href="/book/details/{{ book.id }}" class="film">
+                                                <img src="{{ book.thumbnail }}" alt="{{ book.title|fix_chars }}">
+                                                <div class="film-text">
+                                                    <div class="film-cell">
+                                                        <h3>{{ book.title|fix_chars }}</h3>
+                                                        <p>{{ book.release_date.year }}</p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="interval"></div>
+                            {% endif %}
+                        {% endwith %}
                     {% endif %}
-                    {% endfor %}
-                </div>
-            </div>
+                {% endfor %}
+            {% endwith %}
         </div>
     </main>
     <!-- <script src="button.js"></script> -->
