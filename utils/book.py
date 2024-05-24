@@ -77,7 +77,7 @@ def _create_book(book_id):
         if book_details['status'] == 404:
             return {"error": "Book not found"}, status.HTTP_404_NOT_FOUND
     authors = book_details.get("volumeInfo").get("authors")
-    categories = book_details.get("volumeInfo").get("categories")
+    # categories = book_details.get("volumeInfo").get("categories")
     translated = translate([book_details.get("volumeInfo").get("title"), remove_html_tags(book_details.get("volumeInfo").get("description"))])
     book.title = translated[0]
     book.release_date = _format_published_date(book_details.get("volumeInfo").get("publishedDate"))
@@ -92,9 +92,9 @@ def _create_book(book_id):
         for author_name in authors:
             author, created = Person.objects.get_or_create(name=author_name)
             book.authors.add(author)
-    if categories:
-        for category_name in categories:
-            category, created = Genre.objects.get_or_create(name=category_name)
-            book.genres.add(category)
+    # if categories:
+    #     for category_name in categories:
+    #         category, created = Genre.objects.get_or_create(name=category_name)
+    #         book.genres.add(category)
     
     return {"message": "Book created successfully", "book_id": book.id}, status.HTTP_201_CREATED
