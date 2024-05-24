@@ -73,8 +73,8 @@ def get_user_recommendations(request):
         return Response({"error": "Invalid media type"}, status=status.HTTP_400_BAD_REQUEST)
 
     if request.query_params.get('consider_favorites'):
-        completed_list = random.sample(_get_user_completed(profile, media_type), 5)
-        favorites_list = random.sample(_get_user_favorites(profile, media_type), 5)
+        completed_list = random.sample(_get_user_completed(profile, media_type), min(5, len(_get_user_completed(profile, media_type))))
+        favorites_list = random.sample(_get_user_favorites(profile, media_type), min(5, len(_get_user_favorites(profile, media_type))))
     else:
         completed_list = []
         favorites_list = []
