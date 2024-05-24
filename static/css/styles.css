@@ -1,0 +1,246 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Arial", sans-serif;
+    overflow-x: hidden;
+}
+
+a {
+    text-decoration: none;
+}
+
+header {
+    background-color: black;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    width: 100vw;
+    padding: 10px 0px;
+}
+
+header h1 {
+    margin: 0;
+}
+
+header .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-left: 250px;
+}
+
+header .logo img{
+    width: 50px;
+    height: 50px;
+    display: flex;
+}
+
+.user-icon {
+    width: 50px;
+    padding-right: 20px;
+}
+
+.user-icon img {
+    width: 100%;
+}
+
+main {
+    display: grid;
+    grid-template-columns: 250px auto;
+    width: 100vw;
+    height: 100vh;
+    
+}
+
+/* start left menu */
+.left-menu {
+    position: relative;
+    background-color: red;
+}
+
+nav {
+    background-color: lightgrey;
+    border-right: 2px solid black;
+    position: fixed;
+    top: 70px;
+    left: 0;
+    max-width: 250px; /*same as in main grid column one*/
+    height: 100vh;
+}
+
+nav ul {
+    list-style: none;
+    padding: 20px;
+}
+
+nav .footer {
+    position: fixed;
+    bottom: 0vh;
+    padding-left: 20px; /*same as nav ul*/
+}
+
+nav ul li {
+    margin: 10px 0;
+}
+
+nav ul li a {
+    color: black;
+    font-size: large;
+    font-weight: bold;
+}
+
+nav a {
+    display: grid;
+    grid-template-columns: 50px auto;
+   gap: 20px;
+   align-items: center;
+}
+
+nav img {
+    width: 100%;
+}
+
+.footer {
+    text-align: center;
+    font-size: 0.8em;
+}
+
+/* end left menu */
+
+.content {
+    margin: 70px 30px 30px 30px;
+    overflow-x: hidden;
+}
+
+.top {    
+    
+    display: flex;
+    align-items: center;
+    padding: 20px 0px 10px 0px;
+    width: 100vw;
+    height: 15vh;
+    gap: 30px;
+}
+
+.top h2 {
+    margin: 0;
+    padding-left: 400px;
+}
+
+.search-box {
+    margin-left: 30px;
+    padding: 20px 30px 30px 30px;
+    width: 65vw;
+    /* height: 100vh; */
+    background-color: rgb(253, 242, 233);
+    border: 2px solid black;
+
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+
+}
+
+label {
+    font-weight: bold;
+}
+
+button {
+    width: 150px;
+    height: 50px;
+    margin-top:30px;
+    font-weight: bold;
+    padding: 10px;
+}
+
+input, select {
+    
+    padding: 10px;
+    border: 1px solid #ccc;
+    border: 1px solid black;
+}
+
+#toggleButton {
+    width: 130px;
+    height: auto;
+    background-color: #FF6666;
+    border: 1px solid black;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    -webkit-text-stroke: 0.5px black;
+    font-size: 1.1em;
+}
+
+#searchButton {
+    cursor: pointer;
+    display: flex; 
+    align-items: center; 
+    padding: 10px;
+    margin-left: 410px;
+    background-color: #fff266;
+    border: 1px solid black;
+    font-size: 1.1em;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    
+}
+
+
+#searchButton img {
+    width: 45px;
+    height: 30px;
+    margin-right: 5px;
+}
+
+
+.check-box {
+    margin-top: 10px;
+}
+
+.check-box input[type="checkbox"] {
+    display: none;
+}
+
+.check-box label {
+    position: relative;
+    padding-left: 30px;
+    cursor: pointer;
+}
+
+.check-box label:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 1px;
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    border: 0.5px solid #5c5b5b;
+    background-color: #fff;
+}
+
+.check-box input[type="checkbox"]:checked + label:before {
+    background-color: #007bff;
+}
+
+.check-box label:after {
+    content: '\2713';
+    font-size: 16px;
+    color: #fff;
+    position: absolute;
+    top: -2px;
+    left: 4px;
+    display: none;
+}
+
+.check-box input[type="checkbox"]:checked + label:after {
+    display: block;
+}

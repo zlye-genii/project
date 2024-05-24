@@ -1,0 +1,160 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+    <link rel="stylesheet" href="{% static 'css/prochit.css' %}">
+    <title>BookflixRecommender</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var clickableItems = document.querySelectorAll('.redirectable');
+            clickableItems.forEach(function(item) {
+                item.addEventListener('click', function() {
+                    var mediaId = this.getAttribute('data-media-id');
+                    if (mediaId) {
+                        mediaType = mediaId.includes('tt') ? 'movie': 'book'
+                        var detailUrl = '/' + mediaType + '/details/' + mediaId + '/';
+                        window.location.href = detailUrl;
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+
+<body>
+    {% include "templates/header.html" %}
+    <main>
+        {% include "templates/sidebar.html" %}
+        <div class="content">
+            <div class="top">
+                <h2>Просмотренное</h2>
+            </div>
+            <div class="underline"></div>
+            <div class="calendar-list">
+                {% for movie in watched_movies %}
+                <li class="calendar-item" data-media-id="{{ movie.media.id }}">
+                    <div class="calendar-item-img redirectable">
+                        <img src="/{{ movie.media.thumbnail }}">
+                    </div>
+                    <div class="mnogabukav redirectable">
+                        <ul>
+                            <li>
+                                <h3>{{ movie.media.title }}</h3>
+                            </li>
+                            <li>
+                                <h4>{{ movie.media.release_date }}</h4>
+                            </li>
+                            <li>
+                                <p>
+                                {{ movie.media.description }}
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="rate">
+                        <ul>
+                            <li>Ваша оценка</li>
+                            <li>{{ movie.stars|default:'отсутствует' }}</li>
+                        </ul>
+                    </div>
+                    <div class="likee">
+                        <button data-media-id="{{ movie.media.id }}" data-state="{{ movie.favorited|lower }}">
+                            <img src="{% if movie.favorited %}{% static 'logo/избранное.png' %}{% else %}{% static 'logo/неизбранное.png' %}{% endif %}">
+                        </button>
+                    </div>
+                    <div class="comento">
+                        <ul>
+                            <li><p>Ваш комментарий:</p></li>
+                            <li><textarea id="review-text-{{ movie.media.id }}" name="Here may be your add" cols="30" rows="5">{{ movie.review|default_if_none:"" }}</textarea></li>
+                            <li><button onclick="submitReview('{{ movie.media.id }}')">Оставить отзыв</button></li>
+                        </ul>
+                    </div>
+                </li>
+                <div class="underline"></div>
+                {% endfor %}
+            </div>
+        </div>
+    </main>
+    <script>
+        function submitReview(mediaId) {
+            event.stopPropagation();
+            var reviewText = document.getElementById('review-text-' + mediaId).value;
+            fetch('/api/user/review/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    media_id: mediaId,
+                    review: reviewText
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                const button = document.querySelector(`button[onclick="submitReview('${mediaId}')"]`);
+                const originalText = button.textContent;
+                button.textContent = 'Успешно';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 1000);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+        function getCookie(name) {
+            const value = '; ' + document.cookie;
+            const parts = value.split('; ' + name + '=');
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+    
+        function sendStatusUpdate(mediaId, status) {
+            var payload = {
+                media_type: 'movie',
+                media_id: mediaId,
+                favorited: status
+            };
+    
+            fetch('/api/user/ratings/set/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    
+        document.addEventListener('DOMContentLoaded', function() {
+            var likeButtons = document.querySelectorAll('.likee button');
+    
+            likeButtons.forEach(function(button) {
+                button.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    var mediaId = this.dataset.mediaId;
+                    var currentState = this.getAttribute('data-state') == 'true';
+                    var newState = !currentState;
+                    this.setAttribute('data-state', newState.toString());
+                    this.querySelector('img').src = newState ? '{% static 'logo/избранное.png' %}' : '{% static 'logo/неизбранное.png' %}';
+                    sendStatusUpdate(mediaId, newState);
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

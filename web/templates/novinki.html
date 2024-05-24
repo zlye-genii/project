@@ -1,0 +1,149 @@
+{% load static %}
+{% load fix_chars %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+    <link rel="stylesheet" href="{% static 'css/novinki.css' %}">
+    <title>BookflixRecommender</title>
+</head>
+
+<body>
+    {% include "templates/header.html" %}
+    <main>
+        {% include "templates/sidebar.html" %}
+        <div class="content">
+            <div class="top">
+                <img src="{% static 'logo/топ за месяц.jpg' %}" width="64" height="64">
+                <h2>Топ-10 за месяц</h2>
+            </div>
+            <div class="films">
+                <div class="scroll-container">
+                    {% for movie in movies %}
+                    <a href="/movie/details/{{ movie.id }}" class="card">
+                        <div>
+                            <img src="{{ movie.thumbnail }}">
+                        </div>
+                        <h3>{{ movie.title|fix_chars }}</h3>
+                        <p>{{ movie.release_date.year }}, {{ movie.genres.first.translated_name }}</p>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="books">
+                <div class="scroll-container">
+                    {% for book in books %}
+                    <a href="/book/details/{{ book.id }}" class="card">
+                        <div>
+                            <img src="{{ book.thumbnail }}">
+                        </div>
+                        <h3>{{ book.title|fix_chars }}</h3>
+                        <p>{{ book.release_date.year }}</p>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="top">
+                <img src="{% static 'logo/календарь релизов.png' %}">
+                <h2>Календарь релизов</h2>
+            </div>
+            <div class="calendar-list">
+                <ul>
+                    {% for movie in upcoming %}
+                    <li class="calendar-item">
+                        <a href="/movie/details/{{ movie.id }}">
+                            <span>{{ forloop.counter }}.</span>
+                            <div class="calendar-item-img">
+                                <img src="{{ movie.thumbnail }}">
+                            </div>
+                            <h4 class="calendar-item-title">{{ movie.title|fix_chars }}</h4>
+                            <p>{{ movie.release_date|date:"d M" }}</p>
+                            <button class="like" data-item-id="{{ movie.id }}">
+                                <svg width="50px" height="50px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 5.881C12.981 4.729 14.484 4 16.05 4C18.822 4 21 6.178 21 8.95C21 12.3492 17.945 15.1195 13.3164 19.3167L13.305 19.327L12 20.515L10.695 19.336L10.6595 19.3037C6.04437 15.1098 3 12.3433 3 8.95C3 6.178 5.178 4 7.95 4C9.516 4 11.019 4.729 12 5.881Z" fill="#dddddd"/>
+                                </svg>
+                            </button>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </main>
+    <script>
+        function getCookie(name) {
+            const value = '; ' + document.cookie;
+            const parts = value.split('; ' + name + '=');
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var likeButtons = document.querySelectorAll('.like');
+            var favorites = {{ favorites|safe }};
+        
+            function isFavorited(itemId) {
+                return favorites.some(function(favorite) {
+                    return favorite.media.id === itemId && favorite.favorited;
+                });
+            }
+        
+            console.log(favorites)
+            if (favorites) {
+                likeButtons.forEach(function(button) {
+                    var itemId = button.dataset.itemId;
+                    if (isFavorited(itemId)) {
+                        button.classList.add('liked');
+                    }
+                });
+            }
+        
+            likeButtons.forEach(function(button) {
+                button.addEventListener('click', function(event) {
+                    event.preventDefault();
+    
+                    var itemId = this.dataset.itemId;
+                    this.disabled = true;
+    
+                    if (this.classList.contains('liked')) {
+                        this.classList.remove('liked');
+                    } else {
+                        this.classList.add('liked');
+                    }
+    
+                    fetch('/api/user/ratings/set/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCookie('csrftoken')
+                        },
+                        body: JSON.stringify({
+                            media_id: itemId,
+                            media_type: "movie",
+                            favorited: !this.classList.contains('liked')
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                    })
+                    .catch(error => {
+                        if (this.classList.contains('liked')) {
+                            this.classList.remove('liked');
+                        } else {
+                            this.classList.add('liked');
+                        }
+                        console.error('Error:', error);
+                    })
+                    .finally(() => {
+                        this.disabled = false;
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

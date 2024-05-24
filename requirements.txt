@@ -1,0 +1,12 @@
+Django==4.2.11
+djangorestframework
+dj-rest-auth
+django-allauth
+django-extensions
+django-polymorphic
+python-dotenv
+psycopg2
+requests
+PyMovieDB
+Pillow
+lxml_html_clean

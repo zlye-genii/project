@@ -1,0 +1,123 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <title>BookflixRecommender</title>
+</head>
+
+<body>
+    {% include "templates/header.html" %}
+    <main>
+        {% include "templates/sidebar.html" %}
+        <div class="content">
+            <div class="top">
+                <h2>Подобрать   <button id="toggleButton">Книгу</button></h2>
+            </div>
+            <div class="search-box">
+                <label>Ключевое слово</label>
+                <input type="text" id="keyword" placeholder="Введите ключевое слово">
+                <label>Жанр</label>
+                <select id="genre">
+                    <option value='none'>Использовать мои настройки</option>
+                    <option value="war">Военное</option>
+                    <option value="detective">Детектив</option>
+                    <option value="drama">Драма</option>
+                    <option value="comedy">Комедия</option>
+                    <option value="melodrama">Мелодрама</option>
+                    <option value="thriller">Триллер</option>
+                    <option value="horror">Ужасы</option>
+                    <option value="sci-fi">Фантастика</option>
+                    <option value="fantasy">Фэнтези</option>
+                </select>
+                <label>Страна</label>
+                <input type="text" id="country" placeholder="Введите страну">
+                <label>Создатель (автор/режиссер)</label>
+                <input type="text" id="author" placeholder="Введите создателя">
+                <label>Год</label>
+                <input type="number" id="year" placeholder="Введите год">
+                <label>Возрастное ограничение</label>
+                <select id="age">
+                    <option value="0">0+</option>
+                    <option value="6">6+</option>
+                    <option value="12">12+</option>
+                    <option value="16">16+</option>
+                    <option value="18">18+</option>
+                </select>
+                <div class="check-box">
+                    <input type="checkbox" id="considerFavorites">
+                    <label for="considerFavorites">Учитывать произведения из Избранного и Архива</label>
+                </div>
+            </div>
+            <button id="searchButton" style="justify-content: center;"> 
+                <img src="{% static 'logo/поиск.png' %}" alt="Поиск"> 
+                <span>Найти</span>
+            </button>
+        </div>
+    </main>
+    <script>
+        const toggleButton = document.getElementById('toggleButton');
+        toggleButton.addEventListener('click', function () {
+            if (toggleButton.textContent === 'Книгу') {
+                toggleButton.textContent = 'Фильм';
+                toggleButton.style.backgroundColor = 'lightgreen';
+            } else {
+                toggleButton.textContent = 'Книгу';
+                toggleButton.style.backgroundColor = '#FF6666';
+            }
+        });
+        function getCookie(name) {
+            const value = '; ' + document.cookie;
+            const parts = value.split('; ' + name + '=');
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+        const searchButton = document.getElementById('searchButton');
+        searchButton.addEventListener('click', function () {
+            searchButton.disabled = true;
+            searchButton.innerHTML = '<span>Загрузка...</span>';
+
+            const keyword = document.getElementById('keyword').value;
+            const genre = document.getElementById('genre').value;
+            const country = document.getElementById('country').value;
+            const author = document.getElementById('author').value;
+            const year = document.getElementById('year').value;
+            const age = document.getElementById('age').value;
+
+            const queryParams = new URLSearchParams({
+                media_type: toggleButton.textContent == 'Фильм' ? 'movie' : 'book',
+                keyword: keyword,
+                genre: genre,
+                country: country,
+                creator: author,
+                year: year,
+                age: age,
+                consider_favorites: document.getElementById('considerFavorites').checked
+            }).toString();
+        
+            fetch('/api/user/recommendations?' + queryParams, {
+                method: 'GET',               
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                const mediaIds = data.recommendations.map(item => item.id);
+                const queryString = new URLSearchParams({ ids: mediaIds, media_type: toggleButton.textContent == 'Фильм' ? 'movie' : 'book' }).toString();
+                window.location.href = `/user/recommendations/result/?${queryString}`;
+            })
+            .catch(error => {
+                console.error('Error fetching data: ', error);
+                searchButton.disabled = false;
+                searchButton.innerHTML = '<img src="{% static 'logo/поиск.png' %}" alt="Поиск"><span>Найти</span>';
+            });
+        });
+    </script>
+
+</body>
+
+</html>

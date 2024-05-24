@@ -1,0 +1,44 @@
+{% load static %}
+<style>
+    .left-menu .footer a:visited {
+        color: black;
+    }
+</style>
+<div class="left-menu">
+    <nav>
+        <ul>
+            <li>
+                <a href="/">
+                    <img src="{% static 'logo/новинки.png' %}" alt="Иконка Фильмы" />
+                    <span>Новинки</span>
+                </a>
+            </li>
+            <li>
+                <a href='/movies'>
+                    <img src="{% static 'logo/фильмы.png' %}" alt="Иконка Фильмы" />
+                    <span>Фильмы</span>
+                </a>
+            </li>
+            <li>
+                <a href='/books'>
+                    <img src="{% static 'logo/книги.png' %}" alt="Иконка Книги" />
+                    <span>Книги</span>
+                </a>
+            </li>
+            <li>
+                <a href="/user/recommendations">
+                    <img src="{% static 'logo/подборка.png' %}" alt="Иконка Персональная подборка">
+                    <span>Персональная подборка</span>
+                </a>
+            </li>
+        </ul>
+        <div class="footer">
+            <p>
+                © 2024, Злые гении
+            </p>
+            <p>
+                <a href="/support">Служба поддержки</a>
+            </p>
+        </div>
+    </nav>
+</div>
