@@ -1,5 +1,5 @@
 from django import template
-from web.models import Genre  # Make sure to import the Genre model
+from web.models import Genre
 
 register = template.Library()
 

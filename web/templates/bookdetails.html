@@ -106,7 +106,7 @@
 
         document.getElementById('summarizeButton').addEventListener('click', function() {
             var button = this;
-            button.textContent = 'Загрузка...'; // Show loading text
+            button.textContent = 'Загрузка...';
             var bookId = "{{ book.id }}";
     
             fetch('/api/books/summarize', {
@@ -119,14 +119,13 @@
             })
             .then(response => response.json())
             .then(data => {
-                button.textContent = 'Получить краткое содержание'; // Reset button text
+                button.textContent = 'Получить краткое содержание';
                 var summaryResult = document.getElementById('summaryResult');
-                // Вставить описание книги в элемент summaryResult
                 summaryResult.innerHTML = '<ul><li class="calendar-item"><p>' + data.summary + '</p></li></ul>';
             })
             .catch(error => {
                 console.error('Error:', error);
-                button.textContent = 'Получить краткое содержание'; // Reset button text
+                button.textContent = 'Получить краткое содержание';
             });
         });
 
@@ -190,7 +189,6 @@
             starPopup.style.left = star.getBoundingClientRect().left + 'px';
             starPopup.style.top = star.getBoundingClientRect().bottom + 'px';
         
-            // Highlight the stars based on the current rating
             var currentRating = parseInt(document.getElementById('ratingText').textContent);
             var stars = starPopup.querySelectorAll('.fa-star');
             stars.forEach((star, index) => {
@@ -216,7 +214,6 @@
             });
             document.getElementById('starPopup').style.display = 'none';
         
-            // Send the rating to the backend
             sendStatusUpdate(bookId, 'book', 'rating', value);
         }
     </script>

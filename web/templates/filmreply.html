@@ -169,7 +169,6 @@
             starPopup.style.left = star.getBoundingClientRect().left + 'px';
             starPopup.style.top = star.getBoundingClientRect().bottom + 'px';
         
-            // Highlight the stars based on the current rating
             var currentRating = parseInt(document.getElementById('ratingText').textContent);
             var stars = starPopup.querySelectorAll('.fa-star');
             stars.forEach((star, index) => {
@@ -195,7 +194,6 @@
             });
             document.getElementById('starPopup').style.display = 'none';
         
-            // Send the rating to the backend
             sendStatusUpdate(movieId, 'movie', 'rating', value);
         }
     </script>

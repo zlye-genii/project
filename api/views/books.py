@@ -105,15 +105,12 @@ def get_popular_books(request):
 @permission_classes([AllowAny])
 @authentication_classes([])
 def create_book(request):
-    # Extract book id from the request
     book_id = request.data.get("id")
     if not book_id:
         return Response({"error": "Book ID is required"}, status=status.HTTP_400_BAD_REQUEST)
     
-    # Check if book already exists to avoid duplicates
     if Book.objects.filter(id=book_id).exists():
         return Response({"error": "Book with this ID already exists"}, status=status.HTTP_400_BAD_REQUEST)
     
-    # Use the _create_book function from utils/book.py to create the book
     result, stat = _create_book(book_id)
     return Response(result, status=stat)

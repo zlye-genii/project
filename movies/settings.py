@@ -53,7 +53,6 @@ INSTALLED_APPS = [
     'django_extensions'
 ]
 
-# maybe set up smtp server on the vps later
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 MIDDLEWARE = [

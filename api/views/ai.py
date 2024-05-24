@@ -19,7 +19,6 @@ AI_BASE_URL = os.getenv('AI_BASE_URL')
 AI_TOKEN = os.getenv('AI_TOKEN')
 AI_MODEL = os.getenv("AI_MODEL")
 
-# if this doesnt work properly try the <AIROLE> from AP-3
 PROMPT = '''You are a {{CONTENT_TYPE}} expert and your task is to recommend {{CONTENT_TYPE_PLURAL}} based on the User's past {{CONTENT_TYPE_PLURAL_ACTION}}, favorites, and specific preferences.
 You will be given the User's preferences in the <UserPreferences> tag. You must provide a list of FIVE {{CONTENT_TYPE_PLURAL}}, outputting ONLY COMMA-SEPARATED NAMES, after the "Recommendations" line.
 Your response MUST BE IN ENGLISH. Write all media titles IN ENGLISH.
@@ -61,7 +60,6 @@ def get_user_recommendations(request):
     creator = request.query_params.get('creator', 'not specified')
     year = request.query_params.get('year', 'not specified')
     age_rating = request.query_params.get('age', 'not specified')
-    # ¯\_(ツ)_/¯
     keyword = 'not specified' if keyword == '' else keyword
     country = 'not specified' if country == '' else country
     creator = 'not specified' if creator == '' else creator
@@ -126,22 +124,16 @@ def get_user_recommendations(request):
         print(recommendations)
         for rec in recommendations:
             if media_type == 'movie':
-                # Search for the movie by title
                 search_results = _search_movies(rec)
                 if search_results:
-                    # Get the ID of the first result
                     movie_id = search_results[0]['id']
-                    # Attempt to create the movie
                     results, status_code = _create_movie(movie_id)
                     if status_code == status.HTTP_201_CREATED or status_code == status.HTTP_400_BAD_REQUEST:
-                        # The movie was created successfully or already exists
                         movie = Movie.objects.get(id=movie_id)
                         media_objects.append(movie)
                     else:
-                        # Handle other errors appropriately
                         return Response(results, status=status_code)
             elif media_type == 'book':
-                # Similar logic for books
                 search_results = _search_books(rec)
                 if search_results:
                     book_id = search_results[0]['id']
@@ -155,7 +147,6 @@ def get_user_recommendations(request):
         serialized_media = MovieSerializer(media_objects, many=True) if media_type == 'movie' else BookSerializer(media_objects, many=True)
         return Response({"recommendations": serialized_media.data}, status=status.HTTP_200_OK)
     else:
-        # :/ filter?
         print(response.json())
         return Response({"error": "AI service unavailable"}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
 

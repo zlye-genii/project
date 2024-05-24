@@ -117,7 +117,7 @@
                 button.addEventListener('click', function(event) {
                     event.preventDefault();
                     event.stopPropagation();
-                    var mediaId = this.dataset.mediaId; // Ensure you have data-media-id attribute on each button
+                    var mediaId = this.dataset.mediaId;
                     var currentState = this.getAttribute('data-state') == 'true';
                     var newState = !currentState;
                     this.setAttribute('data-state', newState.toString());

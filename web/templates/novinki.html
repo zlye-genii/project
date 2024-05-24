@@ -82,27 +82,24 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             var likeButtons = document.querySelectorAll('.like');
-            var favorites = {{ favorites|safe }}; // Assuming 'favorites' is the context variable provided by Django
+            var favorites = {{ favorites|safe }};
         
-            // Function to check if an item is favorited
             function isFavorited(itemId) {
                 return favorites.some(function(favorite) {
                     return favorite.media.id === itemId && favorite.favorited;
                 });
             }
         
-            // Set the initial state of the like buttons
             console.log(favorites)
             if (favorites) {
                 likeButtons.forEach(function(button) {
                     var itemId = button.dataset.itemId;
                     if (isFavorited(itemId)) {
-                        button.classList.add('liked'); // Add a class that makes the button red
+                        button.classList.add('liked');
                     }
                 });
             }
         
-            // Event listeners for like buttons
             likeButtons.forEach(function(button) {
                 button.addEventListener('click', function(event) {
                     event.preventDefault();
@@ -110,10 +107,8 @@
                     var itemId = this.dataset.itemId;
                     var isCurrentlyFavorited = isFavorited(itemId);
                     
-                    // Disable the button while processing
                     this.disabled = true;
 
-                    // Optimistically toggle the 'liked' class
                     if (isCurrentlyFavorited) {
                         this.classList.remove('liked');
                     } else {
@@ -138,7 +133,6 @@
                         isCurrentlyFavorited = !isCurrentlyFavorited;
                     })
                     .catch(error => {
-                        // If there's an error, revert the class change
                         if (isCurrentlyFavorited) {
                             this.classList.add('liked');
                         } else {
@@ -147,7 +141,6 @@
                         console.error('Error:', error);
                     })
                     .finally(() => {
-                        // Re-enable the button after processing is complete
                         this.disabled = false;
                     });
                 });

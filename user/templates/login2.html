@@ -51,7 +51,7 @@
     <script>
         document.getElementById('submitButton').addEventListener('click', function() {
             var userInput = document.getElementById('username').value;
-            var isEmail = /\S+@\S+\.\S+/.test(userInput); // Simple regex to check if input is an email
+            var isEmail = /\S+@\S+\.\S+/.test(userInput);
     
             var requestBody = isEmail
                 ? { email: userInput, password: document.getElementById('password').value }

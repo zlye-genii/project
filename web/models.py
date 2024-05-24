@@ -28,13 +28,6 @@ class Person(models.Model):
         return self.name
     name = models.TextField()
     url = models.URLField(null=True)
-
-# are you here because of a "non nullable field" error?
-# step 1: delete database
-# step 2: delete all migration folders, keep __init__.py
-# step 3: run dmigrate
-# step 4: yippee!
-
 class Media(PolymorphicModel):
     id = models.TextField(primary_key=True)
     title = models.TextField(null=True)
@@ -66,4 +59,4 @@ class Rating(models.Model):
     completed = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.media.title}: {self.stars}{', ★' if self.favorited else ''}{', ✔' if self.completed else ''}" # star is NOT rating amount!!!! it is if favorited yes/no
+        return f"{self.media.title}: {self.stars}{', ★' if self.favorited else ''}{', ✔' if self.completed else ''}"

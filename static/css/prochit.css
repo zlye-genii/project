@@ -147,7 +147,6 @@
     margin-left: 10px;
 }
 
-/* Add this style to change the appearance of the selected genre */
 .genre-item input[type="checkbox"]:checked + label {
     font-weight: bold;
     color: #007BFF;
