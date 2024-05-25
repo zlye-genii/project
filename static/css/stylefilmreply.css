@@ -187,7 +187,7 @@ nav img {
     margin: 0px 0px 10px 280px;
     font-size: 2em;
     text-align: left;
-    
+    max-width: 55%;
 }
 
 .mnogabukav li h4 {
