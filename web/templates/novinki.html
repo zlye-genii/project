@@ -127,7 +127,7 @@
                         body: JSON.stringify({
                             media_id: itemId,
                             media_type: "movie",
-                            favorited: !this.classList.contains('liked')
+                            favorited: this.classList.contains('liked')
                         })
                     })
                     .then(response => response.json())
